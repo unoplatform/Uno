@@ -36,7 +36,7 @@ namespace Windows.UI.Xaml.Controls
 			var gravityResize = stretch switch
 			{
 				Stretch.Uniform => (string)CoreAnimation.CALayer.GravityResizeAspect,
-				Stretch.None => null,
+				Stretch.None => (string)CoreAnimation.CALayer.GravityLeft,
 				Stretch.UniformToFill => (string)CoreAnimation.CALayer.GravityResizeAspectFill,
 				Stretch.Fill => (string)CoreAnimation.CALayer.GravityResize,
 				_ => throw new NotSupportedException("Stretch mode {0} is not supported".InvariantCultureFormat(stretch)),
