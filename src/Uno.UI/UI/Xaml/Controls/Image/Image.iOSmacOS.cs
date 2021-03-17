@@ -148,6 +148,7 @@ namespace Windows.UI.Xaml.Controls
 				TryCreateNative();
 
 				_native.SetImage(image);
+				UpdateContentMode(Stretch, image);
 
 				SourceImageSize = image?.Size.ToFoundationSize() ?? default(Size);
 			}
@@ -171,8 +172,6 @@ namespace Windows.UI.Xaml.Controls
 				_native = new NativeImage();
 
 				AddSubview(_native);
-
-				UpdateContentMode(Stretch);
 			}
 		}
 
