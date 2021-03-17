@@ -33,18 +33,23 @@ namespace Windows.UI.Xaml.Controls
 
 			_native.Layer = new CoreAnimation.CALayer();
 
-			var gravityResize = stretch switch
+			switch (stretch)
 			{
-				Stretch.Uniform => (string)CoreAnimation.CALayer.GravityResizeAspect,
-				Stretch.None => (string)CoreAnimation.CALayer.GravityLeft,
-				Stretch.UniformToFill => (string)CoreAnimation.CALayer.GravityResizeAspectFill,
-				Stretch.Fill => (string)CoreAnimation.CALayer.GravityResize,
-				_ => throw new NotSupportedException("Stretch mode {0} is not supported".InvariantCultureFormat(stretch)),
-			};
-
-			if (gravityResize != null)
-			{
-				_native.Layer.ContentsGravity = gravityResize;
+				case Stretch.Uniform:
+					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspect;
+					break;
+				case Stretch.None:
+					_native.ImageScaling = NSImageScale.None;
+					break;
+				case Stretch.UniformToFill:
+					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspectFill;
+					_native.ImageScaling = NSImageScale.AxesIndependently;
+					break;
+				case Stretch.Fill:
+					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResize;
+					break;
+				default:
+					throw new NotSupportedException("Stretch mode {0} is not supported".InvariantCultureFormat(stretch));
 			}
 
 			_native.Layer.SetContents(image);
