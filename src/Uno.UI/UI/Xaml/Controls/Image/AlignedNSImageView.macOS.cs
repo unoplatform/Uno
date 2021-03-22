@@ -9,7 +9,7 @@ using CoreGraphics;
 namespace Windows.UI.Xaml.Controls
 {
 	// https://github.com/reydanro/UIImageViewAligned
-	internal class AlignedNSImageView : NSImageView
+	internal partial class AlignedNSImageView : NSImageView
 	{
 		private readonly NSImageView _realImageView;
 		private Stretch _stretch = Stretch.Fill;
