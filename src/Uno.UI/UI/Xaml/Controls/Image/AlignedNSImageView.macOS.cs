@@ -88,7 +88,7 @@ namespace Windows.UI.Xaml.Controls
 			_realImageView.Frame = realFrame;
 
 			// Make sure we clear the contents of this container layer, since it refreshes from the image property once in a while.
-			Layer.Contents = null;
+			//Layer.Contents = null;
 		}
 
 		private CGSize GetContentSize()
