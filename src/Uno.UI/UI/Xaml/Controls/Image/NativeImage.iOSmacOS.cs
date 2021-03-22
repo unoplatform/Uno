@@ -8,7 +8,7 @@ using _UIImage = UIKit.UIImage;
 using _UIImageView = UIKit.UIImageView;
 #elif __MACOS__
 using _UIImage = AppKit.NSImage;
-using _UIImageView = AppKit.NSImageView;
+using _UIImageView = Windows.UI.Xaml.Controls.AlignedNSImageView;
 #endif
 
 namespace Windows.UI.Xaml.Controls
