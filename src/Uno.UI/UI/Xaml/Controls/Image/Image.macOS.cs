@@ -44,6 +44,7 @@ namespace Windows.UI.Xaml.Controls
 					break;
 				case Stretch.UniformToFill:
 					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspectFill;
+					_native.Alignment = NSTextAlignment.Left;
 					break;
 				case Stretch.Fill:
 					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResize;
