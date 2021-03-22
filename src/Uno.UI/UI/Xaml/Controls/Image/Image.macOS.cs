@@ -39,14 +39,15 @@ namespace Windows.UI.Xaml.Controls
 					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspect;
 					break;
 				case Stretch.None:
-					_native.ImageScaling = NSImageScale.None;
+					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityTopLeft;
+
 					break;
 				case Stretch.UniformToFill:
 					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspectFill;
-					_native.ImageScaling = NSImageScale.AxesIndependently;
 					break;
 				case Stretch.Fill:
 					_native.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResize;
+					_native.Alignment = NSTextAlignment.Left;
 					break;
 				default:
 					throw new NotSupportedException("Stretch mode {0} is not supported".InvariantCultureFormat(stretch));
