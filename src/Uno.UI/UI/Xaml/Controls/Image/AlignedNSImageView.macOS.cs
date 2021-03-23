@@ -87,6 +87,7 @@ namespace Windows.UI.Xaml.Controls
 
 			_realImageView.Frame = realFrame;
 
+			base.Layout();
 			// Make sure we clear the contents of this container layer, since it refreshes from the image property once in a while.
 			//Layer.Contents = null;
 		}
