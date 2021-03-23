@@ -85,7 +85,7 @@ namespace Windows.UI.Xaml.Controls
 			////else if (_vAlign == VerticalAlignment.Bottom)
 			////	realFrame.Y = Bounds.Bottom - realFrame.Size.Height;
 
-			//_realImageView.Frame = realFrame;
+			_realImageView.Frame = Bounds;
 
 			base.Layout();
 			// Make sure we clear the contents of this container layer, since it refreshes from the image property once in a while.
