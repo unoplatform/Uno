@@ -71,8 +71,7 @@ namespace Windows.UI.Xaml.Controls
 		public override void Layout()
 		{
 			var realSize = GetContentSize();
-			if (_stretch == Stretch.Uniform ||
-				_stretch == Stretch.None)
+			if (_stretch == Stretch.Uniform)
 			{
 				_realImageView.Frame = Bounds;
 			}
