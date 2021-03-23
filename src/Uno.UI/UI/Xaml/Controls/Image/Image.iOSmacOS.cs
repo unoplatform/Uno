@@ -148,7 +148,11 @@ namespace Windows.UI.Xaml.Controls
 				TryCreateNative();
 
 				_native.SetImage(image);
+#if __MACOS__
+				_native.UpdateContentMode(Stretch, HorizontalAlignment, VerticalAlignment);
+#else
 				UpdateContentMode(Stretch, image);
+#endif
 
 				SourceImageSize = image?.Size.ToFoundationSize() ?? default(Size);
 			}
