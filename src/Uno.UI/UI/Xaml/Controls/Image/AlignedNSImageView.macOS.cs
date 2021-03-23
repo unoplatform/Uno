@@ -48,7 +48,7 @@ namespace Windows.UI.Xaml.Controls
 					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspect;
 					break;
 				case Stretch.None:
-					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityTopLeft;
+					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityCenter;
 
 					break;
 				case Stretch.UniformToFill:
@@ -134,7 +134,6 @@ namespace Windows.UI.Xaml.Controls
 					}
 
 				case Stretch.Fill:
-				case Stretch.None:
 					{
 						var scalex = Bounds.Size.Width / _realImageView.Image.Size.Width;
 						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
