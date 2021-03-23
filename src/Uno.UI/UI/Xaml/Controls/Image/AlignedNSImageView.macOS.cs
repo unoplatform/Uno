@@ -48,7 +48,7 @@ namespace Windows.UI.Xaml.Controls
 					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspect;
 					break;
 				case Stretch.None:
-					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityBottomRight;
+					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityCenter;
 
 					break;
 				case Stretch.UniformToFill:
@@ -70,35 +70,33 @@ namespace Windows.UI.Xaml.Controls
 
 		public override void Layout()
 		{
-			var realSize = GetContentSize();
 			if (_stretch == Stretch.Uniform)
 			{
 				_realImageView.Frame = Bounds;
 			}
 			else
 			{
+				var realSize = GetContentSize();
 				var realFrame = new CGRect(
 					x: 0,
 					y: 0,
 					width: realSize.Width,
 					height: realSize.Height);
 
-				//if (_hAlign == HorizontalAlignment.Center)
-				//	realFrame.X = (Bounds.Size.Width - realSize.Width) / 2;
-				//else if (_hAlign == HorizontalAlignment.Left)
-				//	realFrame.X = Bounds.Right - realFrame.Size.Width;
+				if (_hAlign == HorizontalAlignment.Center)
+					realFrame.X = (Bounds.Size.Width - realSize.Width) / 2;
+				else if (_hAlign == HorizontalAlignment.Left)
+					realFrame.X = Bounds.Right - realFrame.Size.Width;
 
-				//if (_vAlign == VerticalAlignment.Center)
-				//	realFrame.Y = (Bounds.Size.Height - realSize.Height) / 2;
-				//else if (_vAlign == VerticalAlignment.Bottom)
-				//	realFrame.Y = Bounds.Bottom - realFrame.Size.Height;
+				if (_vAlign == VerticalAlignment.Center)
+					realFrame.Y = (Bounds.Size.Height - realSize.Height) / 2;
+				else if (_vAlign == VerticalAlignment.Bottom)
+					realFrame.Y = Bounds.Bottom - realFrame.Size.Height;
 
 				_realImageView.Frame = realFrame;
 			}
 
 			base.Layout();
-			// Make sure we clear the contents of this container layer, since it refreshes from the image property once in a while.
-			//Layer.Contents = null;
 		}
 
 		private CGSize GetContentSize()
@@ -124,7 +122,6 @@ namespace Windows.UI.Xaml.Controls
 					}
 
 				case Stretch.UniformToFill:
-				case Stretch.None:
 					{
 						var scalex = Bounds.Size.Width / _realImageView.Image.Size.Width;
 						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
