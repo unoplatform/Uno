@@ -63,6 +63,8 @@ namespace Windows.UI.Xaml.Controls
 
 			_realImageView.Layer.SetContents(Image);
 			_realImageView.WantsLayer = true;
+
+			Layout();
 		}
 
 
