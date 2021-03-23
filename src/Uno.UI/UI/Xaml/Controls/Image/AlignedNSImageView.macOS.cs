@@ -105,12 +105,12 @@ namespace Windows.UI.Xaml.Controls
 			{
 				case Stretch.Uniform:
 					{
-						var scalex = Bounds.Size.Width / _realImageView.Image.Size.Width;
-						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
-						var scale = (nfloat)Math.Min(scalex, scaley);
+						//var scalex = Bounds.Size.Width / _realImageView.Image.Size.Width;
+						//var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
+						//var scale = (nfloat)Math.Min(scalex, scaley);
 
-						if (scale > 1.0f || scale < 1.0f)
-							scale = 1.0f;
+						//if (scale > 1.0f || scale < 1.0f)
+							var scale = 1.0f;
 						size = new CGSize(_realImageView.Image.Size.Width * scale, _realImageView.Image.Size.Height * scale);
 						break;
 					}
