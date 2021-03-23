@@ -118,8 +118,7 @@ namespace Windows.UI.Xaml.Controls
 						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
 						var scale = (nfloat)Math.Min(scalex, scaley);
 
-						if (scale > 1.0f || scale < 1.0f)
-							scale = 1.0f;
+						
 						size = new CGSize(_realImageView.Image.Size.Width * scale, _realImageView.Image.Size.Height * scale);
 						break;
 					}
@@ -130,9 +129,6 @@ namespace Windows.UI.Xaml.Controls
 						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
 						var scale = (nfloat)Math.Max(scalex, scaley);
 
-						if (scale > 1.0f || scale < 1.0f)
-							scale = 1.0f;
-
 						size = new CGSize(_realImageView.Image.Size.Width * scale, _realImageView.Image.Size.Height * scale);
 						break;
 					}
@@ -142,10 +138,6 @@ namespace Windows.UI.Xaml.Controls
 						var scalex = Bounds.Size.Width / _realImageView.Image.Size.Width;
 						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
 
-						if (scalex > 1.0f || scalex < 1.0f)
-							scalex = 1.0f;
-						if (scaley > 1.0f || scaley < 1.0f)
-							scaley = 1.0f;
 
 						size = new CGSize(_realImageView.Image.Size.Width * scalex, _realImageView.Image.Size.Height * scaley);
 						break;
