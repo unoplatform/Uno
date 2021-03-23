@@ -124,6 +124,7 @@ namespace Windows.UI.Xaml.Controls
 					}
 
 				case Stretch.UniformToFill:
+				case Stretch.None:
 					{
 						var scalex = Bounds.Size.Width / _realImageView.Image.Size.Width;
 						var scaley = Bounds.Size.Height / _realImageView.Image.Size.Height;
