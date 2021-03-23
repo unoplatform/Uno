@@ -48,7 +48,7 @@ namespace Windows.UI.Xaml.Controls
 					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityResizeAspect;
 					break;
 				case Stretch.None:
-					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityCenter;
+					_realImageView.Layer.ContentsGravity = (string)CoreAnimation.CALayer.GravityBottomRight;
 
 					break;
 				case Stretch.UniformToFill:
