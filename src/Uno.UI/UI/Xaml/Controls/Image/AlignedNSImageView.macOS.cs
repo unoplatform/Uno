@@ -68,24 +68,24 @@ namespace Windows.UI.Xaml.Controls
 
 		public override void Layout()
 		{
-			var realSize = GetContentSize();
-			var realFrame = new CGRect(
-				x: (Bounds.Size.Width - realSize.Width) / 2,
-				y: (Bounds.Size.Height - realSize.Height) / 2,
-				width: realSize.Width,
-				height: realSize.Height);
+			//var realSize = GetContentSize();
+			//var realFrame = new CGRect(
+			//	x: (Bounds.Size.Width - realSize.Width) / 2,
+			//	y: (Bounds.Size.Height - realSize.Height) / 2,
+			//	width: realSize.Width,
+			//	height: realSize.Height);
 
-			//if (_hAlign == HorizontalAlignment.Center)
-			//	realFrame.X = (Bounds.Size.Width - realSize.Width) / 2;
-			//else if (_hAlign == HorizontalAlignment.Left)
-			//	realFrame.X = Bounds.Right - realFrame.Size.Width;
+			////if (_hAlign == HorizontalAlignment.Center)
+			////	realFrame.X = (Bounds.Size.Width - realSize.Width) / 2;
+			////else if (_hAlign == HorizontalAlignment.Left)
+			////	realFrame.X = Bounds.Right - realFrame.Size.Width;
 
-			//if (_vAlign == VerticalAlignment.Center)
-			//	realFrame.Y = (Bounds.Size.Height - realSize.Height) / 2;
-			//else if (_vAlign == VerticalAlignment.Bottom)
-			//	realFrame.Y = Bounds.Bottom - realFrame.Size.Height;
+			////if (_vAlign == VerticalAlignment.Center)
+			////	realFrame.Y = (Bounds.Size.Height - realSize.Height) / 2;
+			////else if (_vAlign == VerticalAlignment.Bottom)
+			////	realFrame.Y = Bounds.Bottom - realFrame.Size.Height;
 
-			_realImageView.Frame = realFrame;
+			//_realImageView.Frame = realFrame;
 
 			base.Layout();
 			// Make sure we clear the contents of this container layer, since it refreshes from the image property once in a while.
