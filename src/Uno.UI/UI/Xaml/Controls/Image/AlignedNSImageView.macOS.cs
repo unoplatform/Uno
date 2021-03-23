@@ -85,7 +85,7 @@ namespace Windows.UI.Xaml.Controls
 
 				if (_hAlign == HorizontalAlignment.Center)
 					realFrame.X = (Bounds.Size.Width - realSize.Width) / 2;
-				else if (_hAlign == HorizontalAlignment.Left)
+				else if (_hAlign == HorizontalAlignment.Right)
 					realFrame.X = Bounds.Right - realFrame.Size.Width;
 
 				if (_vAlign == VerticalAlignment.Center)
