@@ -8,13 +8,93 @@
 				<ControlTemplate TargetType="toolkit:ElevatedView">
 					<Grid>
 						<Canvas x:Name="PART_ShadowHost" />
-						
+
 						<Border x:Name="PART_Border"
 								Background="{TemplateBinding Background}"
 								BorderBrush="{TemplateBinding BorderBrush}"
 								BorderThickness="{TemplateBinding BorderThickness}"
 								CornerRadius="{TemplateBinding CornerRadius}"
 								Child="{TemplateBinding ElevatedContent}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="TabBar">
+		<Setter Property="IsTabStop"
+				Value="False" />
+		<Setter Property="OverflowButtonStyle"
+				Value="{StaticResource TabBarOverflowButtonStyle}" />
+		<Setter Property="ItemsPanel">
+			<Setter.Value>
+				<ItemsPanelTemplate>
+					<ItemsStackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="TabBar">
+					<Grid x:Name="RootGrid">
+						<Grid x:Name="TabBarGrid"
+							  Background="{TemplateBinding Background}"
+							  Height="{ThemeResource TabBarHeight}">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="Auto" />
+								<ColumnDefinition Width="Auto" />
+							</Grid.ColumnDefinitions>
+							<ListView x:Name="TabBarItemsHost"
+									  Grid.Column="0"
+									  AutomationProperties.LandmarkType="Navigation"
+									  IsItemClickEnabled="True"
+									  ItemTemplate="{TemplateBinding TabBarItemTemplate}"
+									  ItemTemplateSelector="{TemplateBinding TabBarItemTemplateSelector}"
+									  ItemContainerStyle="{TemplateBinding TabBarItemContainerStyle}"
+									  ItemContainerStyleSelector="{TemplateBinding TabBarItemContainerStyleSelector}"
+									  ItemsPanel="{TemplateBinding TabBarItemsPanel}"
+									  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+									  ScrollViewer.HorizontalScrollMode="Disabled"
+									  ScrollViewer.VerticalScrollBarVisibility="Hidden"
+									  ScrollViewer.VerticalScrollMode="Disabled"
+									  SelectionMode="Single" />
+							<ContentPresenter x:Name="SelectionIndicatorPresenter"
+											  Content="{TemplateBinding SelectionIndicator}"
+											  ContentTemplate="{TemplateBinding SelectionIndicatorTemplate}"
+											  ContentTemplateSelector="{TemplateBinding SelectionIndicatorTemplateSelector}"
+											  Style="{TemplateBinding SelectionIndicatorStyle}" />
+
+							<Button x:Name="TabBarOverflowButton"
+									Grid.Column="1"
+									Content="More"
+									Style="{TemplateBinding OverflowButtonStyle}"
+									Visibility="Collapsed">
+
+								<Button.Flyout>
+									<Flyout Placement="Bottom">
+										<Flyout.FlyoutPresenterStyle>
+											<!-- Based on is required until https://github.com/unoplatform/uno/issues/119 is fixed -->
+											<Style BasedOn="{StaticResource DefaultFlyoutPresenter}"
+												   TargetType="FlyoutPresenter">
+												<Setter Property="Padding"
+														Value="0,8" />
+												<!-- Set negative top margin to make the flyout align exactly with the button -->
+												<Setter Property="Margin"
+														Value="0,-4,0,0" />
+											</Style>
+										</Flyout.FlyoutPresenterStyle>
+										<ListView x:Name="TabBarItemsOverflowHost"
+												  IsItemClickEnabled="True"
+												  ItemContainerStyle="{TemplateBinding TabBarItemContainerStyle}"
+												  ItemContainerStyleSelector="{TemplateBinding TabBarItemContainerStyleSelector}"
+												  ItemTemplate="{TemplateBinding TabBarItemTemplate}"
+												  ItemTemplateSelector="{TemplateBinding TabBarItemTemplateSelector}"
+												  SingleSelectionFollowsFocus="False" />
+
+									</Flyout>
+								</Button.Flyout>
+							</Button>
+						</Grid>
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
