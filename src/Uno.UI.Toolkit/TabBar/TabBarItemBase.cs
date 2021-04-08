@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 
 namespace Uno.UI.Toolkit
 {
-	public partial class TabBarItemBase : Selector
+	public partial class TabBarItemBase : SelectorItem
 	{
 		public ICommand Command
 		{

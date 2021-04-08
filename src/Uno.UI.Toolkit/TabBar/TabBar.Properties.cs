@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -6,15 +7,6 @@ namespace Uno.UI.Toolkit
 {
 	public partial class TabBar
 	{
-		public object ItemsSource
-		{
-			get { return (object)GetValue(ItemsSourceProperty); }
-			set { SetValue(ItemsSourceProperty, value); }
-		}
-
-		public static readonly DependencyProperty ItemsSourceProperty =
-			DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(TabBar), new PropertyMetadata(default));
-
 		public DataTemplateSelector TabBarItemTemplateSelector
 		{
 			get { return (DataTemplateSelector)GetValue(ItemTemplateSelectorProperty); }
@@ -60,23 +52,24 @@ namespace Uno.UI.Toolkit
 		public static readonly DependencyProperty ItemsPanelProperty =
 			DependencyProperty.Register(nameof(TabBarItemsPanel), typeof(ItemsPanelTemplate), typeof(TabBar), new PropertyMetadata(default));
 
-		public IList<object> Items
+		public IList<TabBarItemBase> Items
 		{
-			get { return (IList<object>)GetValue(ItemsProperty); }
+			get { return (IList<TabBarItemBase>)GetValue(ItemsProperty); }
 			set { SetValue(ItemsProperty, value); }
 		}
 
 		public static readonly DependencyProperty ItemsProperty =
-			DependencyProperty.Register(nameof(Items), typeof(IList<object>), typeof(TabBar), new PropertyMetadata(default));
+			DependencyProperty.Register(nameof(Items), typeof(IList<TabBarItemBase>), typeof(TabBar), new PropertyMetadata(default, OnItemsChanged));
 
-		public object SelectedItem
+
+		public TabBarItemBase SelectedItem
 		{
-			get { return (object)GetValue(SelectedItemProperty); }
+			get { return (TabBarItemBase)GetValue(SelectedItemProperty); }
 			set { SetValue(SelectedItemProperty, value); }
 		}
 
 		public static readonly DependencyProperty SelectedItemProperty =
-			DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(TabBar), new PropertyMetadata(default));
+			DependencyProperty.Register(nameof(SelectedItem), typeof(TabBarItemBase), typeof(TabBar), new PropertyMetadata(default, OnSelectedItemChanged));
 
 		public bool CanShowOverflow
 		{
