@@ -15,15 +15,12 @@ namespace Uno.UI.Toolkit
 		}
 
 		public static readonly DependencyProperty IconProperty =
-			DependencyProperty.Register(nameof(Icon), typeof(IconElement), typeof(TabBarItem), new PropertyMetadata(default));
+			DependencyProperty.Register(nameof(Icon), typeof(IconElement), typeof(TabBarItem), new PropertyMetadata(null, OnPropertyChanged));
 
-		public IconElement SelectedIcon
+		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
-			get { return (IconElement)GetValue(SelectedIconProperty); }
-			set { SetValue(SelectedIconProperty, value); }
+			var owner = (TabBarItem)sender;
+			owner.OnPropertyChanged(args);
 		}
-
-		public static readonly DependencyProperty SelectedIconProperty =
-			DependencyProperty.Register(nameof(SelectedIcon), typeof(IconElement), typeof(TabBarItem), new PropertyMetadata(default));
 	}
 }

@@ -4,7 +4,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 
 namespace Uno.UI.Toolkit
 {
-	public partial class TabBarItemBase : SelectorItem
+	public partial class TabBarItemBase : ListViewItem
 	{
 		public ICommand Command
 		{
@@ -12,8 +12,8 @@ namespace Uno.UI.Toolkit
 			set { SetValue(CommandProperty, value); }
 		}
 
-		public static readonly DependencyProperty CommandProperty =
-			DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(TabBarItemBase), new PropertyMetadata(default));
+		public static DependencyProperty CommandProperty { get; } =
+			DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(TabBarItemBase), new PropertyMetadata(null));
 
 		public object CommandParameter
 		{
@@ -21,7 +21,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(CommandParameterProperty, value); }
 		}
 
-		public static readonly DependencyProperty CommandParameterProperty =
-			DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(TabBarItemBase), new PropertyMetadata(default));
+		public static DependencyProperty CommandParameterProperty { get; } =
+			DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(TabBarItemBase), new PropertyMetadata(null));
 	}
 }

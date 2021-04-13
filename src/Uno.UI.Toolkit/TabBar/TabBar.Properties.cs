@@ -13,7 +13,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(ItemTemplateSelectorProperty, value); }
 		}
 
-		public static readonly DependencyProperty ItemTemplateSelectorProperty =
+		public static DependencyProperty ItemTemplateSelectorProperty { get; } =
 			DependencyProperty.Register(nameof(TabBarItemTemplateSelector), typeof(DataTemplateSelector), typeof(TabBar), new PropertyMetadata(default));
 
 		public DataTemplate TabBarItemTemplate
@@ -22,7 +22,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(ItemTemplateProperty, value); }
 		}
 
-		public static readonly DependencyProperty ItemTemplateProperty =
+		public static DependencyProperty ItemTemplateProperty { get; } =
 			DependencyProperty.Register(nameof(TabBarItemTemplate), typeof(DataTemplate), typeof(TabBar), new PropertyMetadata(default));
 
 		public StyleSelector TabBarItemContainerStyleSelector
@@ -31,7 +31,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(ItemContainerStyleSelectorProperty, value); }
 		}
 
-		public static readonly DependencyProperty ItemContainerStyleSelectorProperty =
+		public static DependencyProperty ItemContainerStyleSelectorProperty { get; } =
 			DependencyProperty.Register(nameof(TabBarItemContainerStyleSelector), typeof(StyleSelector), typeof(TabBar), new PropertyMetadata(default));
 
 		public Style TabBarItemContainerStyle
@@ -40,54 +40,65 @@ namespace Uno.UI.Toolkit
 			set { SetValue(ItemContainerStyleProperty, value); }
 		}
 
-		public static readonly DependencyProperty ItemContainerStyleProperty =
+		public static DependencyProperty ItemContainerStyleProperty { get; } =
 			DependencyProperty.Register(nameof(TabBarItemContainerStyle), typeof(Style), typeof(TabBar), new PropertyMetadata(default));
 
 		public ItemsPanelTemplate TabBarItemsPanel
 		{
-			get { return (ItemsPanelTemplate)GetValue(ItemsPanelProperty); }
-			set { SetValue(ItemsPanelProperty, value); }
+			get { return (ItemsPanelTemplate)GetValue(TabBarItemsPanelProperty); }
+			set { SetValue(TabBarItemsPanelProperty, value); }
 		}
 
-		public static readonly DependencyProperty ItemsPanelProperty =
+		public static DependencyProperty TabBarItemsPanelProperty { get; } =
 			DependencyProperty.Register(nameof(TabBarItemsPanel), typeof(ItemsPanelTemplate), typeof(TabBar), new PropertyMetadata(default));
 
-		public IList<TabBarItemBase> Items
+		public IList<object> Items
 		{
-			get { return (IList<TabBarItemBase>)GetValue(ItemsProperty); }
+			get { return (IList<object>)GetValue(ItemsProperty); }
 			set { SetValue(ItemsProperty, value); }
 		}
 
-		public static readonly DependencyProperty ItemsProperty =
-			DependencyProperty.Register(nameof(Items), typeof(IList<TabBarItemBase>), typeof(TabBar), new PropertyMetadata(default, OnItemsChanged));
+		public static DependencyProperty ItemsProperty { get; } =
+			DependencyProperty.Register(nameof(Items), typeof(IList<object>), typeof(TabBar), new PropertyMetadata(default, OnPropertyChanged));
 
-
-		public TabBarItemBase SelectedItem
+		public object ItemsSource
 		{
-			get { return (TabBarItemBase)GetValue(SelectedItemProperty); }
+			get => (object)GetValue(ItemsSourceProperty);
+			set => SetValue(ItemsSourceProperty, value);
+		}
+
+		public static DependencyProperty ItemsSourceProperty { get; } =
+			DependencyProperty.Register(nameof(ItemsSource), typeof(object), typeof(TabBar), new PropertyMetadata(null));
+
+
+		public object SelectedItem
+		{
+			get { return (object)GetValue(SelectedItemProperty); }
 			set { SetValue(SelectedItemProperty, value); }
 		}
 
-		public static readonly DependencyProperty SelectedItemProperty =
-			DependencyProperty.Register(nameof(SelectedItem), typeof(TabBarItemBase), typeof(TabBar), new PropertyMetadata(default, OnSelectedItemChanged));
+		public static DependencyProperty SelectedItemProperty { get; } =
+			DependencyProperty.Register(nameof(SelectedItem), typeof(object), typeof(TabBar), new PropertyMetadata(default, OnPropertyChanged));
 
-		public bool CanShowOverflow
+
+		public bool ShowSelectionIndicator
 		{
-			get { return (bool)GetValue(CanShowOverflowProperty); }
-			set { SetValue(CanShowOverflowProperty, value); }
+			get { return (bool)GetValue(ShowSelectionIndicatorProperty); }
+			set { SetValue(ShowSelectionIndicatorProperty, value); }
 		}
 
-		public static readonly DependencyProperty CanShowOverflowProperty =
-			DependencyProperty.Register(nameof(CanShowOverflow), typeof(bool), typeof(TabBar), new PropertyMetadata(default));
+		public static DependencyProperty ShowSelectionIndicatorProperty { get; } =
+			DependencyProperty.Register(nameof(ShowSelectionIndicator), typeof(bool), typeof(TabBar), new PropertyMetadata(true));
 
-		public Style OverflowButtonStyle
+		public bool AnimateSelectionIndicator
 		{
-			get { return (Style)GetValue(OverflowButtonStyleProperty); }
-			set { SetValue(OverflowButtonStyleProperty, value); }
+			get { return (bool)GetValue(AnimateSelectionIndicatorProperty); }
+			set { SetValue(AnimateSelectionIndicatorProperty, value); }
 		}
 
-		public static readonly DependencyProperty OverflowButtonStyleProperty =
-			DependencyProperty.Register(nameof(OverflowButtonStyle), typeof(Style), typeof(TabBar), new PropertyMetadata(default));
+		public static DependencyProperty AnimateSelectionIndicatorProperty { get; } =
+			DependencyProperty.Register(nameof(AnimateSelectionIndicator), typeof(bool), typeof(TabBar), new PropertyMetadata(true));
+
 
 		public SelectionIndicatorPlacement SelectionIndicatorPlacement
 		{
@@ -95,8 +106,8 @@ namespace Uno.UI.Toolkit
 			set { SetValue(SelectionIndicatorPlacementProperty, value); }
 		}
 
-		public static readonly DependencyProperty SelectionIndicatorPlacementProperty =
-			DependencyProperty.Register(nameof(SelectionIndicatorPlacement), typeof(SelectionIndicatorPlacement), typeof(TabBar), new PropertyMetadata(SelectionIndicatorPlacement.Below));
+		public static DependencyProperty SelectionIndicatorPlacementProperty { get; } =
+			DependencyProperty.Register(nameof(SelectionIndicatorPlacement), typeof(SelectionIndicatorPlacement), typeof(TabBar), new PropertyMetadata(SelectionIndicatorPlacement.Below, OnPropertyChanged));
 
 		public UIElement SelectionIndicator
 		{
@@ -104,7 +115,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(SelectionIndicatorProperty, value); }
 		}
 
-		public static readonly DependencyProperty SelectionIndicatorProperty =
+		public static DependencyProperty SelectionIndicatorProperty { get; } =
 			DependencyProperty.Register(nameof(SelectionIndicator), typeof(UIElement), typeof(TabBar), new PropertyMetadata(default));
 
 		public Style SelectionIndicatorStyle
@@ -113,7 +124,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(SelectionIndicatorStyleProperty, value); }
 		}
 
-		public static readonly DependencyProperty SelectionIndicatorStyleProperty =
+		public static DependencyProperty SelectionIndicatorStyleProperty { get; } =
 			DependencyProperty.Register(nameof(SelectionIndicatorStyle), typeof(Style), typeof(TabBar), new PropertyMetadata(default));
 
 		public DataTemplate SelectionIndicatorTemplate
@@ -122,7 +133,7 @@ namespace Uno.UI.Toolkit
 			set { SetValue(SelectionIndicatorTemplateProperty, value); }
 		}
 
-		public static readonly DependencyProperty SelectionIndicatorTemplateProperty =
+		public static DependencyProperty SelectionIndicatorTemplateProperty { get; } =
 			DependencyProperty.Register(nameof(SelectionIndicatorTemplate), typeof(DataTemplate), typeof(TabBar), new PropertyMetadata(default));
 
 		public DataTemplateSelector SelectionIndicatorTemplateSelector
@@ -131,7 +142,13 @@ namespace Uno.UI.Toolkit
 			set { SetValue(SelectionIndicatorTemplateSelectorProperty, value); }
 		}
 
-		public static readonly DependencyProperty SelectionIndicatorTemplateSelectorProperty =
+		public static DependencyProperty SelectionIndicatorTemplateSelectorProperty { get; } =
 			DependencyProperty.Register(nameof(SelectionIndicatorTemplateSelector), typeof(DataTemplateSelector), typeof(TabBar), new PropertyMetadata(default));
+
+		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
+		{
+			var owner = (TabBar)sender;
+			owner.OnPropertyChanged(args);
+		}
 	}
 }
