@@ -21,7 +21,6 @@ namespace Uno.UI.Toolkit
 		private TranslateTransform _selectionIndicatorTransform;
 
 		private SerialDisposable _tabBarListSubscriptions = new SerialDisposable();
-		private SerialDisposable _sizeChangedSubscription = new SerialDisposable();
 
 		public TabBar()
 		{
@@ -30,20 +29,13 @@ namespace Uno.UI.Toolkit
 			var items = new ObservableCollection<object>();
 			SetValue(ItemsProperty, items);
 
-			Loaded += OnLoaded;
-			Unloaded += OnUnloaded;
-		}
-
-		private void OnLoaded(object sender, RoutedEventArgs e)
-		{
 			SizeChanged += OnSizeChanged;
-			_sizeChangedSubscription.Disposable = Disposable.Create(() => SizeChanged -= OnSizeChanged);
+			Unloaded += OnUnloaded;
 		}
 
 		private void OnUnloaded(object sender, RoutedEventArgs e)
 		{
 			UnhookTabBarListEvents();
-			_sizeChangedSubscription.Disposable = null;
 		}
 
 		private void UnhookTabBarListEvents()
