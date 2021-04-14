@@ -69,30 +69,13 @@ namespace Uno.UI.Toolkit
 
 				_tabBarItemsHost.Loaded += OnTabBarListLoaded;
 				_tabBarItemsHost.SelectionChanged += OnTabBarListSelectionChanged;
-				_tabBarItemsHost.ItemClick += OnTabBarListItemClicked;
 
 				disposable.Add(() => _tabBarItemsHost.Loaded -= OnTabBarListLoaded);
 				disposable.Add(() => _tabBarItemsHost.SelectionChanged -= OnTabBarListSelectionChanged);
-				disposable.Add(() => _tabBarItemsHost.ItemClick -= OnTabBarListItemClicked);
 			}
 
 			UpdateItemsSource();
 			OnSelectionIndicatorPlacementChanged();
-		}
-
-		private void OnTabBarListItemClicked(object sender, ItemClickEventArgs e)
-		{
-			var command = Command;
-			if (command == null)
-			{
-				return;
-			}
-
-			var commandParam = CommandParameter ?? e.ClickedItem;
-			if (command.CanExecute(commandParam))
-			{
-				command.Execute(commandParam);
-			}
 		}
 
 		private void OnTabBarListLoaded(object sender, RoutedEventArgs e)
@@ -125,7 +108,7 @@ namespace Uno.UI.Toolkit
 
 			if (prevItem != null && nextItem == null) // try to unselect an item but it's not allowed
 			{
-				// Always keep one item is selected
+				// Always keep one item selected
 				if (prevItem is TabBarItem tabBarItem)
 				{
 					tabBarItem.IsSelected = true;
@@ -183,7 +166,6 @@ namespace Uno.UI.Toolkit
 			{
 				MoveSelectionIndicator(nextItem);
 			}
-
 		}
 
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e)
