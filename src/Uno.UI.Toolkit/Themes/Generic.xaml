@@ -21,55 +21,136 @@
 		</Setter>
 	</Style>
 
+	<ResourceDictionary.ThemeDictionaries>
+		<ResourceDictionary x:Key="Dark">
+
+			<StaticResource x:Key="TabBarItemBackground"
+							ResourceKey="SystemControlTransparentBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundPointerOver"
+							ResourceKey="SystemControlHighlightListLowBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundPressed"
+							ResourceKey="SystemControlHighlightListMediumBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundSelected"
+							ResourceKey="SystemControlTransparentBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundSelectedPointerOver"
+							ResourceKey="SystemControlHighlightListLowBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundSelectedPressed"
+							ResourceKey="SystemControlHighlightListMediumBrush" />
+
+			<StaticResource x:Key="TabBarItemForeground"
+							ResourceKey="SystemControlForegroundBaseHighBrush" />
+			<StaticResource x:Key="TabBarItemForegroundPointerOver"
+							ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+			<StaticResource x:Key="TabBarItemForegroundPressed"
+							ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+			<StaticResource x:Key="TabBarItemForegroundDisabled"
+							ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+			<StaticResource x:Key="TabBarItemForegroundSelected"
+							ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+
+			<StaticResource x:Key="TabBarItemBorderBrush"
+							ResourceKey="SystemControlTransparentBrush" />
+		</ResourceDictionary>
+
+		<ResourceDictionary x:Key="Light">
+
+			<StaticResource x:Key="TabBarItemBackground"
+							ResourceKey="SystemControlTransparentBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundPointerOver"
+							ResourceKey="SystemControlHighlightListLowBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundPressed"
+							ResourceKey="SystemControlHighlightListMediumBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundSelected"
+							ResourceKey="SystemControlTransparentBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundSelectedPointerOver"
+							ResourceKey="SystemControlHighlightListLowBrush" />
+			<StaticResource x:Key="TabBarItemBackgroundSelectedPressed"
+							ResourceKey="SystemControlHighlightListMediumBrush" />
+
+			<StaticResource x:Key="TabBarItemForeground"
+							ResourceKey="SystemControlForegroundBaseHighBrush" />
+			<StaticResource x:Key="TabBarItemForegroundPointerOver"
+							ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+			<StaticResource x:Key="TabBarItemForegroundPressed"
+							ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+			<StaticResource x:Key="TabBarItemForegroundDisabled"
+							ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+			<StaticResource x:Key="TabBarItemForegroundSelected"
+							ResourceKey="SystemControlHighlightAltBaseHighBrush" />
+
+			<StaticResource x:Key="TabBarItemBorderBrush"
+							ResourceKey="SystemControlTransparentBrush" />
+		</ResourceDictionary>
+	</ResourceDictionary.ThemeDictionaries>
+
+	<x:Double x:Key="TabBarHeight">64</x:Double>
+	<x:Double x:Key="TabBarItemIconHeight">16</x:Double>
+	<x:Double x:Key="TabBarItemIconWidth">16</x:Double>
+	<Thickness x:Key="TabBarItemContentMargin">0,0,0,12</Thickness>
+	<Thickness x:Key="TabBarItemContentOnlyMargin">12,0</Thickness>
+	<Thickness x:Key="TabBarItemBorderThickness">1</Thickness>
+	
 	<Style TargetType="toolkit:TabBar">
 		<Setter Property="IsTabStop"
 				Value="False" />
-		<Setter Property="OverflowButtonStyle"
-				Value="{StaticResource TabBarOverflowButtonStyle}" />
+		<Setter Property="Height"
+				Value="{StaticResource TabBarHeight}" />
 		<Setter Property="TabBarItemsPanel">
 			<Setter.Value>
 				<ItemsPanelTemplate>
-					<ItemsStackPanel Orientation="Horizontal" />
+					<toolkit:TabBarListPanel />
 				</ItemsPanelTemplate>
 			</Setter.Value>
 		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate TargetType="TabBar">
-					<Grid x:Name="RootGrid">
-						<Grid x:Name="TabBarGrid"
-							  Background="{TemplateBinding Background}"
-							  Height="{ThemeResource TabBarHeight}">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto" />
-								<ColumnDefinition Width="Auto" />
-							</Grid.ColumnDefinitions>
-							<ListView x:Name="TabBarItemsHost"
-									  Grid.Column="0"
-									  AutomationProperties.LandmarkType="Navigation"
-									  IsItemClickEnabled="True"
-									  ItemTemplate="{TemplateBinding TabBarItemTemplate}"
-									  ItemTemplateSelector="{TemplateBinding TabBarItemTemplateSelector}"
-									  ItemContainerStyle="{TemplateBinding TabBarItemContainerStyle}"
-									  ItemContainerStyleSelector="{TemplateBinding TabBarItemContainerStyleSelector}"
-									  ItemsPanel="{TemplateBinding TabBarItemsPanel}"
-									  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-									  ScrollViewer.HorizontalScrollMode="Disabled"
-									  ScrollViewer.VerticalScrollBarVisibility="Hidden"
-									  ScrollViewer.VerticalScrollMode="Disabled"
-									  SelectionMode="Single" />
-							<Grid x:Name="SelectionIndicatorContainer">
-								<ContentPresenter x:Name="SelectionIndicatorPresenter"
-												  Content="{TemplateBinding SelectionIndicator}"
-												  ContentTemplate="{TemplateBinding SelectionIndicatorTemplate}"
-												  ContentTemplateSelector="{TemplateBinding SelectionIndicatorTemplateSelector}"
-												  Style="{TemplateBinding SelectionIndicatorStyle}" />
-								<Grid.RenderTransform>
-									<TranslateTransform x:Name="SelectionIndicatorTransform"/>
-								</Grid.RenderTransform>
-							</Grid>
-						</Grid>
+				<ControlTemplate TargetType="toolkit:TabBar">
+					<Grid x:Name="TabBarGrid"
+						  Background="{TemplateBinding Background}"
+						  Height="{TemplateBinding Height}">
+						<toolkit:TabBarList x:Name="TabBarItemsHost"
+											AutomationProperties.LandmarkType="Navigation"
+											SelectionMode="Single"
+											IsItemClickEnabled="True"
+											ItemTemplate="{TemplateBinding TabBarItemTemplate}"
+											ItemTemplateSelector="{TemplateBinding TabBarItemTemplateSelector}"
+											ItemContainerStyle="{TemplateBinding TabBarItemContainerStyle}"
+											ItemContainerStyleSelector="{TemplateBinding TabBarItemContainerStyleSelector}"
+											ItemsPanel="{TemplateBinding TabBarItemsPanel}" />
+						<ContentPresenter x:Name="SelectionIndicatorPresenter"
+										  HorizontalContentAlignment="Center"
+										  Content="{TemplateBinding SelectionIndicator}"
+										  ContentTemplate="{TemplateBinding SelectionIndicatorTemplate}"
+										  ContentTemplateSelector="{TemplateBinding SelectionIndicatorTemplateSelector}"
+										  Style="{TemplateBinding SelectionIndicatorStyle}"
+										  Opacity="0">
+							<ContentPresenter.RenderTransform>
+								<TranslateTransform x:Name="SelectionIndicatorTranslateTransform" />
+							</ContentPresenter.RenderTransform>
+						</ContentPresenter>
+
 					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style TargetType="toolkit:TabBarList">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ListView">
+					<Border BorderBrush="{TemplateBinding BorderBrush}"
+							Background="{TemplateBinding Background}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="{TemplateBinding CornerRadius}">
+						<ItemsPresenter Header="{TemplateBinding Header}"
+										HeaderTemplate="{TemplateBinding HeaderTemplate}"
+										HeaderTransitions="{TemplateBinding HeaderTransitions}"
+										Footer="{TemplateBinding Footer}"
+										FooterTemplate="{TemplateBinding FooterTemplate}"
+										FooterTransitions="{TemplateBinding FooterTransitions}"
+										Padding="{TemplateBinding Padding}" />
+					</Border>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
@@ -90,16 +171,19 @@
 				Value="Normal" />
 		<Setter Property="FontSize"
 				Value="{ThemeResource ControlContentThemeFontSize}" />
+		<Setter Property="Margin"
+				Value="{StaticResource TabBarItemContentMargin}" />
 		<Setter Property="UseSystemFocusVisuals"
 				Value="True" />
 		<Setter Property="HorizontalContentAlignment"
-				Value="Stretch" />
+				Value="Center" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="toolkit:TabBarItem">
 					<Grid x:Name="LayoutRoot"
 						  Background="{TemplateBinding Background}"
 						  Control.IsTemplateFocusTarget="True">
+
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="PointerStates">
 								<VisualState x:Name="Normal" />
@@ -176,17 +260,13 @@
 								</VisualState>
 							</VisualStateGroup>
 							<VisualStateGroup x:Name="TabBarIconPositionStates">
-								<VisualState x:Name="IconOnLeft" />
+								<VisualState x:Name="IconOnTop" />
 								<VisualState x:Name="IconOnly">
 									<VisualState.Setters>
 										<Setter Target="PointerRectangle.Visibility"
 												Value="Visible" />
-										<Setter Target="LayoutRoot.Width"
-												Value="48" />
 										<Setter Target="ContentPresenter.Visibility"
 												Value="Collapsed" />
-										<Setter Target="SelectionIndicatorGrid.Margin"
-												Value="4,0,4,4" />
 									</VisualState.Setters>
 								</VisualState>
 								<VisualState x:Name="ContentOnly">
@@ -194,9 +274,11 @@
 										<Setter Target="IconBox.Visibility"
 												Value="Collapsed" />
 										<Setter Target="ContentPresenter.Margin"
-												Value="12,0" />
-										<Setter Target="SelectionIndicatorGrid.Margin"
-												Value="12,0,12,4" />
+												Value="{StaticResource TabBarItemContentOnlyMargin}" />
+										<Setter Target="IconRow.Height"
+												Value="0" />
+										<Setter Target="ContentRow.Height"
+												Value="*" />
 									</VisualState.Setters>
 								</VisualState>
 							</VisualStateGroup>
@@ -204,32 +286,32 @@
 						<Rectangle x:Name="PointerRectangle"
 								   Fill="Transparent"
 								   Visibility="Collapsed" />
-						<Grid x:Name="ContentGrid">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto" />
-								<ColumnDefinition Width="*" />
-							</Grid.ColumnDefinitions>
+						<Grid x:Name="ContentGrid"
+							  HorizontalAlignment="Center">
+							<Grid.RowDefinitions>
+								<RowDefinition x:Name="IconRow"
+											   Height="*" />
+								<RowDefinition x:Name="ContentRow"
+											   Height="Auto" />
+							</Grid.RowDefinitions>
 							<Viewbox x:Name="IconBox"
-									 Height="16"
-									 Width="16"
-									 Margin="16,0,0,0"
-									 VerticalAlignment="Center"
-									 HorizontalAlignment="Center">
+									 Height="{StaticResource TabBarItemIconHeight}"
+									 Width="{StaticResource TabBarItemIconWidth}">
 								<ContentPresenter x:Name="Icon"
 												  Content="{TemplateBinding Icon}"
-												  Foreground="{ThemeResource TabBarItemForeground}" />
+												  Foreground="{TemplateBinding Foreground}" />
 							</Viewbox>
 							<ContentPresenter x:Name="ContentPresenter"
-											  Grid.Column="1"
-											  Margin="8,0,16,0"
-											  Foreground="{ThemeResource TabBarItemForeground}"
+											  Grid.Row="1"
+											  Foreground="{TemplateBinding Foreground}"
 											  TextWrapping="NoWrap"
+											  Margin="{TemplateBinding Margin}"
 											  ContentTransitions="{TemplateBinding ContentTransitions}"
 											  ContentTemplate="{TemplateBinding ContentTemplate}"
 											  Content="{TemplateBinding Content}"
 											  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 											  ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
-											  VerticalAlignment="Center"
+											  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 											  AutomationProperties.AccessibilityView="Raw" />
 						</Grid>
 					</Grid>

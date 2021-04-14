@@ -145,6 +145,24 @@ namespace Uno.UI.Toolkit
 		public static DependencyProperty SelectionIndicatorTemplateSelectorProperty { get; } =
 			DependencyProperty.Register(nameof(SelectionIndicatorTemplateSelector), typeof(DataTemplateSelector), typeof(TabBar), new PropertyMetadata(default));
 
+		public ICommand Command
+		{
+			get { return (ICommand)GetValue(CommandProperty); }
+			set { SetValue(CommandProperty, value); }
+		}
+
+		public static DependencyProperty CommandProperty { get; } =
+			DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(TabBar), new PropertyMetadata(null));
+
+		public object CommandParameter
+		{
+			get { return (object)GetValue(CommandParameterProperty); }
+			set { SetValue(CommandParameterProperty, value); }
+		}
+
+		public static DependencyProperty CommandParameterProperty { get; } =
+			DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(TabBar), new PropertyMetadata(null));
+
 		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
 			var owner = (TabBar)sender;

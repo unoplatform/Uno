@@ -69,14 +69,31 @@ namespace Uno.UI.Toolkit
 
 				_tabBarItemsHost.Loaded += OnTabBarListLoaded;
 				_tabBarItemsHost.SelectionChanged += OnTabBarListSelectionChanged;
+				_tabBarItemsHost.ItemClick += OnTabBarListItemClicked;
 
 				disposable.Add(() => _tabBarItemsHost.Loaded -= OnTabBarListLoaded);
 				disposable.Add(() => _tabBarItemsHost.SelectionChanged -= OnTabBarListSelectionChanged);
+				disposable.Add(() => _tabBarItemsHost.ItemClick -= OnTabBarListItemClicked);
 			}
 
 			UpdateItemsSource();
+			OnSelectionIndicatorPlacementChanged();
 		}
 
+		private void OnTabBarListItemClicked(object sender, ItemClickEventArgs e)
+		{
+			var command = Command;
+			if (command == null)
+			{
+				return;
+			}
+
+			var commandParam = CommandParameter ?? e.ClickedItem;
+			if (command.CanExecute(commandParam))
+			{
+				command.Execute(commandParam);
+			}
+		}
 
 		private void OnTabBarListLoaded(object sender, RoutedEventArgs e)
 		{
@@ -136,6 +153,15 @@ namespace Uno.UI.Toolkit
 			{
 				UpdateItemsSource();
 			}
+			else if (property == SelectionIndicatorPlacementProperty)
+			{
+				OnSelectionIndicatorPlacementChanged();
+			}
+		}
+
+		private void OnSelectionIndicatorPlacementChanged()
+		{
+			Canvas.SetZIndex(_selectionIndicatorPresenter, SelectionIndicatorPlacement == SelectionIndicatorPlacement.Above ? -10 : 10);
 		}
 
 		private void OnSelectedItemChanged(DependencyPropertyChangedEventArgs args)
@@ -155,7 +181,6 @@ namespace Uno.UI.Toolkit
 		{
 			if (prevItem != nextItem)
 			{
-				_selectionIndicatorPresenter.Opacity = 1f;
 				MoveSelectionIndicator(nextItem);
 			}
 
@@ -184,6 +209,7 @@ namespace Uno.UI.Toolkit
 			}
 
 			var centerXPos = GetRelativeCenterPosition(tabBarItem);
+			_selectionIndicatorPresenter.Opacity = 1f;
 			if (_selectionIndicatorTransform != null)
 			{
 				_selectionIndicatorTransform.X = centerXPos - ((_selectionIndicatorPresenter?.ActualWidth ?? 0) / 2);
