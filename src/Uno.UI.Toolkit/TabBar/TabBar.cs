@@ -162,16 +162,27 @@ namespace Uno.UI.Toolkit
 
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e)
 		{
-			MoveSelectionIndicator(SelectedItem);
+			var selectedItem = SelectedItem;
+			if (selectedItem != null)
+			{
+				MoveSelectionIndicator(selectedItem, force: true);
+			};
 		}
 
 		private bool ShouldShowSelectionIndicator() =>
 			_selectionIndicatorPresenter != null && SelectionIndicator != null && ShowSelectionIndicator;
 
 
-		private void MoveSelectionIndicator(object item)
+		private void MoveSelectionIndicator(object item, bool force = false)
 		{
-			if (!ShouldShowSelectionIndicator() || !AnimateSelectionIndicator)
+			if (!ShouldShowSelectionIndicator())
+			{
+				return;
+			}
+
+			_selectionIndicatorPresenter.Opacity = 1f;
+
+			if (!AnimateSelectionIndicator && !force)
 			{
 				return;
 			}
@@ -183,7 +194,7 @@ namespace Uno.UI.Toolkit
 			}
 
 			var centerXPos = GetRelativeCenterPosition(tabBarItem);
-			_selectionIndicatorPresenter.Opacity = 1f;
+
 			if (_selectionIndicatorTransform != null)
 			{
 				_selectionIndicatorTransform.X = centerXPos - ((_selectionIndicatorPresenter?.ActualWidth ?? 0) / 2);
