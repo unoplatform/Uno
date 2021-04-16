@@ -25,17 +25,18 @@
 		<ResourceDictionary x:Key="Dark">
 
 			<StaticResource x:Key="TabBarItemBackground"
-							ResourceKey="SystemControlTransparentBrush" />
+									ResourceKey="SystemControlTransparentBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundPointerOver"
-							ResourceKey="SystemControlHighlightListLowBrush" />
+									ResourceKey="SystemControlHighlightListLowBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundPressed"
-							ResourceKey="SystemControlHighlightListMediumBrush" />
+									ResourceKey="SystemControlHighlightListMediumBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundSelected"
-							ResourceKey="SystemControlTransparentBrush" />
+									ResourceKey="SystemControlHighlightListAccentLowBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundSelectedPointerOver"
-							ResourceKey="SystemControlHighlightListLowBrush" />
+									ResourceKey="SystemControlHighlightListAccentMediumBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundSelectedPressed"
-							ResourceKey="SystemControlHighlightListMediumBrush" />
+									ResourceKey="SystemControlHighlightListAccentHighBrush" />
+
 
 			<StaticResource x:Key="TabBarItemForeground"
 							ResourceKey="SystemControlForegroundBaseHighBrush" />
@@ -55,17 +56,17 @@
 		<ResourceDictionary x:Key="Light">
 
 			<StaticResource x:Key="TabBarItemBackground"
-							ResourceKey="SystemControlTransparentBrush" />
+									ResourceKey="SystemControlTransparentBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundPointerOver"
-							ResourceKey="SystemControlHighlightListLowBrush" />
+									ResourceKey="SystemControlHighlightListLowBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundPressed"
-							ResourceKey="SystemControlHighlightListMediumBrush" />
+									ResourceKey="SystemControlHighlightListMediumBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundSelected"
-							ResourceKey="SystemControlTransparentBrush" />
+									ResourceKey="SystemControlHighlightListAccentLowBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundSelectedPointerOver"
-							ResourceKey="SystemControlHighlightListLowBrush" />
+									ResourceKey="SystemControlHighlightListAccentMediumBrush" />
 			<StaticResource x:Key="TabBarItemBackgroundSelectedPressed"
-							ResourceKey="SystemControlHighlightListMediumBrush" />
+									ResourceKey="SystemControlHighlightListAccentHighBrush" />
 
 			<StaticResource x:Key="TabBarItemForeground"
 							ResourceKey="SystemControlForegroundBaseHighBrush" />
@@ -226,7 +227,7 @@
 								<VisualState x:Name="PointerOverSelected">
 									<VisualState.Setters>
 										<Setter Target="LayoutRoot.Background"
-												Value="{ThemeResource TabBarItemBackgroundPointerOver}" />
+												Value="{ThemeResource TabBarItemBackgroundSelectedPointerOver}" />
 										<Setter Target="PointerRectangle.Fill"
 												Value="{ThemeResource TabBarItemBackgroundSelectedPointerOver}" />
 										<Setter Target="Icon.Foreground"
@@ -238,7 +239,7 @@
 								<VisualState x:Name="PressedSelected">
 									<VisualState.Setters>
 										<Setter Target="LayoutRoot.Background"
-												Value="{ThemeResource TabBarItemBackgroundPressed}" />
+												Value="{ThemeResource TabBarItemBackgroundSelectedPressed}" />
 										<Setter Target="PointerRectangle.Fill"
 												Value="{ThemeResource TabBarItemBackgroundSelectedPressed}" />
 										<Setter Target="Icon.Foreground"
