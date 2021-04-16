@@ -8,6 +8,7 @@ namespace Uno.UI.Toolkit
 {
 	partial class TabBarItem
 	{
+		#region Icon
 		public IconElement Icon
 		{
 			get { return (IconElement)GetValue(IconProperty); }
@@ -17,6 +18,7 @@ namespace Uno.UI.Toolkit
 		public static readonly DependencyProperty IconProperty =
 			DependencyProperty.Register(nameof(Icon), typeof(IconElement), typeof(TabBarItem), new PropertyMetadata(null, OnPropertyChanged));
 
+		#endregion
 		private static void OnPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs args)
 		{
 			var owner = (TabBarItem)sender;

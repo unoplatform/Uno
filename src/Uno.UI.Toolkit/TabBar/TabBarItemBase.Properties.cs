@@ -8,6 +8,7 @@ namespace Uno.UI.Toolkit
 {
 	partial class TabBarItemBase
 	{
+		#region Command
 		public ICommand Command
 		{
 			get { return (ICommand)GetValue(CommandProperty); }
@@ -16,7 +17,9 @@ namespace Uno.UI.Toolkit
 
 		public static DependencyProperty CommandProperty { get; } =
 			DependencyProperty.Register(nameof(Command), typeof(ICommand), typeof(TabBarItemBase), new PropertyMetadata(null));
+		#endregion
 
+		#region CommandParameter
 		public object CommandParameter
 		{
 			get { return (object)GetValue(CommandParameterProperty); }
@@ -24,6 +27,7 @@ namespace Uno.UI.Toolkit
 		}
 
 		public static DependencyProperty CommandParameterProperty { get; } =
-			DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(TabBarItemBase), new PropertyMetadata(null));
+			DependencyProperty.Register(nameof(CommandParameter), typeof(object), typeof(TabBarItemBase), new PropertyMetadata(null)); 
+		#endregion
 	}
 }

@@ -136,7 +136,7 @@ namespace Uno.UI.Toolkit
 
 		private void OnSelectionIndicatorPlacementChanged()
 		{
-			Canvas.SetZIndex(_selectionIndicatorPresenter, SelectionIndicatorPlacement == SelectionIndicatorPlacement.Above ? -10 : 10);
+			Canvas.SetZIndex(_selectionIndicatorPresenter, SelectionIndicatorPlacement == SelectionIndicatorPlacement.Above ? 10 : -10);
 		}
 
 		private void OnSelectedItemChanged(DependencyPropertyChangedEventArgs args)

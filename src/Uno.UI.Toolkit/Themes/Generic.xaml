@@ -109,6 +109,19 @@
 					<Grid x:Name="TabBarGrid"
 						  Background="{TemplateBinding Background}"
 						  Height="{TemplateBinding Height}">
+						<ContentPresenter x:Name="SelectionIndicatorPresenter"
+										  HorizontalContentAlignment="Center"
+										  Style="{TemplateBinding SelectionIndicatorStyle}"
+										  Content="{TemplateBinding SelectionIndicator}"
+										  ContentTemplate="{TemplateBinding SelectionIndicatorTemplate}"
+										  ContentTemplateSelector="{TemplateBinding SelectionIndicatorTemplateSelector}"
+										  IsHitTestVisible="False"
+										  Style="{TemplateBinding SelectionIndicatorStyle}"
+										  Opacity="0">
+							<ContentPresenter.RenderTransform>
+								<TranslateTransform x:Name="SelectionIndicatorTranslateTransform" />
+							</ContentPresenter.RenderTransform>
+						</ContentPresenter>
 						<toolkit:TabBarList x:Name="TabBarItemsHost"
 											AutomationProperties.LandmarkType="Navigation"
 											SelectionMode="Single"
@@ -118,18 +131,6 @@
 											ItemContainerStyle="{TemplateBinding TabBarItemContainerStyle}"
 											ItemContainerStyleSelector="{TemplateBinding TabBarItemContainerStyleSelector}"
 											ItemsPanel="{TemplateBinding TabBarItemsPanel}" />
-						<ContentPresenter x:Name="SelectionIndicatorPresenter"
-										  HorizontalContentAlignment="Center"
-										  Content="{TemplateBinding SelectionIndicator}"
-										  ContentTemplate="{TemplateBinding SelectionIndicatorTemplate}"
-										  ContentTemplateSelector="{TemplateBinding SelectionIndicatorTemplateSelector}"
-										  Style="{TemplateBinding SelectionIndicatorStyle}"
-										  Opacity="0">
-							<ContentPresenter.RenderTransform>
-								<TranslateTransform x:Name="SelectionIndicatorTranslateTransform" />
-							</ContentPresenter.RenderTransform>
-						</ContentPresenter>
-
 					</Grid>
 				</ControlTemplate>
 			</Setter.Value>
