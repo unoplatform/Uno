@@ -18,8 +18,9 @@ namespace Uno.UI.Controls
 {
 	internal partial class CommandBarNavigationItemRenderer : Renderer<CommandBar, UINavigationItem?>
 	{
-		private static DependencyProperty NavigationCommandProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationCommand");
-		private static DependencyProperty BackButtonTitleProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "BackButtonTitle");
+		private static DependencyProperty NavigationButtonProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationButton");
+		private static DependencyProperty NavigationButtonModeProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationButtonMode");
+		private static DependencyProperty CurrentPageTitleProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "CurrentPageTitle");
 
 		private TitleView? _titleView;
 
@@ -62,9 +63,10 @@ namespace Uno.UI.Controls
 				(s, e) => RegisterCommandVisibilityAndInvalidate(),
 				new[] { CommandBar.PrimaryCommandsProperty },
 				new[] { CommandBar.ContentProperty },
-				new[] { NavigationCommandProperty },
-				new[] { NavigationCommandProperty, AppBarButton.VisibilityProperty },
-				new[] { BackButtonTitleProperty }
+				new[] { NavigationButtonProperty },
+				new[] { NavigationButtonModeProperty },
+				new[] { NavigationButtonModeProperty, AppBarButton.VisibilityProperty },
+				new[] { CurrentPageTitleProperty }
 			);
 
 			RegisterCommandVisibilityAndInvalidate();
@@ -101,11 +103,12 @@ namespace Uno.UI.Controls
 				.ToArray();
 
 			// CommandBarExtensions.NavigationCommand
-			var navigationCommand = element.GetValue(NavigationCommandProperty) as AppBarButton;
-			if (navigationCommand?.Visibility == Visibility.Visible)
+			var navigationButton = element.GetValue(NavigationButtonProperty) as AppBarButton;
+			var navigationButtonMode = element.GetValue(NavigationButtonModeProperty) as NavigationButtonMode;
+			if (navigationButton?.Visibility == Visibility.Visible)
 			{
-				navigationCommand.SetParent(element); // This ensures that Behaviors expecting this button to be in the logical tree work.
-				native.LeftBarButtonItem = navigationCommand.GetRenderer(() => new AppBarButtonRenderer(navigationCommand)).Native;
+				navigationButton.SetParent(element); // This ensures that Behaviors expecting this button to be in the logical tree work.
+				native.LeftBarButtonItem = navigationButton.GetRenderer(() => new AppBarButtonRenderer(navigationButton)).Native;
 			}
 			else
 			{
@@ -113,7 +116,7 @@ namespace Uno.UI.Controls
 			}
 
 			// CommandBarExtensions.BackButtonText
-			if (element.GetValue(BackButtonTitleProperty) is string backButtonText)
+			if (element.GetValue(CurrentPageTitleProperty) is string backButtonText)
 			{
 				native.BackBarButtonItem = new UIBarButtonItem(backButtonText, UIBarButtonItemStyle.Plain, null);
 			}

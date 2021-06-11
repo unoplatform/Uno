@@ -36,11 +36,11 @@ namespace Uno.UI.Toolkit
 
 		#endregion
 
-		#region NavigationCommand
+		#region NavigationButton
 
-		public static DependencyProperty NavigationCommandProperty { get; } =
+		public static DependencyProperty NavigationButtonProperty { get; } =
 			DependencyProperty.RegisterAttached(
-				"NavigationCommand",
+				"NavigationButton",
 				typeof(AppBarButton),
 				typeof(CommandBarExtensions),
 #if XAMARIN
@@ -50,108 +50,66 @@ namespace Uno.UI.Toolkit
 #endif
 			);
 
-		public static void SetNavigationCommand(this CommandBar commandBar, AppBarButton navigationCommand)
+		public static void SetNavigationButton(this CommandBar commandBar, AppBarButton navigationButton)
 		{
-			commandBar.SetValue(NavigationCommandProperty, navigationCommand);
+			commandBar.SetValue(NavigationButtonProperty, navigationButton);
 		}
 
-		public static AppBarButton GetNavigationCommand(this CommandBar commandBar)
+		public static AppBarButton GetNavigationButton(this CommandBar commandBar)
 		{
-			return (AppBarButton)commandBar.GetValue(NavigationCommandProperty);
+			return (AppBarButton)commandBar.GetValue(NavigationButtonProperty);
 		}
 
 		#endregion
 
-		#region BackButtonTitle
+		#region NavigationButtonMode
 
-		public static DependencyProperty BackButtonTitleProperty { get; } =
+		public static DependencyProperty NavigationButtonModeProperty { get; } =
 			DependencyProperty.RegisterAttached(
-				"BackButtonTitle",
+				"NavigationButtonMode",
+				typeof(NavigationButtonMode),
+				typeof(CommandBarExtensions),
+				new PropertyMetadata(NavigationButtonMode.Native)
+			);
+
+		public static void SetNavigationButtonMode(this CommandBar commandBar, NavigationButtonMode navigationButtonMode)
+		{
+			commandBar.SetValue(NavigationButtonModeProperty, navigationButtonMode);
+		}
+
+		public static AppBarButton GetNavigationButtonMode(this CommandBar commandBar)
+		{
+			return (AppBarButton)commandBar.GetValue(NavigationButtonModeProperty);
+		}
+		#endregion
+
+		#region CurrentPageTitle
+
+		public static DependencyProperty CurrentPageTitleProperty { get; } =
+			DependencyProperty.RegisterAttached(
+				"CurrentPageTitle",
 				typeof(string),
 				typeof(CommandBarExtensions),
 				new PropertyMetadata(null)
 			);
 
-		public static void SetBackButtonTitle(this CommandBar commandBar, string backButtonTitle)
+		public static void SetCurrentPageTitle(this CommandBar commandBar, string currentPageTitle)
 		{
-			commandBar.SetValue(BackButtonTitleProperty, backButtonTitle);
+			commandBar.SetValue(CurrentPageTitleProperty, currentPageTitle);
 		}
 
-		public static string GetBackButtonTitle(this CommandBar commandBar)
+		public static string GetCurrentPageTitle(this CommandBar commandBar)
 		{
-			return (string)commandBar.GetValue(BackButtonTitleProperty);
-		}
-
-		#endregion
-
-		#region BackButtonVisibility
-
-		public static DependencyProperty BackButtonVisibilityProperty { get; } =
-			DependencyProperty.RegisterAttached(
-				"BackButtonVisibility",
-				typeof(Visibility),
-				typeof(CommandBarExtensions),
-				new PropertyMetadata(Visibility.Collapsed)
-			);
-
-		public static void SetBackButtonVisibility(this CommandBar commandBar, Visibility BackButtonVisibility)
-		{
-			commandBar.SetValue(BackButtonVisibilityProperty, BackButtonVisibility);
-		}
-
-		public static Visibility GetBackButtonVisibility(this CommandBar commandBar)
-		{
-			return (Visibility)commandBar.GetValue(BackButtonVisibilityProperty);
-		}
-
-		#endregion
-
-		#region BackButtonForeground
-
-		public static DependencyProperty BackButtonForegroundProperty { get; } =
-			DependencyProperty.RegisterAttached(
-				"BackButtonForeground",
-				typeof(Brush),
-				typeof(CommandBarExtensions),
-#if XAMARIN
-				new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.ValueInheritsDataContext)
-#else
-				new PropertyMetadata(null)
-#endif
-			);
-
-		public static void SetBackButtonForeground(this CommandBar commandBar, Brush backButtonForeground)
-		{
-			commandBar.SetValue(BackButtonForegroundProperty, backButtonForeground);
-		}
-
-		public static Brush GetBackButtonForeground(this CommandBar commandBar)
-		{
-			return (Brush)commandBar.GetValue(BackButtonForegroundProperty);
-		}
-
-		#endregion
-
-		#region BackButtonIcon
-
-		public static DependencyProperty BackButtonIconProperty { get; } =
-			DependencyProperty.RegisterAttached(
-				"BackButtonIcon",
-				typeof(IconElement),
-				typeof(CommandBarExtensions),
-				new PropertyMetadata(null)
-			);
-
-		public static void SetBackButtonIcon(this CommandBar commandBar, IconElement backButtonIcon)
-		{
-			commandBar.SetValue(BackButtonIconProperty, backButtonIcon);
-		}
-
-		public static IconElement GetBackButtonIcon(this CommandBar commandBar)
-		{
-			return (IconElement)commandBar.GetValue(BackButtonIconProperty);
+			return (string)commandBar.GetValue(CurrentPageTitleProperty);
 		}
 
 		#endregion
 	}
+
+	public enum NavigationButtonMode
+	{
+		Native,
+		Override,
+	}
+
 }

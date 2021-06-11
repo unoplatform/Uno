@@ -28,10 +28,8 @@ namespace Uno.UI.Controls
 	internal partial class CommandBarRenderer : Renderer<CommandBar, Toolbar>
 	{
 		private static DependencyProperty SubtitleProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "Subtitle");
-		private static DependencyProperty NavigationCommandProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationCommand");
-		private static DependencyProperty BackButtonVisibilityProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "BackButtonVisibility");
-		private static DependencyProperty BackButtonForegroundProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "BackButtonForeground");
-		private static DependencyProperty BackButtonIconProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "BackButtonIcon");
+		private static DependencyProperty NavigationButtonProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationButton");
+		private static DependencyProperty NavigationButtonModeProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationButtonMode");
 
 		private static string? _actionBarUpDescription;
 		private static string? ActionBarUpDescription

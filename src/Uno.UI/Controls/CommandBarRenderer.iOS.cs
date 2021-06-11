@@ -16,8 +16,7 @@ namespace Uno.UI.Controls
 {
 	internal partial class CommandBarRenderer : Renderer<CommandBar, UINavigationBar>
 	{
-		private static DependencyProperty BackButtonForegroundProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "BackButtonForeground");
-		private static DependencyProperty BackButtonIconProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "BackButtonIcon");
+		private static DependencyProperty NavigationButtonProperty = ToolkitHelper.GetProperty("Uno.UI.Toolkit.CommandBarExtensions", "NavigationButton");
 
 		public CommandBarRenderer(CommandBar element) : base(element) { }
 
@@ -43,8 +42,8 @@ namespace Uno.UI.Controls
 				new[] { CommandBar.BackgroundProperty },
 				new[] { CommandBar.BackgroundProperty, SolidColorBrush.ColorProperty },
 				new[] { CommandBar.BackgroundProperty, SolidColorBrush.OpacityProperty },
-				new[] { BackButtonForegroundProperty },
-				new[] { BackButtonIconProperty }
+				new[] { NavigationButtonProperty, AppBarButton.ForegroundProperty },
+				new[] { NavigationButtonProperty, AppBarButton.IconProperty }
 			);
 
 			if (Native is UnoNavigationBar unoNavigationBar)
@@ -108,11 +107,13 @@ namespace Uno.UI.Controls
 			}
 
 			// CommandBarExtensions.BackButtonForeground
-			var backButtonForeground = Brush.GetColorWithOpacity(Element.GetValue(BackButtonForegroundProperty) as Brush);
+			var navigationButton = Element.GetValue(NavigationButtonProperty) as AppBarButton;
+
+			var backButtonForeground = Brush.GetColorWithOpacity(navigationButton?.Foreground);
 			Native.TintColor = backButtonForeground;
 
 			// CommandBarExtensions.BackButtonIcon
-			var backButtonIcon = Element.GetValue(BackButtonIconProperty) is BitmapIcon bitmapIcon
+			var backButtonIcon = navigationButton?.Icon is BitmapIcon bitmapIcon
 				? UIImageHelper.FromUri(bitmapIcon.UriSource)?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
 				: null;
 
