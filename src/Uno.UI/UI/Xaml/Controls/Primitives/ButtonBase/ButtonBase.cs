@@ -165,11 +165,11 @@ namespace Windows.UI.Xaml.Controls.Primitives
 
 		partial void RegisterEvents();
 
-		private void OnCommandChanged(ICommand newCommand)
+		protected virtual void OnCommandChanged(object oldValue, object newValue)
 		{
 			_commandCanExecute.Disposable = null;
 
-			if (newCommand != null)
+			if (newValue is ICommand newCommand)
 			{
 				EventHandler handler = (s, e) => OnCanExecuteChanged();
 

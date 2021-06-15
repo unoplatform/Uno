@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Windows.UI.Xaml.Controls.Primitives;
 
 namespace Windows.UI.Xaml.Controls
 {
 	partial class AppBarToggleButton
 	{
+		#region TemplateSettings
+		public AppBarToggleButtonTemplateSettings TemplateSettings
+		{
+			get { return (AppBarToggleButtonTemplateSettings)this.GetValue(TemplateSettingsProperty); }
+			set { this.SetValue(TemplateSettingsProperty, value); }
+		}
+		public static DependencyProperty TemplateSettingsProperty { get; } =
+			DependencyProperty.Register(nameof(TemplateSettings), typeof(AppBarToggleButtonTemplateSettings), typeof(AppBarToggleButton), new PropertyMetadata(null));
+		#endregion
+
 		#region Label
 
 		public string Label

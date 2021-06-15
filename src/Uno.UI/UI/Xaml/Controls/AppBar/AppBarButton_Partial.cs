@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Input;
 using DirectUI;
 using Uno.Disposables;
 using Windows.Foundation;
@@ -10,17 +9,20 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media.Animation;
+using static Microsoft.UI.Xaml.Controls._Tracing;
+
 
 namespace Windows.UI.Xaml.Controls
 {
-	public partial class AppBarToggleButton : ToggleButton, ICommandBarElement, ICommandBarElement2, ICommandBarElement3, ICommandBarOverflowElement, ICommandBarLabeledElement
+	public partial class AppBarButton : Button, ICommandBarElement, ICommandBarElement2, ICommandBarElement3, ICommandBarOverflowElement, ICommandBarLabeledElement, ISubMenuOwner
 	{
 		// LabelOnRightStyle doesn't work in AppBarButton/AppBarToggleButton Reveal Style.
 		// Animate the width to NaN if width is not overrided and right-aligned labels and no LabelOnRightStyle. 
 		Storyboard m_widthAdjustmentsForLabelOnRightStyleStoryboard;
 
+		bool m_isWithToggleButtons;
+		bool m_isWithIcons;
 		CommandBarDefaultLabelPosition m_defaultLabelPosition;
-		// UNO TODO
 		//DirectUI::InputDeviceType m_inputDeviceTypeUsedToOpenOverflow;
 
 		TextBlock m_tpKeyboardAcceleratorTextLabel;
@@ -28,10 +30,6 @@ namespace Windows.UI.Xaml.Controls
 		// We won't actually set the label-on-right style unless we've applied the template,
 		// because we won't have the label-on-right style from the template until we do.
 		bool m_isTemplateApplied;
-
-
-		// We need to adjust our visual state to account for CommandBarElements that use Icons.
-		bool m_isWithIcons;
 
 		// We need to adjust our visual state to account for CommandBarElements that have keyboard accelerator text.
 		bool m_isWithKeyboardAcceleratorText = false;
@@ -43,23 +41,47 @@ namespace Windows.UI.Xaml.Controls
 		// moves into the overflow section of the app bar or command bar.
 		bool m_ownsToolTip;
 
-		public AppBarToggleButton()
+		// Helper to which to delegate cascading menu functionality.
+		CascadingMenuHelper m_menuHelper;
+
+		// Helpers to track the current opened state of the flyout.
+		bool m_isFlyoutClosing = false;
+		SerialDisposable m_flyoutOpenedHandler = new SerialDisposable();
+		SerialDisposable m_flyoutClosedHandler = new SerialDisposable();
+
+		// Holds the last position that its flyout was opened at.
+		// Used to reposition the flyout on size changed.
+		Point m_lastFlyoutPosition;
+
+		public AppBarButton()
 		{
+			m_isWithToggleButtons = false;
+			m_isWithIcons = false;
 			//m_inputDeviceTypeUsedToOpenOverflow(DirectUI::InputDeviceType::None)
 			m_isTemplateApplied = false;
-			m_isWithIcons = false;
 			m_ownsToolTip = true;
 
-			DefaultStyleKey = typeof(AppBarToggleButton);
+			m_menuHelper = new CascadingMenuHelper();
+			m_menuHelper.Initialize(this);
+
+			Click += OnClick;
+
+			DefaultStyleKey = typeof(AppBarButton);
 		}
 
-		internal void SetOverflowStyleParams(bool hasIcons, bool hasKeyboardAcceleratorText)
+
+		internal void SetOverflowStyleParams(bool hasIcons, bool hasToggleButtons, bool hasKeyboardAcceleratorText)
 		{
 			bool updateState = false;
 
 			if (m_isWithIcons != hasIcons)
 			{
 				m_isWithIcons = hasIcons;
+				updateState = true;
+			}
+			if (m_isWithToggleButtons != hasToggleButtons)
+			{
+				m_isWithToggleButtons = hasToggleButtons;
 				updateState = true;
 			}
 			if (m_isWithKeyboardAcceleratorText != hasKeyboardAcceleratorText)
@@ -92,22 +114,112 @@ namespace Windows.UI.Xaml.Controls
 				&& label != null;
 		}
 
+		protected override void OnPointerEntered(PointerRoutedEventArgs args)
+		{
+			base.OnPointerEntered(args);
+
+			bool isInOverflow = false;
+			isInOverflow = IsInOverflow;
+
+			if (isInOverflow && m_menuHelper is { })
+			{
+				m_menuHelper.OnPointerEntered(args);
+			}
+
+			CloseSubMenusOnPointerEntered(this);
+		}
+
+		protected override void OnPointerExited(PointerRoutedEventArgs e)
+		{
+			base.OnPointerExited(e);
+			bool isInOverflow = false;
+			isInOverflow = IsInOverflow;
+
+			if (isInOverflow && m_menuHelper is { })
+			{
+				m_menuHelper.OnPointerExited(e, parentIsSubMenu: false);
+			}
+		}
+
+		protected override void OnKeyDown(KeyRoutedEventArgs args)
+		{
+			base.OnKeyDown(args);
+
+			bool isInOverflow = false;
+			isInOverflow = IsInOverflow;
+
+			if (isInOverflow && m_menuHelper is { })
+			{
+				m_menuHelper.OnKeyDown(args);
+			}
+		}
+
+		protected override void OnKeyUp(KeyRoutedEventArgs args)
+		{
+			base.OnKeyUp(args);
+
+			bool isInOverflow = false;
+			isInOverflow = IsInOverflow;
+
+			if (isInOverflow && m_menuHelper is { })
+			{
+				m_menuHelper.OnKeyUp(args);
+			}
+		}
+
 		internal override void OnPropertyChanged2(DependencyPropertyChangedEventArgs args)
 		{
+			base.OnPropertyChanged2(args);
+
+			if (args.Property == FlyoutProperty)
+			{
+				var oldFlyout = args.OldValue as FlyoutBase;
+				var newFlyout = args.NewValue as FlyoutBase;
+
+				if (oldFlyout is { })
+				{
+					m_flyoutOpenedHandler.Disposable = null;
+					m_flyoutClosedHandler.Disposable = null;
+
+					m_menuHelper = null;
+				}
+
+				if (newFlyout is { })
+				{
+					m_menuHelper = new CascadingMenuHelper();
+					m_menuHelper.Initialize(this);
+
+					newFlyout.Opened += OnFlyoutOpened;
+					m_flyoutOpenedHandler.Disposable = Disposable.Create(() => newFlyout.Opened -= OnFlyoutOpened);
+
+					newFlyout.Closed += OnFlyoutClosed;
+					m_flyoutClosedHandler.Disposable = Disposable.Create(() => newFlyout.Closed -= OnFlyoutClosed);
+				}
+			}
+
 			OnPropertyChanged(args);
 		}
 
+		private void OnFlyoutClosed(object sender, EventArgs e)
+		{
+			m_isFlyoutClosing = false;
+			UpdateVisualState();
+		}
+
+		private void OnFlyoutOpened(object sender, EventArgs e)
+		{
+			m_isFlyoutClosing = false;
+			UpdateVisualState();
+		}
+
+		// After template is applied, set the initial view state
+		// (FullSize or Compact) based on the value of our
+		// IsCompact property
 		protected override void OnApplyTemplate()
 		{
 			OnBeforeApplyTemplate();
 			base.OnApplyTemplate();
 			OnAfterApplyTemplate();
-		}
-
-		protected override void OnPointerEntered(PointerRoutedEventArgs args)
-		{
-			base.OnPointerEntered(args);
-			CloseSubMenusOnPointerEntered(null);
 		}
 
 		// Sets the visual state to "Compact" or "FullSize" based on the value
@@ -121,7 +233,15 @@ namespace Windows.UI.Xaml.Controls
 
 			if (useOverflowStyle)
 			{
-				if (m_isWithIcons)
+				if (m_isWithToggleButtons && m_isWithIcons)
+				{
+					GoToState(useTransitions, "OverflowWithToggleButtonsAndMenuIcons");
+				}
+				else if (m_isWithToggleButtons)
+				{
+					GoToState(useTransitions, "OverflowWithToggleButtons");
+				}
+				else if (m_isWithIcons)
 				{
 					GoToState(useTransitions, "OverflowWithMenuIcons");
 				}
@@ -130,64 +250,68 @@ namespace Windows.UI.Xaml.Controls
 					GoToState(useTransitions, "Overflow");
 				}
 
+				if (m_isWithIcons)
 				{
 					bool isEnabled = false;
 					bool isPressed = false;
 					bool isPointerOver = false;
-					bool isChecked;
+					bool isSubMenuOpen = false;
 
 					isEnabled = IsEnabled;
 					isPressed = IsPressed;
 					isPointerOver = IsPointerOver;
-					isChecked = IsChecked ?? false;
+					isSubMenuOpen = ((ISubMenuOwner)this).IsSubMenuOpen;
 
-					if (isChecked)
+					if (isSubMenuOpen && !m_isFlyoutClosing)
 					{
-						if (isPressed)
-						{
-							GoToState(useTransitions, "OverflowCheckedPressed");
-						}
-						else if (isPointerOver)
-						{
-							GoToState(useTransitions, "OverflowCheckedPointerOver");
-						}
-						else if (isEnabled)
-						{
-							GoToState(useTransitions, "OverflowChecked");
-						}
+						GoToState(useTransitions, "OverflowSubMenuOpened");
 					}
-					else
+					else if (isPressed)
 					{
-						if (isPressed)
-						{
-							GoToState(useTransitions, "OverflowPressed");
-						}
-						else if (isPointerOver)
-						{
-							GoToState(useTransitions, "OverflowPointerOver");
-						}
-						else if (isEnabled)
-						{
-							GoToState(useTransitions, "OverflowNormal");
-						}
+						GoToState(useTransitions, "OverflowPressed");
+					}
+					else if (isPointerOver)
+					{
+						GoToState(useTransitions, "OverflowPointerOver");
+					}
+					else if (isEnabled)
+					{
+						GoToState(useTransitions, "OverflowNormal");
 					}
 				}
 			}
 
+			var flyout = Flyout;
+
+			if (flyout is { })
+			{
+				GoToState(useTransitions, "HasFlyout");
+			}
+			else
+			{
+				GoToState(useTransitions, "NoFlyout");
+			}
+
+
 			ChangeCommonVisualStates(useTransitions);
 		}
 
-
-		// Create AppBarToggleButtonAutomationPeer to represent the AppBarToggleButton.
 		protected override AutomationPeer OnCreateAutomationPeer()
 		{
-			return new AppBarToggleButtonAutomationPeer(this);
+			return new AppBarButtonAutomationPeer(this);
 		}
 
-		protected override void OnToggle()
+		private void OnClick(object sender, RoutedEventArgs e)
 		{
-			CommandBar.OnCommandExecutionStatic(this);
-			base.OnToggle();
+			FlyoutBase spFlyoutBase;
+
+			// Don't execute the logic on CommandBar to close the secondary
+			// commands popup when we have a flyout associated with this button.
+			spFlyoutBase = Flyout;
+			if (spFlyoutBase == null)
+			{
+				CommandBar.OnCommandExecutionStatic(this);
+			}
 		}
 
 		protected override void OnVisibilityChanged(Visibility oldValue, Visibility newValue)
@@ -202,29 +326,40 @@ namespace Windows.UI.Xaml.Controls
 			OnCommandChangedHelper(oldValue, newValue);
 		}
 
+		protected override void OpenAssociatedFlyout()
+		{
+			bool isInOverflow = false;
+			isInOverflow = IsInOverflow;
+
+			// If we call OpenSubMenu, that causes the menu not to have a light-dismiss layer, as it assumes
+			// that its parent will have one.  That's not the case for AppBarButtons that aren't in overflow,
+			// so we'll just open the flyout normally in this circumstance.
+			if (m_menuHelper is { } && isInOverflow)
+			{
+				m_menuHelper.OpenSubMenu();
+			}
+			else
+			{
+				base.OpenAssociatedFlyout();
+			}
+		}
+
 		private CommandBarDefaultLabelPosition GetEffectiveLabelPosition()
 		{
-			CommandBarLabelPosition labelPosition;
-			labelPosition = LabelPosition;
+			var labelPosition = LabelPosition;
 
 			return labelPosition == CommandBarLabelPosition.Collapsed ? CommandBarDefaultLabelPosition.Collapsed : m_defaultLabelPosition;
 		}
 
 		private void UpdateInternalStyles()
 		{
-			// If the template isn't applied yet, we'll early-out,
-			// because we won't have the style to apply from the
-			// template yet.
-			if (m_isTemplateApplied == null)
+			if (!m_isTemplateApplied)
 			{
 				return;
 			}
 
-			CommandBarDefaultLabelPosition effectiveLabelPosition;
-			bool useOverflowStyle;
-
-			effectiveLabelPosition = GetEffectiveLabelPosition();
-			useOverflowStyle = UseOverflowStyle;
+			var effectiveLabelPosition = GetEffectiveLabelPosition();
+			var useOverflowStyle = UseOverflowStyle;
 
 			bool shouldHaveLabelOnRightStyleSet = effectiveLabelPosition == CommandBarDefaultLabelPosition.Right && !useOverflowStyle;
 
@@ -298,6 +433,161 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
+		bool ISubMenuOwner.IsSubMenuOpen
+		{
+			get
+			{
+				var flyout = Flyout;
+				if (flyout is { })
+				{
+					return flyout.IsOpen;
+				}
+
+				return false;
+			}
+		}
+
+		ISubMenuOwner ISubMenuOwner.ParentOwner
+		{
+			get => null;
+			set => throw new NotImplementedException();
+		}
+
+		void ISubMenuOwner.PrepareSubMenu()
+		{
+			var flyout = Flyout;
+
+			if (flyout is { })
+			{
+				var rootVisual = Window.Current.Content;
+				flyout.OverlayInputPassThroughElement = rootVisual;
+
+				if (flyout is IMenu flyoutAsMenu)
+				{
+					var parentCommandBar = CommandBar.FindParentCommandBarForElement(this);
+
+					if (parentCommandBar is { })
+					{
+						flyoutAsMenu.ParentMenu = parentCommandBar;
+					}
+				}
+			}
+		}
+
+		void ISubMenuOwner.OpenSubMenu(Point position)
+		{
+			var flyout = Flyout;
+			if (flyout is { })
+			{
+				var showOptions = new FlyoutShowOptions();
+
+				var isInOverflow = IsInOverflow;
+
+				// We shouldn't be doing anything special to open flyouts for AppBarButtons
+				// that are not in overflow.
+				if (!isInOverflow)
+				{
+					return;
+				}
+
+				showOptions.Placement = FlyoutPlacementMode.RightEdgeAlignedTop;
+
+				var itemWidth = ActualWidth;
+
+				showOptions.Position = position;
+
+				flyout.ShowAt(this, showOptions);
+
+				if (m_menuHelper is { })
+				{
+					m_menuHelper.SetSubMenuPresenter(flyout.GetPresenter());
+				}
+			}
+
+			m_lastFlyoutPosition = position;
+		}
+
+		void ISubMenuOwner.PositionSubMenu(Point position)
+		{
+			((ISubMenuOwner)this).CloseSubMenu();
+
+			if (double.IsNegativeInfinity(position.X))
+			{
+				position.X = m_lastFlyoutPosition.X;
+			}
+
+			if (double.IsNegativeInfinity(position.y))
+			{
+				position.Y = m_lastFlyoutPosition.Y;
+			}
+
+			((ISubMenuOwner)this).OpenSubMenu(position);
+		}
+
+		void ISubMenuOwner.ClosePeerSubMenus()
+		{
+			var parentCommandBar = CommandBar.FindParentCommandBarForElement(this);
+
+			if (parentCommandBar is { })
+			{
+				parentCommandBar.CloseSubMenus(this);
+			}
+		}
+
+		void ISubMenuOwner.CloseSubMenu()
+		{
+			var flyout = Flyout;
+
+			if (flyout is { })
+			{
+				flyout.Hide();
+
+				// The Closing event is raised after the fade-out animation completes,
+				// whereas we want to stop showing the sub-menu open state as soon
+				// as we know we're moving out of it.  So we'll manually update the
+				// visual state here.
+				m_isFlyoutClosing = true;
+				UpdateVisualState();
+			}
+		}
+
+		void ISubMenuOwner.CloseSubMenuTree()
+		{
+			if (m_menuHelper is { })
+			{
+				m_menuHelper.CloseChildSubMenus();
+			}
+		}
+		void ISubMenuOwner.DelayCloseSubMenu()
+		{
+			if (m_menuHelper is { })
+			{
+				m_menuHelper.DelayCloseSubMenu();
+			}
+		}
+
+		void ISubMenuOwner.CancelCloseSubMenu()
+		{
+			if (m_menuHelper is { })
+			{
+				m_menuHelper.CancelCloseSubMenu();
+			}
+		}
+
+		bool ISubMenuOwner.IsSubMenuPositionedAbsolutely => false;
+
+		void ISubMenuOwner.RaiseAutomationPeerExpandCollapse(bool isOpen)
+		{
+			if (AutomationPeer.ListenerExists(AutomationEvents.PropertyChanged))
+			{
+				var spAutomationPeer = GetAutomationPeer();
+				if (spAutomationPeer is AppBarButtonAutomationPeer)
+				{
+					spAutomationPeer.RaiseExpandCollapseAutomationEvent(isOpen);
+				}
+			}
+		}
+
 		#region AppBarButtonHelpers
 		private void OnBeforeApplyTemplate()
 		{
@@ -328,7 +618,7 @@ namespace Windows.UI.Xaml.Controls
 			{
 				// If there are other buttons that have open sub-menus, then we should
 				// close those on a delay, since they no longer have mouse-over.
-			
+
 				var parentCommandBar = CommandBar.FindParentCommandBarForElement(this);
 
 				if (parentCommandBar is { })
@@ -460,7 +750,7 @@ namespace Windows.UI.Xaml.Controls
 
 				if (templateSettings == null)
 				{
-					templateSettings = new AppBarToggleButtonTemplateSettings();
+					templateSettings = new AppBarButtonTemplateSettings();
 					TemplateSettings = templateSettings;
 				}
 
@@ -544,7 +834,6 @@ namespace Windows.UI.Xaml.Controls
 		}
 
 		#endregion
-
 		private void GetTemplatePart<T>(string name, out T element) where T : class
 		{
 			element = GetTemplateChild(name) as T;

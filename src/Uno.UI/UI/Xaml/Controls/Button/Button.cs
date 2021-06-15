@@ -29,7 +29,7 @@ namespace Windows.UI.Xaml.Controls
 		{
 			InitializeVisualStates();
 
-			Click += (s, e) => { Flyout?.ShowAt(this); };
+			Click += (s, e) => { OpenAssociatedFlyout(); };
 
 			DefaultStyleKey = typeof(Button);
 		}
@@ -58,6 +58,11 @@ namespace Windows.UI.Xaml.Controls
 			base.OnUnloaded();
 
 			Flyout?.Close();
+		}
+
+		protected virtual void OpenAssociatedFlyout()
+		{
+			Flyout?.ShowAt(this);
 		}
 
 		protected override AutomationPeer OnCreateAutomationPeer()
