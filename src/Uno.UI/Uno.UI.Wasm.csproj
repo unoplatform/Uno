@@ -151,16 +151,6 @@
 
 	<ItemGroup>
 	  <None Remove="tsconfig.json" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBar.g.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBar.Properties.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarMode.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBar_Partial.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar.g.h.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar.h.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar.Properties.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBarElementCollection_Partial.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBarElementCollection_Partial.h.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar_Partial.cs" />
 	  <Content Include="tsconfig.json" />
 	</ItemGroup>
 
