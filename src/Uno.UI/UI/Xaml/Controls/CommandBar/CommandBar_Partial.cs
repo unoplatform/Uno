@@ -103,9 +103,9 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		private void PrepareState()
+		protected override void PrepareState()
 		{
-			//base.PrepareState
+			base.PrepareState();
 
 			CommandBarElementCollection spCollection_Primary;
 
@@ -121,13 +121,8 @@ namespace Windows.UI.Xaml.Controls
 
 			// Set the value for our collection properties so that they are in the
 			// effective value map and get processed during EnterImpl.
-			//IFC_RETURN(SetValueInternal(
-			//	MetadataAPI::GetDependencyPropertyByIndex(KnownPropertyIndex::CommandBar_PrimaryCommands),
-			//	ctl::as_iinspectable(m_tpPrimaryCommands.Get()), TRUE /*fAllowReadOnly*/));
-
-			//IFC_RETURN(SetValueInternal(
-			//	MetadataAPI::GetDependencyPropertyByIndex(KnownPropertyIndex::CommandBar_SecondaryCommands),
-			//	ctl::as_iinspectable(m_tpSecondaryCommands.Get()), TRUE /*fAllowReadOnly*/));
+			PrimaryCommands = m_tpPrimaryCommands;
+			SecondaryCommands = m_tpSecondaryCommands;
 
 			Unloaded += OnUnloaded;
 
@@ -143,14 +138,12 @@ namespace Windows.UI.Xaml.Controls
 			m_tpDynamicSecondaryCommands = new CommandBarElementCollection();
 			m_tpDynamicSecondaryCommands.Init(this, notifyCollectionChanging: false);
 
-			m_tpPrimaryCommandsInPreviousTransition = new ObservableVector<ICommandBarElement>();
-			m_tpPrimaryCommandsInTransition = new ObservableVector<ICommandBarElement>();
+			m_tpPrimaryCommandsInPreviousTransition = new TrackerCollection<ICommandBarElement>();
+			m_tpPrimaryCommandsInTransition = new TrackerCollection<ICommandBarElement>();
 
 			m_tpAppBarSeparatorInOverflow = new AppBarSeparator();
 
 		}
-
-	
 
 		private void OnPropertyChanged2(DependencyPropertyChangedEventArgs args)
 		{

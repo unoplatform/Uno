@@ -1,33 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Markup;
 
 namespace Windows.UI.Xaml.Controls
 {
-	public partial class AppBarToggleButton : ToggleButton, ICommandBarElement, ICommandBarElement2, ICommandBarElement3
+	partial class AppBarToggleButton
 	{
-		public AppBarToggleButton()
-		{
-			DefaultStyleKey = typeof(AppBarToggleButton);
-		}
-
-		protected override void OnApplyTemplate()
-		{
-			base.OnApplyTemplate();
-
-			RegisterPropertyChangedCallback(IsCompactProperty, (s, e) => UpdateApplicationViewState());
-			RegisterPropertyChangedCallback(IsInOverflowProperty, (s, e) => UpdateApplicationViewState());
-			UpdateApplicationViewState();
-
-			SetupContentUpdate();
-
-		}
-
-		public AppBarToggleButtonTemplateSettings TemplateSettings { get; } = new AppBarToggleButtonTemplateSettings();
-
-
 		#region Label
 
 		public string Label
@@ -67,7 +45,7 @@ namespace Windows.UI.Xaml.Controls
 
 		public bool IsInOverflow
 		{
-			get => (bool)this.GetValue(IsInOverflowProperty);
+			get => CommandBar.IsCommandBarElementInOverflow(this);
 			internal set => this.SetValue(IsInOverflowProperty, value);
 		}
 
@@ -96,7 +74,7 @@ namespace Windows.UI.Xaml.Controls
 
 		public static DependencyProperty LabelPositionProperty { get; } =
 			DependencyProperty.Register(
-				"LabelPosition", 
+				"LabelPosition",
 				typeof(CommandBarLabelPosition),
 				typeof(AppBarToggleButton),
 				new FrameworkPropertyMetadata(default(CommandBarLabelPosition))
@@ -114,7 +92,7 @@ namespace Windows.UI.Xaml.Controls
 
 		public static DependencyProperty IsCompactProperty { get; } =
 			DependencyProperty.Register(
-				"IsCompact", 
+				"IsCompact",
 				typeof(bool),
 				typeof(AppBarToggleButton),
 				new FrameworkPropertyMetadata(default(bool))
@@ -132,7 +110,7 @@ namespace Windows.UI.Xaml.Controls
 
 		public static DependencyProperty DynamicOverflowOrderProperty { get; } =
 			DependencyProperty.Register(
-				"DynamicOverflowOrder", 
+				"DynamicOverflowOrder",
 				typeof(int),
 				typeof(AppBarToggleButton),
 				new FrameworkPropertyMetadata(default(int))
@@ -140,39 +118,28 @@ namespace Windows.UI.Xaml.Controls
 
 		#endregion
 
-		private void UpdateApplicationViewState()
+		#region UseOverflowStyle
+
+		internal bool UseOverflowStyle
 		{
-			string applicationViewState;
-
-			if (IsInOverflow)
-			{
-				applicationViewState = "Overflow";
-			}
-			else if (IsCompact)
-			{
-				applicationViewState = "Compact";
-			}
-			else
-			{
-				applicationViewState = "FullSize";
-			}
-
-			VisualStateManager.GoToState(this, applicationViewState, true);
+			get => (bool)this.GetValue(UseOverflowStyleProperty);
+			set => this.SetValue(UseOverflowStyleProperty, value);
 		}
 
-		// TODO: Remove this when ContentPresenter's implicit ContentProperty TemplateBinding is supported.
-		private void SetupContentUpdate()
+		bool ICommandBarOverflowElement.UseOverflowStyle
 		{
-			var contentPresenter = GetTemplateChild("Content") as ContentPresenter;
-
-			void UpdateContent()
-			{
-				contentPresenter.Content = Icon ?? Content;
-			}
-
-			RegisterPropertyChangedCallback(ContentProperty, (s, e) => UpdateContent());
-			RegisterPropertyChangedCallback(IconProperty, (s, e) => UpdateContent());
-			UpdateContent();
+			get => UseOverflowStyle;
+			set => UseOverflowStyle = value;
 		}
+
+		internal static DependencyProperty UseOverflowStyleProperty { get; } =
+			DependencyProperty.Register(
+				nameof(UseOverflowStyle),
+				typeof(bool),
+				typeof(AppBarToggleButton),
+				new FrameworkPropertyMetadata(default(bool))
+			);
+
+		#endregion
 	}
 }

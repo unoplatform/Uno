@@ -15,7 +15,6 @@ namespace Windows.UI.Xaml.Controls
 			m_notifyCollectionChanging = notifyCollectionChanging;
 		}
 
-
 		public ICommandBarElement this[int index]
 		{
 			get => _list[index];
@@ -106,6 +105,5 @@ namespace Windows.UI.Xaml.Controls
 				}
 			}
 		}
-
 	}
 }
