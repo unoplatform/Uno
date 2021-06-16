@@ -1026,10 +1026,13 @@
 	<Thickness x:Key="AppBarButtonContentViewboxCollapsedMargin">0,10,0,0</Thickness>
 	<Thickness x:Key="AppBarButtonOverflowTextTouchMargin">0,9,0,12</Thickness>
 	<Thickness x:Key="AppBarButtonOverflowTextLabelPadding">0,5,0,8</Thickness>
+	<Thickness x:Key="AppBarButtonTextLabelMargin">2,0,2,8</Thickness>
 	<Thickness x:Key="AppBarButtonTextLabelOnRightMargin">8,11,12,13</Thickness>
+
 	<Thickness x:Key="AppBarToggleButtonOverflowTextTouchMargin">0,9,0,12</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowCheckTouchMargin">12,10,12,10</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowCheckMargin">12,4,12,4</Thickness>
+	<Thickness x:Key="AppBarToggleButtonTextLabelMargin">2,0,2,8</Thickness>
 	<Thickness x:Key="AppBarToggleButtonTextLabelOnRightMargin">8,11,12,13</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowTextLabelPadding">0,5,0,8</Thickness>
 
@@ -1509,7 +1512,6 @@
 						  BorderBrush="{TemplateBinding BorderBrush}"
 						  BorderThickness="{TemplateBinding BorderThickness}"
 						  CornerRadius="{TemplateBinding CornerRadius}">
-
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="ApplicationViewStates">
 								<VisualState x:Name="FullSize" />
@@ -1554,7 +1556,7 @@
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel"
 																	   Storyboard.TargetProperty="Margin">
 											<DiscreteObjectKeyFrame KeyTime="0"
-																	Value="{StaticResource AppBarToggleButtonTextLabelOnRightMargin}" />
+																	Value="{ThemeResource AppBarToggleButtonTextLabelOnRightMargin}" />
 										</ObjectAnimationUsingKeyFrames>
 									</Storyboard>
 								</VisualState>
@@ -1628,6 +1630,8 @@
 												Value="{ThemeResource AppBarToggleButtonBackgroundHighLightOverlayPointerOver}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushPointerOver}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushPointerOver}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundPointerOver}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1646,6 +1650,8 @@
 										<Setter Target="AccentOverlayBackground.Fill"
 												Value="{ThemeResource AppBarToggleButtonBackgroundHighLightOverlayPressed}" />
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushPressed}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushPressed}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundPressed}" />
@@ -1666,6 +1672,8 @@
 												Value="{ThemeResource AppBarToggleButtonBackgroundDisabled}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushDisabled}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushDisabled}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundDisabled}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1682,6 +1690,8 @@
 								<VisualState x:Name="Checked">
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushChecked}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushChecked}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundChecked}" />
@@ -1700,6 +1710,8 @@
 								<VisualState x:Name="CheckedPointerOver">
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPointerOver}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPointerOver}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundCheckedPointerOver}" />
@@ -1725,6 +1737,8 @@
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPressed}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPressed}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundCheckedPressed}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1748,6 +1762,8 @@
 								<VisualState x:Name="CheckedDisabled">
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedDisabled}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedDisabled}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundCheckedDisabled}" />
@@ -1779,6 +1795,8 @@
 												Value="{ThemeResource AppBarToggleButtonBackgroundHighLightOverlayPointerOver}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushPointerOver}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushPointerOver}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundPointerOver}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1801,6 +1819,8 @@
 												Value="{ThemeResource AppBarToggleButtonBackgroundHighLightOverlayPressed}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushPressed}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushPressed}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundPressed}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1821,6 +1841,8 @@
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushChecked}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushChecked}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundChecked}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1840,6 +1862,8 @@
 								<VisualState x:Name="OverflowCheckedPointerOver">
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPointerOver}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPointerOver}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundCheckedPointerOver}" />
@@ -1868,6 +1892,8 @@
 								<VisualState x:Name="OverflowCheckedPressed">
 									<VisualState.Setters>
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPressed}" />
+										<Setter Target="AppBarToggleButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarToggleButtonBorderBrushCheckedPressed}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarToggleButtonForegroundCheckedPressed}" />
@@ -1900,17 +1926,17 @@
 								<VisualState x:Name="TouchInputMode">
 									<VisualState.Setters>
 										<Setter Target="OverflowTextLabel.Padding"
-												Value="{StaticResource AppBarToggleButtonOverflowTextTouchMargin}" />
+												Value="{ThemeResource AppBarToggleButtonOverflowTextTouchMargin}" />
 										<Setter Target="OverflowCheckGlyph.Margin"
-												Value="{StaticResource AppBarToggleButtonOverflowCheckTouchMargin}" />
+												Value="{ThemeResource AppBarToggleButtonOverflowCheckTouchMargin}" />
 									</VisualState.Setters>
 								</VisualState>
 								<VisualState x:Name="GameControllerInputMode">
 									<VisualState.Setters>
 										<Setter Target="OverflowTextLabel.Padding"
-												Value="{StaticResource AppBarToggleButtonOverflowTextTouchMargin}" />
+												Value="{ThemeResource AppBarToggleButtonOverflowTextTouchMargin}" />
 										<Setter Target="OverflowCheckGlyph.Margin"
-												Value="{StaticResource AppBarToggleButtonOverflowCheckTouchMargin}" />
+												Value="{ThemeResource AppBarToggleButtonOverflowCheckTouchMargin}" />
 									</VisualState.Setters>
 								</VisualState>
 
@@ -1932,6 +1958,9 @@
 								   Opacity="0" />
 						<Rectangle x:Name="AccentOverlayBackground"
 								   Fill="{ThemeResource AppBarToggleButtonBackgroundHighLightOverlay}" />
+						<Rectangle x:Name="AppBarToggleButtonInnerBorder"
+								   StrokeThickness="1"
+								   Stroke="{TemplateBinding BorderBrush}" />
 						<Grid x:Name="ContentRoot"
 							  MinHeight="{ThemeResource AppBarThemeMinHeight}">
 
@@ -1959,7 +1988,7 @@
 									   AutomationProperties.AccessibilityView="Raw" />
 							<!-- UNO TODO The ViewBox center should be horizontal Stretch but the Grid aligns the content left -->
 							<Viewbox x:Name="ContentViewbox"
-									 Height="20"
+									 Height="{ThemeResource AppBarButtonContentHeight}"
 									 Margin="{ThemeResource AppBarButtonContentViewboxCollapsedMargin}"
 									 HorizontalAlignment="Center"
 									 AutomationProperties.AccessibilityView="Raw">
@@ -1975,11 +2004,12 @@
 									   FontFamily="{TemplateBinding FontFamily}"
 									   TextAlignment="Center"
 									   TextWrapping="Wrap"
-									   Margin="2,0,2,6"
+									   Margin="{ThemeResource AppBarToggleButtonTextLabelMargin}"
 									   AutomationProperties.AccessibilityView="Raw" />
 							<TextBlock x:Name="OverflowTextLabel"
 									   Text="{TemplateBinding Label}"
 									   Foreground="{TemplateBinding Foreground}"
+									   FontSize="{ThemeResource ControlContentThemeFontSize}"
 									   FontFamily="{TemplateBinding FontFamily}"
 									   TextAlignment="Left"
 									   TextTrimming="Clip"
@@ -1987,7 +2017,7 @@
 									   HorizontalAlignment="Stretch"
 									   VerticalAlignment="Center"
 									   Margin="38,0,12,0"
-									   Padding="{StaticResource AppBarToggleButtonOverflowTextLabelPadding}"
+									   Padding="{ThemeResource AppBarToggleButtonOverflowTextLabelPadding}"
 									   Visibility="Collapsed"
 									   AutomationProperties.AccessibilityView="Raw" />
 							<TextBlock x:Name="KeyboardAcceleratorTextLabel"
