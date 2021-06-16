@@ -23,6 +23,8 @@ namespace Windows.UI.Xaml.Automation.Peers
 			// any of our own immediate superclasses, to avoid the logic in ButtonBaseAutomationPeer that will
 			// substitute Content for the automation name if the latter is unset -- we want to either get back
 			// the actual value of AutomationProperties.Name if it has been set, or null if it hasn't.
+
+			//UNO ONLY: ButtonBaseAutomationPeer doesn't substitue Content for automation name if it is unset
 			var returnValue = base.GetNameCore();
 
 			if (string.IsNullOrWhiteSpace(returnValue))

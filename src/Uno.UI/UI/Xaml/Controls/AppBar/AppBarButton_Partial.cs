@@ -53,6 +53,8 @@ namespace Windows.UI.Xaml.Controls
 		// Used to reposition the flyout on size changed.
 		Point m_lastFlyoutPosition;
 
+		internal CascadingMenuHelper MenuHelper => m_menuHelper;
+
 		public AppBarButton()
 		{
 			m_isWithToggleButtons = false;
@@ -581,9 +583,9 @@ namespace Windows.UI.Xaml.Controls
 			if (AutomationPeer.ListenerExists(AutomationEvents.PropertyChanged))
 			{
 				var spAutomationPeer = GetAutomationPeer();
-				if (spAutomationPeer is AppBarButtonAutomationPeer)
+				if (spAutomationPeer is AppBarButtonAutomationPeer appbarButtonAutomationPeer)
 				{
-					spAutomationPeer.RaiseExpandCollapseAutomationEvent(isOpen);
+					appbarButtonAutomationPeer.RaiseExpandCollapseAutomationEvent(isOpen);
 				}
 			}
 		}

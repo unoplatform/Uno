@@ -2,15 +2,8 @@ using Windows.Foundation;
 
 namespace Windows.UI.Xaml.Controls.Primitives
 {
-	public  partial class AppBarTemplateSettings : DependencyObject
+	public partial class AppBarTemplateSettings : DependencyObject
     {
-		private readonly AppBar _appBar;
-
-		public AppBarTemplateSettings(AppBar appBar)
-		{
-			_appBar = appBar;
-		}
-
 		public Rect ClipRect
 		{
 			get => (Rect)GetValue(ClipRectProperty);

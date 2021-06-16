@@ -17,7 +17,7 @@ using static Microsoft.UI.Xaml.Controls._Tracing;
 
 namespace Windows.UI.Xaml.Controls
 {
-	public partial class AppBar : ContentControl
+	partial class AppBar : ContentControl
 	{
 
 		private const string TEXT_HUB_SEE_MORE = nameof(TEXT_HUB_SEE_MORE);
@@ -109,7 +109,7 @@ namespace Windows.UI.Xaml.Controls
 
 			m_windowSizeChangedEventHandler.Disposable = Window.Current.RegisterSizeChangedEvent(OnWindowSizeChanged);
 
-			TemplateSettings = new AppBarTemplateSettings(this);
+			TemplateSettings = new AppBarTemplateSettings();
 		}
 
 		// Note that we need to wait for OnLoaded event to set focus.

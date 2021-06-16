@@ -151,17 +151,6 @@
 
 	<ItemGroup>
 	  <None Remove="tsconfig.json" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarButton.Properties.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarButtonHelpers.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarButton_Partial.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarSeparator.Properties.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarSeparator_Partial.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarToggleButton.Properties.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarToggleButtonAutomationPeer.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarToggleButton_Partial.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBarDefaultLabelPosition.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\ICommandBarLabeledElement.cs" />
-	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\ICommandBarOverflowElement.cs" />
 	  <Content Include="tsconfig.json" />
 	</ItemGroup>
 

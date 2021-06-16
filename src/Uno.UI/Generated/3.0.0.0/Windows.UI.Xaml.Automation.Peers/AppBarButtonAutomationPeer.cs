@@ -2,12 +2,12 @@
 #pragma warning disable 114 // new keyword hiding
 namespace Windows.UI.Xaml.Automation.Peers
 {
-	#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#if false || false || false || false || false || false || false
 	[global::Uno.NotImplemented]
-	#endif
-	public  partial class AppBarButtonAutomationPeer : global::Windows.UI.Xaml.Automation.Peers.ButtonAutomationPeer,global::Windows.UI.Xaml.Automation.Provider.IExpandCollapseProvider
+#endif
+	public partial class AppBarButtonAutomationPeer : global::Windows.UI.Xaml.Automation.Peers.ButtonAutomationPeer,global::Windows.UI.Xaml.Automation.Provider.IExpandCollapseProvider
 	{
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  global::Windows.UI.Xaml.Automation.ExpandCollapseState ExpandCollapseState
 		{
@@ -16,30 +16,30 @@ namespace Windows.UI.Xaml.Automation.Peers
 				throw new global::System.NotImplementedException("The member ExpandCollapseState AppBarButtonAutomationPeer.ExpandCollapseState is not implemented in Uno.");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#endif
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public AppBarButtonAutomationPeer( global::Windows.UI.Xaml.Controls.AppBarButton owner) : base(owner)
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.UI.Xaml.Automation.Peers.AppBarButtonAutomationPeer", "AppBarButtonAutomationPeer.AppBarButtonAutomationPeer(AppBarButton owner)");
 		}
-		#endif
+#endif
 		// Forced skipping of method Windows.UI.Xaml.Automation.Peers.AppBarButtonAutomationPeer.AppBarButtonAutomationPeer(Windows.UI.Xaml.Controls.AppBarButton)
 		// Forced skipping of method Windows.UI.Xaml.Automation.Peers.AppBarButtonAutomationPeer.ExpandCollapseState.get
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  void Collapse()
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.UI.Xaml.Automation.Peers.AppBarButtonAutomationPeer", "void AppBarButtonAutomationPeer.Collapse()");
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#endif
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  void Expand()
 		{
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Windows.UI.Xaml.Automation.Peers.AppBarButtonAutomationPeer", "void AppBarButtonAutomationPeer.Expand()");
 		}
-		#endif
+#endif
 		// Processing: Windows.UI.Xaml.Automation.Provider.IExpandCollapseProvider
 	}
 }
