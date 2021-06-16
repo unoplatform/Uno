@@ -2139,5 +2139,7 @@
 		   BasedOn="{StaticResource XamlDefaultAppBarToggleButton}" />
 	<Style TargetType="AppBarSeparator"
 		   BasedOn="{StaticResource XamlDefaultAppBarSeparator}" />
+	<Style TargetType="AppBarElementContainer"
+		   BasedOn="{StaticResource XamlDefaultAppBarElementContainer}" />
 
 </ResourceDictionary>

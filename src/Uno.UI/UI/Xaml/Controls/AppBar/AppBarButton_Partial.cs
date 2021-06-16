@@ -809,7 +809,7 @@ namespace Windows.UI.Xaml.Controls
 
 		private string GetKeyboardAcceleratorText()
 		{
-			var keyboardAcceleratorText = KeyboardAcceleratorTextOverride;
+			var keyboardAcceleratorText = GetValue(KeyboardAcceleratorTextOverrideProperty) as string;
 
 			// If we have no keyboard accelerator text already provided by the app,
 			// then we'll see if we can construct it ourselves based on keyboard accelerators
@@ -832,7 +832,7 @@ namespace Windows.UI.Xaml.Controls
 
 		private void PutKeyboardAcceleratorText(string keyboardAcceleratorText)
 		{
-			KeyboardAcceleratorTextOverride = keyboardAcceleratorText;
+			SetValue(KeyboardAcceleratorTextOverrideProperty, keyboardAcceleratorText);
 		}
 
 		#endregion

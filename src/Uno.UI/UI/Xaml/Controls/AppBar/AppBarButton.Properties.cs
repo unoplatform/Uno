@@ -153,5 +153,24 @@ namespace Windows.UI.Xaml.Controls
 
 		#endregion
 
+
+		#region KeyboardAcceleratorTextOverride
+
+		public string KeyboardAcceleratorTextOverride
+		{
+			get => GetKeyboardAcceleratorText();
+			set => PutKeyboardAcceleratorText(value);
+		}
+
+		public static DependencyProperty KeyboardAcceleratorTextOverrideProperty { get; } =
+			DependencyProperty.Register(
+				nameof(KeyboardAcceleratorTextOverride),
+				typeof(string),
+				typeof(AppBarButton),
+				new FrameworkPropertyMetadata(default(string))
+			);
+
+		#endregion
+
 	}
 }
