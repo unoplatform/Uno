@@ -1069,7 +1069,6 @@
 						  BorderBrush="{TemplateBinding BorderBrush}"
 						  BorderThickness="{TemplateBinding BorderThickness}"
 						  CornerRadius="{TemplateBinding CornerRadius}">
-
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="ApplicationViewStates">
 								<VisualState x:Name="FullSize" />
@@ -1219,6 +1218,8 @@
 												Value="{ThemeResource AppBarButtonBackgroundPointerOver}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarButtonBorderBrushPointerOver}" />
+										<Setter Target="AppBarButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarButtonBorderBrushPointerOver}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarButtonForegroundPointerOver}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1240,6 +1241,8 @@
 												Value="{ThemeResource AppBarButtonBackgroundPressed}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarButtonBorderBrushPressed}" />
+										<Setter Target="AppBarButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarButtonBorderBrushPressed}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarButtonForegroundPressed}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1260,6 +1263,8 @@
 										<Setter Target="Root.Background"
 												Value="{ThemeResource AppBarButtonBackgroundDisabled}" />
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarButtonBorderBrushDisabled}" />
+										<Setter Target="AppBarButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarButtonBorderBrushDisabled}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarButtonForegroundDisabled}" />
@@ -1283,6 +1288,8 @@
 												Value="{ThemeResource AppBarButtonBackgroundPointerOver}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarButtonBorderBrushPointerOver}" />
+										<Setter Target="AppBarButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarButtonBorderBrushPointerOver}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarButtonForegroundPointerOver}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1305,6 +1312,8 @@
 												Value="{ThemeResource AppBarButtonBackgroundPressed}" />
 										<Setter Target="Root.BorderBrush"
 												Value="{ThemeResource AppBarButtonBorderBrushPressed}" />
+										<Setter Target="AppBarButtonInnerBorder.Stroke"
+												Value="{ThemeResource AppBarButtonBorderBrushPressed}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarButtonForegroundPressed}" />
 										<Setter Target="TextLabel.Foreground"
@@ -1326,6 +1335,8 @@
 										<Setter Target="Root.Background"
 												Value="{ThemeResource AppBarButtonBackgroundSubMenuOpened}" />
 										<Setter Target="Root.BorderBrush"
+												Value="{ThemeResource AppBarButtonBorderBrushSubMenuOpened}" />
+										<Setter Target="AppBarButtonInnerBorder.Stroke"
 												Value="{ThemeResource AppBarButtonBorderBrushSubMenuOpened}" />
 										<Setter Target="Content.Foreground"
 												Value="{ThemeResource AppBarButtonForegroundSubMenuOpened}" />
@@ -1350,13 +1361,13 @@
 								<VisualState x:Name="TouchInputMode">
 									<VisualState.Setters>
 										<Setter Target="OverflowTextLabel.Padding"
-												Value="{StaticResource AppBarButtonOverflowTextTouchMargin}" />
+												Value="{ThemeResource AppBarButtonOverflowTextTouchMargin}" />
 									</VisualState.Setters>
 								</VisualState>
 								<VisualState x:Name="GameControllerInputMode">
 									<VisualState.Setters>
 										<Setter Target="OverflowTextLabel.Padding"
-												Value="{StaticResource AppBarButtonOverflowTextTouchMargin}" />
+												Value="{ThemeResource AppBarButtonOverflowTextTouchMargin}" />
 									</VisualState.Setters>
 								</VisualState>
 
@@ -1379,10 +1390,12 @@
 												Value="Visible" />
 									</VisualState.Setters>
 								</VisualState>
-
 							</VisualStateGroup>
 
 						</VisualStateManager.VisualStateGroups>
+						<Rectangle x:Name="AppBarButtonInnerBorder"
+								   StrokeThickness="1"
+								   Stroke="{TemplateBinding BorderBrush}" />
 						<Grid x:Name="ContentRoot"
 							  MinHeight="{ThemeResource AppBarThemeMinHeight}">
 
@@ -1398,12 +1411,11 @@
 							</Grid.RowDefinitions>
 							<!-- UNO TODO The ViewBox center should be horizontal Stretch but the Grid aligns the content left -->
 							<Viewbox x:Name="ContentViewbox"
-									 Height="20"
+									 Height="{ThemeResource AppBarButtonContentHeight}"
 									 Margin="{ThemeResource AppBarButtonContentViewboxCollapsedMargin}"
 									 HorizontalAlignment="Center"
 									 AutomationProperties.AccessibilityView="Raw">
 								<ContentPresenter x:Name="Content"
-												  Height="20"
 												  Content="{TemplateBinding Icon}"
 												  Foreground="{TemplateBinding Foreground}" />
 							</Viewbox>
@@ -1415,11 +1427,12 @@
 									   FontFamily="{TemplateBinding FontFamily}"
 									   TextAlignment="Center"
 									   TextWrapping="Wrap"
-									   Margin="2,0,2,6"
+									   Margin="{ThemeResource AppBarButtonTextLabelMargin}"
 									   AutomationProperties.AccessibilityView="Raw" />
 							<TextBlock x:Name="OverflowTextLabel"
 									   Text="{TemplateBinding Label}"
 									   Foreground="{TemplateBinding Foreground}"
+									   FontSize="{ThemeResource ControlContentThemeFontSize}"
 									   FontFamily="{TemplateBinding FontFamily}"
 									   TextAlignment="Left"
 									   TextTrimming="Clip"
@@ -1427,7 +1440,7 @@
 									   HorizontalAlignment="Stretch"
 									   VerticalAlignment="Center"
 									   Margin="12,0,12,0"
-									   Padding="{StaticResource AppBarButtonOverflowTextLabelPadding}"
+									   Padding="{ThemeResource AppBarButtonOverflowTextLabelPadding}"
 									   Visibility="Collapsed"
 									   AutomationProperties.AccessibilityView="Raw" />
 							<TextBlock x:Name="KeyboardAcceleratorTextLabel"
