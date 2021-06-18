@@ -1,44 +1,50 @@
 ﻿<!-- Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT License. See LICENSE in the project root for license information. -->
-<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:xamarin="http://uno.ui/xamarin"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:uBehaviors="using:Uno.UI.Behaviors"
-	xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
-    xmlns:local="using:Windows.UI.Xaml.Controls"
-	mc:Ignorable="d">
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:xamarin="http://uno.ui/xamarin"
+					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+					xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+					xmlns:uBehaviors="using:Uno.UI.Behaviors"
+					xmlns:primitives="using:Microsoft.UI.Xaml.Controls.Primitives"
+					xmlns:local="using:Windows.UI.Xaml.Controls"
+					mc:Ignorable="d">
 
 	<ResourceDictionary.ThemeDictionaries>
 
 		<ResourceDictionary x:Key="Default">
-			
+
 			<x:Double x:Key="CommandBarOverflowMinWidth">160</x:Double>
 			<x:Double x:Key="CommandBarOverflowTouchMinWidth">240</x:Double>
 			<x:Double x:Key="CommandBarOverflowMaxWidth">480</x:Double>
 			<x:Double x:Key="CommandBarOverflowMaxHeight">198</x:Double>
 
 			<!-- Resources for Windows.UI.Xaml.Controls.CommandBar -->
-			<StaticResource x:Key="CommandBarBackground" ResourceKey="SystemControlBackgroundChromeMediumBrush" />
-			<StaticResource x:Key="CommandBarForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
-			<StaticResource x:Key="CommandBarHighContrastBorder" ResourceKey="SystemControlForegroundTransparentBrush" />
-			<StaticResource x:Key="CommandBarEllipsisIconForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+			<StaticResource x:Key="CommandBarBackground"
+							ResourceKey="SystemControlBackgroundChromeMediumBrush" />
+			<StaticResource x:Key="CommandBarForeground"
+							ResourceKey="SystemControlForegroundBaseHighBrush" />
+			<StaticResource x:Key="CommandBarHighContrastBorder"
+							ResourceKey="SystemControlForegroundTransparentBrush" />
+			<StaticResource x:Key="CommandBarEllipsisIconForegroundDisabled"
+							ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
 
 			<!-- Resources for Windows.UI.Xaml.Controls.CommandBarOverflowPresenter -->
-			<StaticResource x:Key="CommandBarOverflowPresenterBackground" ResourceKey="SystemControlTransientBackgroundBrush" />
-			<StaticResource x:Key="CommandBarOverflowPresenterBorderBrush" ResourceKey="SystemControlTransientBorderBrush" />
+			<StaticResource x:Key="CommandBarOverflowPresenterBackground"
+							ResourceKey="SystemControlTransientBackgroundBrush" />
+			<StaticResource x:Key="CommandBarOverflowPresenterBorderBrush"
+							ResourceKey="SystemControlTransientBorderBrush" />
 			<Thickness x:Key="CommandBarOverflowPresenterBorderThickness">1</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderDownThickness">0,0,0,1</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderUpThickness">0,1,0,0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderPadding">0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderDownPadding">0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderUpPadding">0</Thickness>
-			
+
 			<!-- Light Dismiss Overlay Resources -->
-			<StaticResource x:Key="CommandBarLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
-			
+			<StaticResource x:Key="CommandBarLightDismissOverlayBackground"
+							ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
+
 			<Thickness x:Key="CommandBarFlyoutBorderThemeThickness">1</Thickness>
 			<Thickness x:Key="CommandBarFlyoutBorderUpThemeThickness">1,1,1,0</Thickness>
 			<Thickness x:Key="CommandBarFlyoutBorderDownThemeThickness">1,0,1,1</Thickness>
@@ -53,24 +59,31 @@
 			<x:Double x:Key="CommandBarOverflowMaxHeight">198</x:Double>
 
 			<!-- Resources for Windows.UI.Xaml.Controls.CommandBar -->
-			<StaticResource x:Key="CommandBarBackground" ResourceKey="SystemControlBackgroundChromeMediumBrush" />
-			<StaticResource x:Key="CommandBarForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
-			<StaticResource x:Key="CommandBarHighContrastBorder" ResourceKey="SystemControlForegroundTransparentBrush" />
-			<StaticResource x:Key="CommandBarEllipsisIconForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+			<StaticResource x:Key="CommandBarBackground"
+							ResourceKey="SystemControlBackgroundChromeMediumBrush" />
+			<StaticResource x:Key="CommandBarForeground"
+							ResourceKey="SystemControlForegroundBaseHighBrush" />
+			<StaticResource x:Key="CommandBarHighContrastBorder"
+							ResourceKey="SystemControlForegroundTransparentBrush" />
+			<StaticResource x:Key="CommandBarEllipsisIconForegroundDisabled"
+							ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
 
 			<!-- Resources for Windows.UI.Xaml.Controls.CommandBarOverflowPresenter -->
-			<StaticResource x:Key="CommandBarOverflowPresenterBackground" ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
-			<StaticResource x:Key="CommandBarOverflowPresenterBorderBrush" ResourceKey="SystemControlTransientBorderBrush" />
+			<StaticResource x:Key="CommandBarOverflowPresenterBackground"
+							ResourceKey="SystemControlBackgroundChromeMediumLowBrush" />
+			<StaticResource x:Key="CommandBarOverflowPresenterBorderBrush"
+							ResourceKey="SystemControlTransientBorderBrush" />
 			<Thickness x:Key="CommandBarOverflowPresenterBorderThickness">1</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderDownThickness">0,0,0,1</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderUpThickness">0,1,0,0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderPadding">0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderDownPadding">0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderUpPadding">0</Thickness>
-			
+
 			<!-- Light Dismiss Overlay Resources -->
-			<StaticResource x:Key="CommandBarLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
-			
+			<StaticResource x:Key="CommandBarLightDismissOverlayBackground"
+							ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
+
 			<Thickness x:Key="CommandBarFlyoutBorderThemeThickness">1</Thickness>
 			<Thickness x:Key="CommandBarFlyoutBorderUpThemeThickness">1,1,1,0</Thickness>
 			<Thickness x:Key="CommandBarFlyoutBorderDownThemeThickness">1,0,1,1</Thickness>
@@ -84,24 +97,31 @@
 			<x:Double x:Key="CommandBarOverflowTouchMinWidth">240</x:Double>
 			<x:Double x:Key="CommandBarOverflowMaxWidth">480</x:Double>
 			<x:Double x:Key="CommandBarOverflowMaxHeight">198</x:Double>
-			
+
 			<!-- Resources for Windows.UI.Xaml.Controls.CommandBar -->
-			<StaticResource x:Key="CommandBarBackground" ResourceKey="SystemControlBackgroundChromeMediumBrush" />
-			<StaticResource x:Key="CommandBarForeground" ResourceKey="SystemControlForegroundBaseHighBrush" />
-			<StaticResource x:Key="CommandBarHighContrastBorder" ResourceKey="SystemControlForegroundTransparentBrush" />
-			<StaticResource x:Key="CommandBarEllipsisIconForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+			<StaticResource x:Key="CommandBarBackground"
+							ResourceKey="SystemControlBackgroundChromeMediumBrush" />
+			<StaticResource x:Key="CommandBarForeground"
+							ResourceKey="SystemControlForegroundBaseHighBrush" />
+			<StaticResource x:Key="CommandBarHighContrastBorder"
+							ResourceKey="SystemControlForegroundTransparentBrush" />
+			<StaticResource x:Key="CommandBarEllipsisIconForegroundDisabled"
+							ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
 
 			<!-- Resources for Windows.UI.Xaml.Controls.CommandBarOverflowPresenter -->
-			<StaticResource x:Key="CommandBarOverflowPresenterBackground" ResourceKey="SystemControlTransientBackgroundBrush" />
-			<StaticResource x:Key="CommandBarOverflowPresenterBorderBrush" ResourceKey="SystemControlTransientBorderBrush" />
+			<StaticResource x:Key="CommandBarOverflowPresenterBackground"
+							ResourceKey="SystemControlTransientBackgroundBrush" />
+			<StaticResource x:Key="CommandBarOverflowPresenterBorderBrush"
+							ResourceKey="SystemControlTransientBorderBrush" />
 			<Thickness x:Key="CommandBarOverflowPresenterBorderThickness">1</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderDownThickness">0,0,0,1</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderUpThickness">0,1,0,0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderPadding">0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderDownPadding">0</Thickness>
 			<Thickness x:Key="CommandBarOverflowPresenterBorderUpPadding">0</Thickness>
-			
-			<StaticResource x:Key="CommandBarLightDismissOverlayBackground" ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
+
+			<StaticResource x:Key="CommandBarLightDismissOverlayBackground"
+							ResourceKey="SystemControlPageBackgroundMediumAltMediumBrush" />
 
 			<Thickness x:Key="CommandBarFlyoutBorderThemeThickness">1</Thickness>
 			<Thickness x:Key="CommandBarFlyoutBorderUpThemeThickness">1,1,1,0</Thickness>
@@ -115,7 +135,7 @@
 
 	<!-- Ellipsis button style for use in Windows.UI.Xaml.Controls.AppBar and Windows.UI.Xaml.Controls.CommandBar -->
 	<Style x:Key="XamlDefaultCommandBar_EllipsisButton"
-				   TargetType="Button">
+		   TargetType="Button">
 		<Setter Property="Background"
 				Value="Transparent" />
 		<Setter Property="Foreground"
@@ -203,7 +223,7 @@
 
 	<!-- Default style for Windows.UI.Xaml.Controls.CommandBar -->
 	<Style x:Key="XamlDefaultCommandBar"
-					TargetType="CommandBar">
+		   TargetType="CommandBar">
 		<Setter Property="Background"
 				Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}" />
 		<Setter Property="Foreground"
@@ -1350,8 +1370,7 @@
 						<Grid.Clip>
 							<RectangleGeometry Rect="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClipRect}">
 								<RectangleGeometry.Transform>
-									<TranslateTransform x:Name="ClipGeometryTransform"
-														Y="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+									<TranslateTransform x:Name="ClipGeometryTransform" Y="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 								</RectangleGeometry.Transform>
 							</RectangleGeometry>
 						</Grid.Clip>
@@ -1378,8 +1397,10 @@
 									<ColumnDefinition Width="Auto" />
 								</Grid.ColumnDefinitions>
 
-								<!-- Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
-									in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate. -->
+								<!--
+									Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
+									in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate.
+								-->
 								<ContentControl x:Name="ContentControl"
 												Content="{TemplateBinding Content}"
 												ContentTemplate="{TemplateBinding ContentTemplate}"
@@ -1433,8 +1454,7 @@
 									</Grid.Clip>
 
 									<Grid.RenderTransform>
-										<TranslateTransform x:Name="OverflowContentRootTransform"
-															X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
+										<TranslateTransform x:Name="OverflowContentRootTransform" X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
 									</Grid.RenderTransform>
 
 									<CommandBarOverflowPresenter x:Name="SecondaryItemsControl"
@@ -1473,7 +1493,7 @@
 
 	<!-- Backward compatibility naming -->
 	<Style x:Key="XamlCommandBar"
-				   TargetType="CommandBar"
+		   TargetType="CommandBar"
 		   BasedOn="{StaticResource XamlDefaultCommandBar}" />
 
 	<Style TargetType="CommandBar"
