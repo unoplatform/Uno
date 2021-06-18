@@ -450,7 +450,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		private void UpdateTemplateSettings(double maxKeyboardAcceleratorTextWidth)
+		internal void UpdateTemplateSettings(double maxKeyboardAcceleratorTextWidth)
 		{
 			if (m_maxKeyboardAcceleratorTextWidth != maxKeyboardAcceleratorTextWidth)
 			{
@@ -497,7 +497,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		private Size GetKeyboardAcceleratorTextDesiredSize()
+		internal Size GetKeyboardAcceleratorTextDesiredSize()
 		{
 			var desiredSize = new Size(0, 0);
 

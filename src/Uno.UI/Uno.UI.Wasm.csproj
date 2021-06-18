@@ -153,9 +153,12 @@
 	  <None Remove="tsconfig.json" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarElementContainer.Properties.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarElementContainer_Partial.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBarDynamicOverflowAction.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBarElementCollection_Partial_h.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBarOverflowButtonVisibility.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar_g_h.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar_h.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\DynamicOverflowItemsChangingEventArgs.cs" />
 	  <Content Include="tsconfig.json" />
 	</ItemGroup>
 

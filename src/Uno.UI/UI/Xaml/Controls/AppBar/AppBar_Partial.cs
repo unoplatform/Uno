@@ -71,6 +71,8 @@ namespace Windows.UI.Xaml.Controls
 		Storyboard m_overlayOpeningStoryboard;
 		Storyboard m_overlayClosingStoryboard;
 
+		protected double ContentHeight => m_contentHeight;
+
 		public AppBar()
 		{
 			m_Mode = AppBarMode.Inline;
@@ -994,7 +996,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		private void UpdateTemplateSettings()
+		protected virtual void UpdateTemplateSettings()
 		{
 			//
 			// AppBar/CommandBar TemplateSettings and how they're used.
@@ -1251,7 +1253,8 @@ namespace Windows.UI.Xaml.Controls
 			m_savedFocusState = FocusState.Unfocused;
 		}
 
-		private void RestoreSavedFocusImpl(DependencyObject savedFocusedElement, FocusState savedFocusState)
+
+		protected virtual void RestoreSavedFocusImpl(DependencyObject savedFocusedElement, FocusState savedFocusState)
 		{
 			if (savedFocusedElement is { })
 			{

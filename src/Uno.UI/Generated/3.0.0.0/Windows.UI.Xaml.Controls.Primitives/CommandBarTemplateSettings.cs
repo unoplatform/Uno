@@ -16,7 +16,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		// Skipping already declared property OverflowContentMinWidth
 		// Skipping already declared property OverflowContentMaxWidth
 		// Skipping already declared property EffectiveOverflowButtonVisibility
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  double OverflowContentCompactYTranslation
 		{
@@ -25,8 +25,8 @@ namespace Windows.UI.Xaml.Controls.Primitives
 				throw new global::System.NotImplementedException("The member double CommandBarTemplateSettings.OverflowContentCompactYTranslation is not implemented in Uno.");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#endif
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  double OverflowContentHiddenYTranslation
 		{
@@ -35,8 +35,8 @@ namespace Windows.UI.Xaml.Controls.Primitives
 				throw new global::System.NotImplementedException("The member double CommandBarTemplateSettings.OverflowContentHiddenYTranslation is not implemented in Uno.");
 			}
 		}
-		#endif
-		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+#endif
+#if false || false || false || false || false || false || false
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public  double OverflowContentMinimalYTranslation
 		{
@@ -45,7 +45,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 				throw new global::System.NotImplementedException("The member double CommandBarTemplateSettings.OverflowContentMinimalYTranslation is not implemented in Uno.");
 			}
 		}
-		#endif
+#endif
 		// Forced skipping of method Windows.UI.Xaml.Controls.Primitives.CommandBarTemplateSettings.ContentHeight.get
 		// Forced skipping of method Windows.UI.Xaml.Controls.Primitives.CommandBarTemplateSettings.OverflowContentClipRect.get
 		// Forced skipping of method Windows.UI.Xaml.Controls.Primitives.CommandBarTemplateSettings.OverflowContentMinWidth.get

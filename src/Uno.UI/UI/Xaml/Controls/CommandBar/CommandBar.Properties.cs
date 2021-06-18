@@ -26,13 +26,13 @@ namespace Windows.UI.Xaml.Controls
 		public static DependencyProperty CommandBarTemplateSettingsProperty { get; } =
 			DependencyProperty.Register(nameof(CommandBarTemplateSettings), typeof(CommandBarTemplateSettings), typeof(CommandBar), new PropertyMetadata(null));
 
-		public CommandBarDefaultLabelPosition CommandBarDefaultLabelPosition
+		public CommandBarDefaultLabelPosition DefaultLabelPosition
 		{
-			get { return (CommandBarDefaultLabelPosition)this.GetValue(CommandBarDefaultLabelPositionProperty); }
-			set { this.SetValue(CommandBarDefaultLabelPositionProperty, value); }
+			get { return (CommandBarDefaultLabelPosition)this.GetValue(DefaultLabelPositionProperty); }
+			set { this.SetValue(DefaultLabelPositionProperty, value); }
 		}
-		public static DependencyProperty CommandBarDefaultLabelPositionProperty { get; } =
-			DependencyProperty.Register(nameof(CommandBarDefaultLabelPosition), typeof(CommandBarDefaultLabelPosition), typeof(CommandBar), new PropertyMetadata(CommandBarDefaultLabelPosition.Bottom));
+		public static DependencyProperty DefaultLabelPositionProperty { get; } =
+			DependencyProperty.Register(nameof(DefaultLabelPosition), typeof(CommandBarDefaultLabelPosition), typeof(CommandBar), new PropertyMetadata(CommandBarDefaultLabelPosition.Bottom));
 
 		public bool IsDynamicOverflowEnabled
 		{
@@ -42,13 +42,13 @@ namespace Windows.UI.Xaml.Controls
 		public static DependencyProperty IsDynamicOverflowEnabledProperty { get; } =
 			DependencyProperty.Register(nameof(IsDynamicOverflowEnabled), typeof(bool), typeof(CommandBar), new PropertyMetadata(true));
 
-		public CommandBarOverflowButtonVisibility CommandBarOverflowButtonVisibility
+		public CommandBarOverflowButtonVisibility OverflowButtonVisibility
 		{
-			get { return (CommandBarOverflowButtonVisibility)this.GetValue(CommandBarOverflowButtonVisibilityProperty); }
-			set { this.SetValue(CommandBarOverflowButtonVisibilityProperty, value); }
+			get { return (CommandBarOverflowButtonVisibility)this.GetValue(OverflowButtonVisibilityProperty); }
+			set { this.SetValue(OverflowButtonVisibilityProperty, value); }
 		}
-		public static DependencyProperty CommandBarOverflowButtonVisibilityProperty { get; } =
-			DependencyProperty.Register(nameof(CommandBarOverflowButtonVisibility), typeof(CommandBarOverflowButtonVisibility), typeof(CommandBar), new PropertyMetadata(CommandBarOverflowButtonVisibility.Auto));
+		public static DependencyProperty OverflowButtonVisibilityProperty { get; } =
+			DependencyProperty.Register(nameof(OverflowButtonVisibility), typeof(CommandBarOverflowButtonVisibility), typeof(CommandBar), new PropertyMetadata(CommandBarOverflowButtonVisibility.Auto));
 
 		public IObservableVector<ICommandBarElement> PrimaryCommands
 		{
