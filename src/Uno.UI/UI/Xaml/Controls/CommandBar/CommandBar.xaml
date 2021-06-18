@@ -132,7 +132,8 @@
 
 	<!-- Control resources that are customizable but do not vary based on theme -->
 	<Thickness x:Key="CommandBarOverflowPresenterMargin">0,4,0,4</Thickness>
-
+	<Thickness x:Key="CommandBarMoreButtonMargin">14,19,14,0</Thickness>
+	<x:Double x:Key="AppBarThemeCompactHeight">40</x:Double>
 	<!-- Ellipsis button style for use in Windows.UI.Xaml.Controls.AppBar and Windows.UI.Xaml.Controls.CommandBar -->
 	<Style x:Key="XamlDefaultCommandBar_EllipsisButton"
 		   TargetType="Button">
@@ -221,13 +222,13 @@
 		</Setter>
 	</Style>
 
-	<!-- Default style for Windows.UI.Xaml.Controls.CommandBar -->
+
 	<Style x:Key="XamlDefaultCommandBar"
 		   TargetType="CommandBar">
 		<Setter Property="Background"
-				Value="{ThemeResource SystemControlBackgroundChromeMediumBrush}" />
+				Value="{ThemeResource CommandBarBackground}" />
 		<Setter Property="Foreground"
-				Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
+				Value="{ThemeResource CommandBarForeground}" />
 		<Setter Property="IsTabStop"
 				Value="False" />
 		<Setter Property="VerticalAlignment"
@@ -240,25 +241,52 @@
 				Value="Top" />
 		<Setter Property="ClosedDisplayMode"
 				Value="Compact" />
+		<Setter Property="ExitDisplayModeOnAccessKeyInvoked"
+				Value="False" />
+		<Setter Property="CommandBarOverflowPresenterStyle"
+				Value="{ThemeResource DefaultCommandBarOverflowPresenterStyle}" />
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="CommandBar">
-					<Grid x:Name="LayoutRoot"
-						  Background="{TemplateBinding Background}">
+					<Grid x:Name="LayoutRoot">
+						<Grid.Resources>
+							<Storyboard x:Key="OverlayOpeningAnimation">
+								<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+									<DiscreteDoubleKeyFrame KeyTime="0:0:0"
+															Value="0" />
+									<SplineDoubleKeyFrame KeyTime="0:0:0.467"
+														  KeySpline="0.1,0.9 0.2,1.0"
+														  Value="1" />
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+							<Storyboard x:Key="OverlayClosingAnimation">
+								<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="Opacity">
+									<DiscreteDoubleKeyFrame KeyTime="0:0:0"
+															Value="1" />
+									<SplineDoubleKeyFrame KeyTime="0:0:0.167"
+														  KeySpline="0.2,0 0,1"
+														  Value="0" />
+								</DoubleAnimationUsingKeyFrames>
+							</Storyboard>
+						</Grid.Resources>
+
 						<VisualStateManager.VisualStateGroups>
 							<VisualStateGroup x:Name="CommonStates">
 								<VisualState x:Name="Normal" />
+
 								<VisualState x:Name="Disabled">
+
 									<Storyboard>
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="EllipsisIcon"
 																	   Storyboard.TargetProperty="Foreground">
 											<DiscreteObjectKeyFrame KeyTime="0"
-																	Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
+																	Value="{ThemeResource CommandBarEllipsisIconForegroundDisabled}" />
 										</ObjectAnimationUsingKeyFrames>
 									</Storyboard>
 								</VisualState>
 							</VisualStateGroup>
 							<VisualStateGroup x:Name="DisplayModeStates">
+
 								<VisualStateGroup.Transitions>
 									<VisualTransition From="CompactClosed"
 													  To="CompactOpenUp"
@@ -299,8 +327,8 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0.467"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 											</DoubleAnimationUsingKeyFrames>
@@ -309,8 +337,8 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -353,8 +381,8 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0.167"
 																		Value="0" />
 											</DoubleAnimationUsingKeyFrames>
@@ -363,8 +391,8 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -402,8 +430,8 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 											</DoubleAnimationUsingKeyFrames>
@@ -412,16 +440,16 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{ThemeResource AppBarThemeCompactHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -459,8 +487,8 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0.167"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.CompactVerticalDelta}" />
 											</DoubleAnimationUsingKeyFrames>
@@ -469,16 +497,16 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{ThemeResource AppBarThemeCompactHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{ThemeResource AppBarThemeCompactHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -489,7 +517,7 @@
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="Padding">
 												<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																		Value="16,11,16,0" />
+																		Value="14,11,14,0" />
 											</ObjectAnimationUsingKeyFrames>
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="MinHeight">
@@ -536,32 +564,32 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="1" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="1" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="1" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="1" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -572,7 +600,7 @@
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="Padding">
 												<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																		Value="16,11,16,0" />
+																		Value="14,11,14,0" />
 											</ObjectAnimationUsingKeyFrames>
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="MinHeight">
@@ -619,32 +647,32 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="1" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="1" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -655,7 +683,7 @@
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="Padding">
 												<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																		Value="16,11,16,0" />
+																		Value="14,11,14,0" />
 											</ObjectAnimationUsingKeyFrames>
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="MinHeight">
@@ -692,40 +720,40 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="1" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="1" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="1" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="1" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentRootTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{ThemeResource AppBarThemeMinimalHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -736,7 +764,7 @@
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="Padding">
 												<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																		Value="16,11,16,0" />
+																		Value="14,11,14,0" />
 											</ObjectAnimationUsingKeyFrames>
 											<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																		   Storyboard.TargetProperty="MinHeight">
@@ -773,40 +801,40 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.MinimalVerticalDelta}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="1" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl"
 																		   Storyboard.TargetProperty="Opacity">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="1" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentRootTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{ThemeResource AppBarThemeMinimalHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{ThemeResource AppBarThemeMinimalHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -854,16 +882,16 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HiddenVerticalDelta}" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HiddenVerticalDelta}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -911,16 +939,16 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HiddenVerticalDelta}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -958,24 +986,24 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HiddenVerticalDelta}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentRootTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.467"
-																		  KeySpline="0.1,0.9 0.2,1.0"
-																		  Value="0" />
+																	  KeySpline="0.1,0.9 0.2,1.0"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
@@ -1013,30 +1041,31 @@
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HiddenVerticalDelta}" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.HiddenVerticalDelta}" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentRootTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.ContentHeight}" />
 												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="0" />
+																	  KeySpline="0.2,0 0,1"
+																	  Value="0" />
 											</DoubleAnimationUsingKeyFrames>
 											<DoubleAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentTransform"
 																		   Storyboard.TargetProperty="Y">
 												<DiscreteDoubleKeyFrame KeyTime="0:0:0"
 																		Value="0" />
-												<win:SplineDoubleKeyFrame KeyTime="0:0:0.167"
-																		  KeySpline="0.2,0 0,1"
-																		  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
+												<SplineDoubleKeyFrame KeyTime="0:0:0.167"
+																	  KeySpline="0.2,0 0,1"
+																	  Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.NegativeOverflowContentHeight}" />
 											</DoubleAnimationUsingKeyFrames>
 										</Storyboard>
 									</VisualTransition>
 								</VisualStateGroup.Transitions>
 								<VisualState x:Name="CompactClosed" />
 								<VisualState x:Name="CompactOpenUp">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1071,6 +1100,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="CompactOpenDown">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1105,6 +1135,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="MinimalClosed">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1129,7 +1160,7 @@
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																	   Storyboard.TargetProperty="Padding">
 											<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																	Value="16,11,16,0" />
+																	Value="14,11,14,0" />
 										</ObjectAnimationUsingKeyFrames>
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																	   Storyboard.TargetProperty="MinHeight">
@@ -1154,6 +1185,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="MinimalOpenUp">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1168,7 +1200,7 @@
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																	   Storyboard.TargetProperty="Padding">
 											<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																	Value="16,11,16,0" />
+																	Value="14,11,14,0" />
 										</ObjectAnimationUsingKeyFrames>
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																	   Storyboard.TargetProperty="MinHeight">
@@ -1203,6 +1235,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="MinimalOpenDown">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1212,7 +1245,7 @@
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																	   Storyboard.TargetProperty="Padding">
 											<DiscreteObjectKeyFrame KeyTime="0:0:0"
-																	Value="16,11,16,0" />
+																	Value="14,11,14,0" />
 										</ObjectAnimationUsingKeyFrames>
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="MoreButton"
 																	   Storyboard.TargetProperty="MinHeight">
@@ -1247,6 +1280,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="HiddenClosed">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1271,6 +1305,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="HiddenOpenUp">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1310,6 +1345,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="HiddenOpenDown">
+
 									<Storyboard>
 										<DoubleAnimationUsingKeyFrames Storyboard.TargetName="ClipGeometryTransform"
 																	   Storyboard.TargetProperty="Y">
@@ -1347,6 +1383,7 @@
 							<VisualStateGroup x:Name="AvailableCommandsStates">
 								<VisualState x:Name="BothCommands" />
 								<VisualState x:Name="PrimaryCommandsOnly">
+
 									<Storyboard>
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="OverflowContentRoot"
 																	   Storyboard.TargetProperty="Visibility">
@@ -1356,6 +1393,7 @@
 									</Storyboard>
 								</VisualState>
 								<VisualState x:Name="SecondaryCommandsOnly">
+
 									<Storyboard>
 										<ObjectAnimationUsingKeyFrames Storyboard.TargetName="PrimaryItemsControl"
 																	   Storyboard.TargetProperty="Visibility">
@@ -1365,8 +1403,19 @@
 									</Storyboard>
 								</VisualState>
 							</VisualStateGroup>
-						</VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="DynamicOverflowStates">
+								<VisualState x:Name="DynamicOverflowDisabled" />
+								<VisualState x:Name="DynamicOverflowEnabled">
+									<VisualState.Setters>
+										<Setter Target="ContentControlColumnDefinition.Width"
+												Value="Auto" />
+										<Setter Target="PrimaryItemsControlColumnDefinition.Width"
+												Value="*" />
+									</VisualState.Setters>
+								</VisualState>
+							</VisualStateGroup>
 
+						</VisualStateManager.VisualStateGroups>
 						<Grid.Clip>
 							<RectangleGeometry Rect="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.ClipRect}">
 								<RectangleGeometry.Transform>
@@ -1374,29 +1423,27 @@
 								</RectangleGeometry.Transform>
 							</RectangleGeometry>
 						</Grid.Clip>
-
 						<Grid x:Name="ContentRoot"
 							  VerticalAlignment="Top"
 							  Margin="{TemplateBinding Padding}"
 							  Height="{TemplateBinding Height}"
+							  MinHeight="{ThemeResource AppBarThemeCompactHeight}"
 							  Background="{TemplateBinding Background}"
-							  Opacity="{TemplateBinding Opacity}">
-
+							  XYFocusKeyboardNavigation="Enabled">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="*" />
 								<ColumnDefinition Width="Auto" />
 							</Grid.ColumnDefinitions>
-
 							<Grid.RenderTransform>
 								<TranslateTransform x:Name="ContentTransform" />
 							</Grid.RenderTransform>
-
 							<Grid>
 								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="*" />
-									<ColumnDefinition Width="Auto" />
+									<ColumnDefinition x:Name="ContentControlColumnDefinition"
+													  Width="*" />
+									<ColumnDefinition x:Name="PrimaryItemsControlColumnDefinition"
+													  Width="Auto" />
 								</Grid.ColumnDefinitions>
-
 								<!--
 									Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
 									in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate.
@@ -1411,10 +1458,9 @@
 												HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
 												VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
 												IsTabStop="False" />
-
 								<ItemsControl x:Name="PrimaryItemsControl"
 											  HorizontalAlignment="Right"
-											  MinHeight="{ThemeResource AppBarThemeMinHeight}"
+											  MinHeight="{ThemeResource AppBarThemeCompactHeight}"
 											  IsTabStop="False"
 											  Grid.Column="1">
 									<ItemsControl.ItemsPanel>
@@ -1424,27 +1470,27 @@
 									</ItemsControl.ItemsPanel>
 								</ItemsControl>
 							</Grid>
-
 							<Button x:Name="MoreButton"
 									Foreground="{TemplateBinding Foreground}"
 									Style="{StaticResource XamlDefaultCommandBar_EllipsisButton}"
-									Padding="16,23,16,0"
+									Padding="{ThemeResource CommandBarMoreButtonMargin}"
 									MinHeight="{ThemeResource AppBarThemeCompactHeight}"
 									VerticalAlignment="Top"
-									Grid.Column="1">
+									Grid.Column="1"
+									Control.IsTemplateKeyTipTarget="True"
+									IsAccessKeyScope="True"
+									Visibility="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.EffectiveOverflowButtonVisibility}">
 								<FontIcon x:Name="EllipsisIcon"
 										  VerticalAlignment="Center"
 										  win:FontFamily="{ThemeResource SymbolThemeFontFamily}"
-										  FontSize="16"
+										  FontSize="20"
 										  Glyph="&#xE10C;"
 										  win:Height="{ThemeResource AppBarExpandButtonCircleDiameter}" />
 							</Button>
-
 							<Popup x:Name="OverflowPopup">
 								<Popup.RenderTransform>
 									<TranslateTransform x:Name="OverflowPopupOffsetTransform" />
 								</Popup.RenderTransform>
-
 								<Grid x:Name="OverflowContentRoot"
 									  MinWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentMinWidth}"
 									  MaxWidth="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentMaxWidth}"
@@ -1452,11 +1498,9 @@
 									<Grid.Clip>
 										<RectangleGeometry x:Name="OverflowContentRootClip" />
 									</Grid.Clip>
-
 									<Grid.RenderTransform>
 										<TranslateTransform x:Name="OverflowContentRootTransform" X="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=CommandBarTemplateSettings.OverflowContentHorizontalOffset}" />
 									</Grid.RenderTransform>
-
 									<CommandBarOverflowPresenter x:Name="SecondaryItemsControl"
 																 Style="{TemplateBinding CommandBarOverflowPresenterStyle}"
 																 IsEnabled="False"
@@ -1476,12 +1520,11 @@
 								</Grid>
 							</Popup>
 							<Rectangle x:Name="HighContrastBorder"
-									   IsHitTestVisible="False"
 									   x:DeferLoadStrategy="Lazy"
 									   Grid.ColumnSpan="2"
 									   Visibility="Collapsed"
 									   VerticalAlignment="Stretch"
-									   Stroke="{ThemeResource SystemControlForegroundTransparentBrush}"
+									   Stroke="{ThemeResource CommandBarHighContrastBorder}"
 									   StrokeThickness="1" />
 						</Grid>
 					</Grid>
