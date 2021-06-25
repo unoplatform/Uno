@@ -47,6 +47,16 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		protected override void ClearContainerForItemOverride(DependencyObject element, object item) => base.ClearContainerForItemOverride(element, item);
+		// Uno Specific: Need to clear the ItemContainerStyle so the style will not stay when the commands
+		// are moved from this Secondary ItemsControl to the CommandBar's Primary ItemsControl
+		protected override void ClearContainerForItemOverride(DependencyObject element, object item)
+		{
+			base.ClearContainerForItemOverride(element, item);
+
+			if (element is FrameworkElement fElt)
+			{
+				fElt.ClearValue(StyleProperty);
+			}
+		}
 	}
 }
