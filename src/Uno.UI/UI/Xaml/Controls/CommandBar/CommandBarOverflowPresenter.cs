@@ -52,11 +52,7 @@ namespace Windows.UI.Xaml.Controls
 		protected override void ClearContainerForItemOverride(DependencyObject element, object item)
 		{
 			base.ClearContainerForItemOverride(element, item);
-
-			if (element is FrameworkElement fElt)
-			{
-				fElt.ClearValue(StyleProperty);
-			}
+			element.ClearValue(StyleProperty);
 		}
 	}
 }
