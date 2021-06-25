@@ -53,7 +53,7 @@ namespace Windows.UI.Xaml.Controls
 		public IObservableVector<ICommandBarElement> PrimaryCommands
 		{
 			get { return (IObservableVector<ICommandBarElement>)this.GetValue(PrimaryCommandsProperty); }
-			set { this.SetValue(PrimaryCommandsProperty, value); }
+			private set { this.SetValue(PrimaryCommandsProperty, value); }
 		}
 		public static DependencyProperty PrimaryCommandsProperty { get; } =
 			DependencyProperty.Register(nameof(PrimaryCommands), typeof(IObservableVector<ICommandBarElement>), typeof(CommandBar), new FrameworkPropertyMetadata(default(IObservableVector<ICommandBarElement>), FrameworkPropertyMetadataOptions.ValueInheritsDataContext));
@@ -61,7 +61,7 @@ namespace Windows.UI.Xaml.Controls
 		public IObservableVector<ICommandBarElement> SecondaryCommands
 		{
 			get { return (IObservableVector<ICommandBarElement>)this.GetValue(SecondaryCommandsProperty); }
-			set { this.SetValue(SecondaryCommandsProperty, value); }
+			private set { this.SetValue(SecondaryCommandsProperty, value); }
 		}
 
 		public static DependencyProperty SecondaryCommandsProperty { get; } =

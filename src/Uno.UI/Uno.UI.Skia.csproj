@@ -114,6 +114,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <UpToDateCheckInput Remove="DirectUI\IterableWrappedCollection.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBar_themeresources.xaml" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Include="Mixins\Wasm\VisualStatesMixins.g.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -121,6 +126,10 @@
 	  </None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Page Include="UI\Xaml\Controls\AppBar\AppBar_themeresources.xaml" />
+	</ItemGroup>
+	
 	<ItemGroup>
 	  <None Update="Mixins\Wasm\VisualStatesMixins.tt">
 	    <LastGenOutput>VisualStatesMixins.g.cs</LastGenOutput>

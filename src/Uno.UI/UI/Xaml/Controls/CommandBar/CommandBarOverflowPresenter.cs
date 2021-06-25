@@ -46,5 +46,7 @@ namespace Windows.UI.Xaml.Controls
 				GoToState(useTransitions, "DisplayModeDefault");
 			}
 		}
+
+		protected override void ClearContainerForItemOverride(DependencyObject element, object item) => base.ClearContainerForItemOverride(element, item);
 	}
 }

@@ -518,7 +518,7 @@ namespace Windows.UI.Xaml.Controls
 				position.X = m_lastFlyoutPosition.X;
 			}
 
-			if (double.IsNegativeInfinity(position.y))
+			if (double.IsNegativeInfinity(position.Y))
 			{
 				position.Y = m_lastFlyoutPosition.Y;
 			}
@@ -532,7 +532,7 @@ namespace Windows.UI.Xaml.Controls
 
 			if (parentCommandBar is { })
 			{
-				parentCommandBar.CloseSubMenus(this);
+				parentCommandBar.CloseSubMenus(this, false);
 			}
 		}
 

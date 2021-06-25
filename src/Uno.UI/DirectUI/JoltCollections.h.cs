@@ -922,7 +922,7 @@ namespace DirectUI
 
 	//		GetAt( uint index, out T item) override
 	//		{
-	//			CValue value;
+	//			CValue value;w
 	//			Xint nIndex = (XINT32)(index);
 
 	//			this.CheckThread();

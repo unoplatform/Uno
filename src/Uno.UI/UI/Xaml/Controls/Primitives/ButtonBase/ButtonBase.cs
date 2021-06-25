@@ -106,7 +106,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 
 		private static void OnCommandChanged(object dependencyobject, DependencyPropertyChangedEventArgs args)
 		{
-			((ButtonBase)dependencyobject).OnCommandChanged(args.NewValue as ICommand);
+			((ButtonBase)dependencyobject).OnCommandChanged(dependencyobject, args.NewValue as ICommand);
 		}
 		#endregion
 

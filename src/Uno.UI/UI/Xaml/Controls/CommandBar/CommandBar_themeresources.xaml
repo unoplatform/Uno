@@ -134,6 +134,68 @@
 	<Thickness x:Key="CommandBarOverflowPresenterMargin">0,4,0,4</Thickness>
 	<Thickness x:Key="CommandBarMoreButtonMargin">14,19,14,0</Thickness>
 	<x:Double x:Key="AppBarThemeCompactHeight">40</x:Double>
+
+	<Style TargetType="CommandBarOverflowPresenter" BasedOn="{StaticResource DefaultCommandBarOverflowPresenterStyle}" />
+
+	<Style x:Key="DefaultCommandBarOverflowPresenterStyle" TargetType="CommandBarOverflowPresenter">
+		<Setter Property="Background" Value="{ThemeResource CommandBarOverflowPresenterBackground}" />
+		<Setter Property="BorderBrush" Value="{ThemeResource CommandBarOverflowPresenterBorderBrush}" />
+		<Setter Property="Padding" Value="{ThemeResource CommandBarOverflowPresenterBorderPadding}" />
+		<Setter Property="MaxWidth" Value="{ThemeResource CommandBarOverflowMaxWidth}" />
+		<Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
+		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+		<Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto" />
+		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+		<Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
+		<Setter Property="AllowFocusOnInteraction" Value="False" />
+		<Setter Property="TabNavigation" Value="Once" />
+		<Setter Property="CornerRadius" Value="{ThemeResource OverlayCornerRadius}" />
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="CommandBarOverflowPresenter">
+					<Grid x:Name="LayoutRoot"
+                        Background="{TemplateBinding Background}"
+                        BackgroundSizing="OuterBorderEdge"
+                        Padding="{TemplateBinding Padding}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{ThemeResource CommandBarOverflowPresenterBorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+
+						<VisualStateManager.VisualStateGroups>
+							<VisualStateGroup x:Name="DisplayModeStates">
+								<VisualState x:Name="DisplayModeDefault" />
+								<VisualState x:Name="FullWidthOpenDown">
+									<VisualState.Setters>
+										<Setter Target="LayoutRoot.Padding" Value="{ThemeResource CommandBarOverflowPresenterBorderDownPadding}" />
+										<Setter Target="LayoutRoot.BorderThickness" Value="{ThemeResource CommandBarOverflowPresenterBorderDownThickness}" />
+									</VisualState.Setters>
+								</VisualState>
+								<VisualState x:Name="FullWidthOpenUp">
+									<VisualState.Setters>
+										<Setter Target="LayoutRoot.Padding" Value="{ThemeResource CommandBarOverflowPresenterBorderUpPadding}" />
+										<Setter Target="LayoutRoot.BorderThickness" Value="{ThemeResource CommandBarOverflowPresenterBorderUpThickness}" />
+									</VisualState.Setters>
+								</VisualState>
+
+							</VisualStateGroup>
+
+						</VisualStateManager.VisualStateGroups>
+						<ScrollViewer HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                            HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                            VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                            VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                            ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}"
+                            AutomationProperties.AccessibilityView="Raw">
+							<ItemsPresenter x:Name="ItemsPresenter" Margin="{ThemeResource CommandBarOverflowPresenterMargin}" />
+						</ScrollViewer>
+
+					</Grid>
+
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
 	<!-- Ellipsis button style for use in Windows.UI.Xaml.Controls.AppBar and Windows.UI.Xaml.Controls.CommandBar -->
 	<Style x:Key="XamlDefaultCommandBar_EllipsisButton"
 		   TargetType="Button">
@@ -226,7 +288,7 @@
 	<Style x:Key="XamlDefaultCommandBar"
 		   TargetType="CommandBar">
 		<Setter Property="Background"
-				Value="{ThemeResource CommandBarBackground}" />
+				Value="Orange" />
 		<Setter Property="Foreground"
 				Value="{ThemeResource CommandBarForeground}" />
 		<Setter Property="IsTabStop"
@@ -1519,11 +1581,13 @@
 									</CommandBarOverflowPresenter>
 								</Grid>
 							</Popup>
+							<!-- Uno specific: Set IsHitTextVisible to False -->
 							<Rectangle x:Name="HighContrastBorder"
 									   x:DeferLoadStrategy="Lazy"
 									   Grid.ColumnSpan="2"
 									   Visibility="Collapsed"
 									   VerticalAlignment="Stretch"
+									   IsHitTestVisible="False"
 									   Stroke="{ThemeResource CommandBarHighContrastBorder}"
 									   StrokeThickness="1" />
 						</Grid>
@@ -1532,8 +1596,7 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-
-
+	
 	<!-- Backward compatibility naming -->
 	<Style x:Key="XamlCommandBar"
 		   TargetType="CommandBar"

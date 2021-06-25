@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using DirectUI;
 using Uno.Disposables;
+using Uno.UI;
 using Uno.UI.Helpers.WinUI;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
@@ -35,9 +36,6 @@ namespace Windows.UI.Xaml.Controls
 
 		AppBarMode m_Mode;
 
-		// Focus state to be applied on loaded.
-		FocusState m_onLoadFocusState;
-
 		// Owner, if this AppBar is owned by a Page using TopAppBar/BottomAppBar.
 		WeakReference<Page> m_wpOwner;
 
@@ -50,10 +48,17 @@ namespace Windows.UI.Xaml.Controls
 		SerialDisposable m_expandButtonClickEventHandler = new SerialDisposable();
 		SerialDisposable m_displayModeStateChangedEventHandler = new SerialDisposable();
 
+#pragma warning disable CS0414
+#pragma warning disable CS0649
+		// Focus state to be applied on loaded.
+		FocusState m_onLoadFocusState;
 		UIElement m_layoutTransitionElement;
 		UIElement m_overlayLayoutTransitionElement;
+		//UIElement m_parentElementForLTEs;
+#pragma warning restore CS0414
+#pragma warning restore CS0649
 
-		UIElement m_parentElementForLTEs;
+
 		FrameworkElement m_overlayElement;
 		SerialDisposable m_overlayElementPointerPressedEventHandler = new SerialDisposable();
 
@@ -181,10 +186,10 @@ namespace Windows.UI.Xaml.Controls
 		}
 		private void OnLayoutUpdated(object sender, object e)
 		{
-			if (m_layoutTransitionElement is { })
-			{
-				//PositionLTEs();
-			}
+			//if (m_layoutTransitionElement is { })
+			//{
+			//	PositionLTEs();
+			//}
 		}
 
 		private void OnSizeChanged(object sender, SizeChangedEventArgs args)
@@ -395,32 +400,32 @@ namespace Windows.UI.Xaml.Controls
 
 			if (m_Mode == AppBarMode.Inline)
 			{
-				// If we're in a popup that is light-dismissable, then we don't want to set up
-				// a light-dismiss layer - the popup will have its own light-dismiss layer,
-				// and it can interfere with ours.
-				var popupAncestor = FindFirstParent<Popup>();
-				if (popupAncestor == null || (popupAncestor.IsLightDismissEnabled || popupAncestor.IsSubMenu))
-				{
-					if (!m_isInOverlayState)
-					{
-						if (IsInLiveTree)
-						{
-							// Setup our LTEs and light-dismiss layer.
-							SetupOverlayState();
+				//// If we're in a popup that is light-dismissable, then we don't want to set up
+				//// a light-dismiss layer - the popup will have its own light-dismiss layer,
+				//// and it can interfere with ours.
+				//var popupAncestor = this.FindFirstParent<Popup>();
+				//if (popupAncestor == null || (popupAncestor.IsLightDismissEnabled || popupAncestor.IsSubMenu))
+				//{
+				//	if (!m_isInOverlayState)
+				//	{
+				//		if (IsInLiveTree)
+				//		{
+				//			// Setup our LTEs and light-dismiss layer.
+				//			SetupOverlayState();
 
-							if (m_isOverlayVisible)
-							{
-								PlayOverlayOpeningAnimation();
-							}
-						}
-					}
-				}
+				//			if (m_isOverlayVisible)
+				//			{
+				//				PlayOverlayOpeningAnimation();
+				//			}
+				//		}
+				//	}
+				//}
 
-				var isSticky = IsSticky;
-				if (!isSticky)
-				{
-					SetFocusOnAppBar();
-				}
+				//var isSticky = IsSticky;
+				//if (!isSticky)
+				//{
+				//	SetFocusOnAppBar();
+				//}
 			}
 			else
 			{
@@ -465,7 +470,7 @@ namespace Windows.UI.Xaml.Controls
 
 		protected virtual void OnOpened(object e)
 		{
-			Opening?.Invoke(this, e);
+			Opened?.Invoke(this, e);
 
 			// UNO TODO
 			//if (DXamlCore::GetCurrent()->GetHandle()->BackButtonSupported())
@@ -482,7 +487,7 @@ namespace Windows.UI.Xaml.Controls
 				// Only restore focus if this AppBar isn't in a flyout - if it is,
 				// then focus will be restored when the flyout closes.
 				// We'll interfere with that if we restore focus before that time.
-				var popupAncestor = FindFirstParent<Popup>();
+				var popupAncestor = this.FindFirstParent<Popup>();
 				if (popupAncestor == null || !(popupAncestor.PopupPanel is FlyoutBasePopupPanel))
 				{
 					RestoreSavedFocus();
@@ -679,7 +684,7 @@ namespace Windows.UI.Xaml.Controls
 				placement = string.Empty;
 			}
 			
-			GoToState(useTransitions, $"{displayMode}{openState}{placement}", out ignored);
+			ignored = GoToState(useTransitions, $"{displayMode}{openState}{placement}");
 		}
 
 		protected override void OnPointerPressed(PointerRoutedEventArgs e)
@@ -825,7 +830,7 @@ namespace Windows.UI.Xaml.Controls
 				// matter because Blue apps wouldn't have had access to them.
 				// For post-WinBlue AppBars, we fire the Opening/Closing & Opened/Closed
 				// events based on our display mode state transitions.
-				if (m_tpDisplayModesStateGroup == null)
+				//if (m_tpDisplayModesStateGroup == null)
 				{
 					if (isOpen)
 					{
@@ -930,7 +935,7 @@ namespace Windows.UI.Xaml.Controls
 
 		public void SetOwner(Page pOwner)
 		{
-			m_wpOwner.SetTarget(pOwner);
+			m_wpOwner = new WeakReference<Page>(pOwner);
 		}
 
 		public Page GetOwner()
@@ -1107,6 +1112,7 @@ namespace Windows.UI.Xaml.Controls
 						var storyboard = currentState.Storyboard;
 						if (storyboard is { })
 						{
+							storyboard.Begin();
 							storyboard.SkipToFill();
 						}
 					}
@@ -1278,7 +1284,6 @@ namespace Windows.UI.Xaml.Controls
 		{
 			MUX_ASSERT(m_Mode == AppBarMode.Inline);
 			MUX_ASSERT(!m_isInOverlayState);
-
 			// The approach used to achieve light-dismiss is to create a 1x1 element that is added
 			// as the first child of our layout root panel.  Adding it as the first child ensures that
 			// it is below our actual content and will therefore not affect the content area's hit-testing.
@@ -1308,7 +1313,7 @@ namespace Windows.UI.Xaml.Controls
 
 					m_overlayElement = rectangle;
 
-					UpdateOverlayElementBrush();
+					//UpdateOverlayElementBrush();
 				}
 
 				// Add our overlay element to our layout root panel.
@@ -1630,6 +1635,11 @@ namespace Windows.UI.Xaml.Controls
 					{
 						rectangle.Fill = brush;
 					}
+				}
+
+				if (m_overlayElement is Rectangle rectangle1)
+				{
+					rectangle1.Fill = SolidColorBrushHelper.Red;
 				}
 			}
 			else

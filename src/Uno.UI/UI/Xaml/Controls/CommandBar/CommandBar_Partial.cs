@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using DirectUI;
 using Uno.Disposables;
+using Uno.Extensions;
+using Uno.Logging;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.System;
@@ -26,10 +29,10 @@ namespace Windows.UI.Xaml.Controls
 
 		CommandBarElementCollection m_tpPrimaryCommands;
 		CommandBarElementCollection m_tpSecondaryCommands;
-		CommandBarElementCollection m_tpDynamicPrimaryCommands;
-		CommandBarElementCollection m_tpDynamicSecondaryCommands;
-		//ObservableCollection<ICommandBarElement> m_tpWrappedPrimaryCommands;
-		//ObservableCollection<ICommandBarElement> m_tpWrappedSecondaryCommands;
+		ObservableCollection<ICommandBarElement> m_tpDynamicPrimaryCommands;
+		ObservableCollection<ICommandBarElement> m_tpDynamicSecondaryCommands;
+		IterableWrappedObservableCollection<ICommandBarElement> m_tpWrappedPrimaryCommands;
+		IterableWrappedObservableCollection<ICommandBarElement> m_tpWrappedSecondaryCommands;
 
 		// Primary commands in the transition to move or restore the primary commands
 		// to overflow or primary commands
@@ -62,7 +65,12 @@ namespace Windows.UI.Xaml.Controls
 		// Restorable primary command minimum width from overflow to the primary command collection
 		double m_restorablePrimaryCommandMinWidth = 0;
 
+
+#pragma warning disable CS0414
+#pragma warning disable CS0649
 		bool m_skipProcessTabStopOverride = false;
+#pragma warning restore CS0414
+#pragma warning restore CS0649
 		// DirectUI::InputDeviceType m_inputDeviceTypeUsedToOpen = DirectUI::InputDeviceType::Touch;
 
 
@@ -90,6 +98,9 @@ namespace Windows.UI.Xaml.Controls
 
 		public CommandBar()
 		{
+
+			Console.WriteLine($"COMMANDBAR CTOR");
+
 			PrepareState();
 			DefaultStyleKey = typeof(CommandBar);
 		}
@@ -125,7 +136,7 @@ namespace Windows.UI.Xaml.Controls
 			CommandBarElementCollection spCollection_Secondary;
 
 			spCollection_Secondary = new CommandBarElementCollection();
-			spCollection_Secondary.Init(this, notifyCollectionChanging: false);
+			spCollection_Secondary.Init(this, notifyCollectionChanging: true);
 			m_tpSecondaryCommands = spCollection_Secondary;
 
 			// Set the value for our collection properties so that they are in the
@@ -141,21 +152,25 @@ namespace Windows.UI.Xaml.Controls
 			m_tpSecondaryCommands.VectorChanged += OnSecondaryCommandsChanged;
 			m_secondaryCommandsChangedEventHandler.Disposable = Disposable.Create(() => m_tpSecondaryCommands.VectorChanged -= OnSecondaryCommandsChanged);
 
-			m_tpDynamicPrimaryCommands = new CommandBarElementCollection();
-			m_tpDynamicPrimaryCommands.Init(this, notifyCollectionChanging: false);
+			m_tpDynamicPrimaryCommands = new ObservableCollection<ICommandBarElement>();
+		//	m_tpDynamicPrimaryCommands.Init(this, notifyCollectionChanging: false);
 
-			m_tpDynamicSecondaryCommands = new CommandBarElementCollection();
-			m_tpDynamicSecondaryCommands.Init(this, notifyCollectionChanging: false);
+			m_tpDynamicSecondaryCommands = new ObservableCollection<ICommandBarElement>();
+		//	m_tpDynamicSecondaryCommands.Init(this, notifyCollectionChanging: false);
 
 			m_tpPrimaryCommandsInPreviousTransition = new TrackerCollection<ICommandBarElement>();
 			m_tpPrimaryCommandsInTransition = new TrackerCollection<ICommandBarElement>();
 
 			m_tpAppBarSeparatorInOverflow = new AppBarSeparator();
 
+			CommandBarTemplateSettings = new CommandBarTemplateSettings();
 		}
 
-		private void OnPropertyChanged2(DependencyPropertyChangedEventArgs args)
+
+		internal override void OnPropertyChanged2(DependencyPropertyChangedEventArgs args)
 		{
+			base.OnPropertyChanged2(args);
+
 			if (args.Property == DefaultLabelPositionProperty)
 			{
 				PropagateDefaultLabelPosition();
@@ -208,6 +223,9 @@ namespace Windows.UI.Xaml.Controls
 			m_tpWindowedPopupPadding = null;
 
 			base.OnApplyTemplate();
+
+			GetTemplatePart("PrimaryItemsControl", out m_tpPrimaryItemsControlPart);
+			GetTemplatePart("SecondaryItemsControl", out m_tpSecondaryItemsControlPart);
 
 			if (m_tpSecondaryItemsControlPart is { })
 			{
@@ -396,11 +414,12 @@ namespace Windows.UI.Xaml.Controls
 								// Save the current transition to compare with the next coming transition
 								SaveMovedPrimaryCommandsIntoPreviousTransitionCollection();
 							}
+
+							// At this point, we'll have modified our primary and secondary command collections, which
+							// impacts our visual state.  We should update our visual state to ensure that it's current.
+							UpdateVisualState();
 						}
 
-						// At this point, we'll have modified our primary and secondary command collections, which
-						// impacts our visual state.  We should update our visual state to ensure that it's current.
-						UpdateVisualState();
 					}
 				}
 				else if (m_lastAvailableWidth < availableSize.Width
@@ -475,6 +494,7 @@ namespace Windows.UI.Xaml.Controls
 		private void ConfigureItemsControls()
 		{
 			// UNO TODO: Do we really need this wrapping collection?
+			ResetDynamicCommands();
 
 			// The wrapping collections have a somewhat unusual reference pattern, which should be
 			// documented here to avoid having it accidentally perturbed in the future in a way that
@@ -491,8 +511,8 @@ namespace Windows.UI.Xaml.Controls
 			// The simplest way to keep it alive is just to have another reference to it,
 			// which is what these tracker pointers do (until the CommandBar is deleted, at which point
 			// that last reference will be removed and they'll be properly cleaned up).
-			m_tpPrimaryCommands.Clear();
-			m_tpSecondaryCommands.Clear();
+			//m_tpDynamicPrimaryCommands?.Clear();
+			//m_tpDynamicSecondaryCommands?.Clear();
 
 			if (m_tpPrimaryItemsControlPart is { })
 			{
@@ -500,14 +520,17 @@ namespace Windows.UI.Xaml.Controls
 				//ctl::ComPtr<IterableWrappedObservableCollection<xaml_controls::ICommandBarElement>> spWrappedCollection;
 
 				//IFC_RETURN(m_tpDynamicPrimaryCommands.As(&spVector))
-		
-		// Set the primary items control source.
+
+				// Set the primary items control source.
 				//IFC_RETURN(ctl::make(&spWrappedCollection));
 				//IFC_RETURN(spWrappedCollection->SetWrappedCollection(spVector.Get()));
 				//IFC_RETURN(m_tpPrimaryItemsControlPart->put_ItemsSource(ctl::as_iinspectable(spWrappedCollection.Get())));
 				//SetPtrValue(m_tpWrappedPrimaryCommands, spWrappedCollection.Get());
-
-				m_tpPrimaryItemsControlPart.ItemsSource = m_tpPrimaryCommands;
+				var spWrappedCollection = new IterableWrappedObservableCollection<ICommandBarElement>();
+				//spWrappedCollection.SetWrappedCollection(m_tpDynamicPrimaryCommands);
+				m_tpPrimaryItemsControlPart.ItemsSource = m_tpDynamicPrimaryCommands;
+				Console.WriteLine("m_tpDynamicPrimaryCommands Count: " + m_tpDynamicPrimaryCommands.Count);
+				m_tpWrappedPrimaryCommands = spWrappedCollection;
 			}
 
 			if (m_tpSecondaryItemsControlPart is { })
@@ -516,14 +539,17 @@ namespace Windows.UI.Xaml.Controls
 				//ctl::ComPtr<IterableWrappedObservableCollection<xaml_controls::ICommandBarElement>> spWrappedCollection;
 
 				//IFC_RETURN(m_tpDynamicSecondaryCommands.As(&spVector))
-		
-		// Set the secondary items control source.
+
+				// Set the secondary items control source.
 				//IFC_RETURN(ctl::make(&spWrappedCollection));
 				//IFC_RETURN(spWrappedCollection->SetWrappedCollection(spVector.Get()));
 				//IFC_RETURN(m_tpSecondaryItemsControlPart->put_ItemsSource(ctl::as_iinspectable(spWrappedCollection.Get())));
 				//SetPtrValue(m_tpWrappedSecondaryCommands, spWrappedCollection.Get());
 
-				m_tpSecondaryItemsControlPart.ItemsSource = m_tpSecondaryCommands;
+				var spWrappedCollection = new IterableWrappedObservableCollection<ICommandBarElement>();
+				//spWrappedCollection.SetWrappedCollection(m_tpDynamicSecondaryCommands);
+				m_tpSecondaryItemsControlPart.ItemsSource = m_tpDynamicSecondaryCommands;
+				m_tpWrappedSecondaryCommands = spWrappedCollection;
 			}
 		}
 
@@ -1040,6 +1066,7 @@ namespace Windows.UI.Xaml.Controls
 			base.OnOpening(e);
 			SetCompactMode(false);
 
+
 			if (m_tpOverflowPopup is { })
 			{
 				m_tpOverflowPopup.IsOpen = true;
@@ -1406,6 +1433,7 @@ namespace Windows.UI.Xaml.Controls
 			return key == VirtualKey.GamepadLeftThumbstickDown || key == VirtualKey.GamepadDPadDown;
 		}
 
+
 		private void OnPrimaryCommandsChanged(IObservableVector<ICommandBarElement> sender, IVectorChangedEventArgs pArgs)
 		{
 			ResetDynamicCommands();
@@ -1659,14 +1687,14 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		private bool HasFocus()
-		{
-			var focusedElement = FocusManager.GetFocusedElement() as DependencyObject;
+		//private bool HasFocus()
+		//{
+		//	var focusedElement = FocusManager.GetFocusedElement() as DependencyObject;
 
-			var containsElement = ContainsElement(focusedElement);
+		//	var containsElement = ContainsElement(focusedElement);
 
-			return containsElement;
-		}
+		//	return containsElement;
+		//}
 
 
 		protected override void UpdateTemplateSettings()
@@ -2049,7 +2077,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 }
 		 */
 
-		private static bool HasVisibleElements(CommandBarElementCollection collection)
+		private static bool HasVisibleElements(ObservableCollection<ICommandBarElement> collection)
 		{
 			bool hasVisibleElements = false;
 
@@ -2326,7 +2354,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 
 			for (int i = 0; i < primaryCommandsCountInTransition; i++)
 			{
-				var transitionPrimaryElement = m_tpPrimaryCommandsInTransition[0];
+				var transitionPrimaryElement = m_tpPrimaryCommandsInTransition[i];
 
 				if (transitionPrimaryElement is { })
 				{
@@ -2367,7 +2395,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 					// Add the AppBarSeparator between the transited primary command and existing secondary command in the overflow
 					SetOverflowStyleUsage(m_tpAppBarSeparatorInOverflow, true /*isItemInOverflow*/);
 					m_tpDynamicSecondaryCommands.Insert(m_SecondaryCommandStartIndex, m_tpAppBarSeparatorInOverflow);
-					//SetInputModeOnSecondaryCommand(m_SecondaryCommandStartIndex++, m_inputDeviceTypeUsedToOpen)
+					/*SetInputModeOnSecondaryCommand(*/m_SecondaryCommandStartIndex++/*, m_inputDeviceTypeUsedToOpen)*/;
 					m_hasAppBarSeparatorInOverflow = true;
 				}
 			}
@@ -2547,7 +2575,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 
 					for (int j = 0; j < currentTransitionCount; j++)
 					{
-						var primaryElementInTransition = m_tpPrimaryCommandsInTransition[i];
+						var primaryElementInTransition = m_tpPrimaryCommandsInTransition[j];
 
 						if (primaryElementInTransition is { } && primaryElementInTransition == primaryElementInPreviousTransition)
 						{
@@ -3292,8 +3320,8 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 
 		private void SetCompactMode(bool isCompact)
 		{
-			if (m_tpDynamicPrimaryCommands is { }
-				|| m_tpDynamicSecondaryCommands is { })
+			if (m_tpDynamicPrimaryCommands == null
+				|| m_tpDynamicSecondaryCommands == null)
 			{
 				return;
 			}
@@ -3310,7 +3338,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 		internal void NotifyElementVectorChanging(CommandBarElementCollection pElementCollection, CollectionChange change, int changeIndex)
 		{
 			// Assume that we get this notification only for secondary commands collection.
-			MUX_ASSERT(pElementCollection == m_tpSecondaryCommands);
+			//MUX_ASSERT(pElementCollection == m_tpSecondaryCommands);
 
 			SetOverflowStyleParams();
 

@@ -215,7 +215,7 @@ namespace Windows.UI.Xaml.Controls
 			// If the template isn't applied yet, we'll early-out,
 			// because we won't have the style to apply from the
 			// template yet.
-			if (m_isTemplateApplied == null)
+			if (!m_isTemplateApplied)
 			{
 				return;
 			}
@@ -329,7 +329,7 @@ namespace Windows.UI.Xaml.Controls
 				// If there are other buttons that have open sub-menus, then we should
 				// close those on a delay, since they no longer have mouse-over.
 			
-				var parentCommandBar = CommandBar.FindParentCommandBarForElement(this);
+				CommandBar.FindParentCommandBarForElement(this, out var parentCommandBar);
 
 				if (parentCommandBar is { })
 				{

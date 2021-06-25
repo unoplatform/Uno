@@ -66,7 +66,7 @@
     <Style TargetType="CommandBar" BasedOn="{StaticResource DefaultCommandBarStyle}" />
 
     <Style x:Key="DefaultCommandBarStyle" TargetType="CommandBar">
-        <Setter Property="Background" Value="{ThemeResource CommandBarBackground}" />
+        <Setter Property="Background" Value="Green" />
         <Setter Property="Foreground" Value="{ThemeResource CommandBarForeground}" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -885,6 +885,7 @@
                             Grid.ColumnSpan="2"
                             Visibility="Collapsed"
                             VerticalAlignment="Stretch"
+									   IsHitTestVisible="False"
                             Stroke="{ThemeResource CommandBarHighContrastBorder}"
                             StrokeThickness="1" />
                         </Grid>

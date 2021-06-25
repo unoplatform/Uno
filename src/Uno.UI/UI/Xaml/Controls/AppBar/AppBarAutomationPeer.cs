@@ -188,7 +188,6 @@ namespace Windows.UI.Xaml.Automation.Peers
 		public void Expand()
 		{
 			bool bIsEnabled;
-			bool isOpen = false;
 
 			bIsEnabled = IsEnabled();
 			if (!bIsEnabled)
@@ -204,7 +203,6 @@ namespace Windows.UI.Xaml.Automation.Peers
 		public void Collapse()
 		{
 			bool bIsEnabled;
-			bool isOpen = false;
 
 			bIsEnabled = IsEnabled();
 			if (!bIsEnabled)
@@ -222,14 +220,15 @@ namespace Windows.UI.Xaml.Automation.Peers
 
 		}
 
-		public void SetVisualState()
+		public void SetVisualState(global::Windows.UI.Xaml.Automation.WindowVisualState state)
 		{
 
 		}
 
-		public void WaitForInputIdle()
-		{
 
+		public bool WaitForInputIdle(int milliseconds)
+		{
+			return false;
 		}
 	}
 }

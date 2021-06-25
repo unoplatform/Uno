@@ -1032,6 +1032,8 @@
 	<Thickness x:Key="AppBarToggleButtonOverflowTextTouchMargin">0,9,0,12</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowCheckTouchMargin">12,10,12,10</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowCheckMargin">12,4,12,4</Thickness>
+	<x:Double x:Key="AppBarThemeMinHeight">56</x:Double>
+	<x:Double x:Key="AppBarButtonContentHeight">16</x:Double>
 	<Thickness x:Key="AppBarToggleButtonTextLabelMargin">2,0,2,8</Thickness>
 	<Thickness x:Key="AppBarToggleButtonTextLabelOnRightMargin">8,11,12,13</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowTextLabelPadding">0,5,0,8</Thickness>
