@@ -165,7 +165,7 @@ namespace Windows.UI.Xaml.Controls
 			DependencyProperty.Register(
 				nameof(KeyboardAcceleratorTextOverride),
 				typeof(string),
-				typeof(AppBarButton),
+				typeof(AppBarToggleButton),
 				new FrameworkPropertyMetadata(default(string))
 			);
 

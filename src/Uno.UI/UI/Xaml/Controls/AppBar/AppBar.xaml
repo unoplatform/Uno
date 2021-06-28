@@ -1023,7 +1023,7 @@
 	<!-- Control resources that are customizable but do not vary based on theme -->
 	<Thickness x:Key="AppBarButtonContentViewboxMargin">12,10,0,10</Thickness>
 	<Thickness x:Key="AppBarButtonContentViewboxCompactMargin">0,10,0,10</Thickness>
-	<Thickness x:Key="AppBarButtonContentViewboxCollapsedMargin">0,10,0,0</Thickness>
+	<Thickness x:Key="AppBarButtonContentViewboxCollapsedMargin">0,12,0,4</Thickness>
 	<Thickness x:Key="AppBarButtonOverflowTextTouchMargin">0,9,0,12</Thickness>
 	<Thickness x:Key="AppBarButtonOverflowTextLabelPadding">0,5,0,8</Thickness>
 	<Thickness x:Key="AppBarButtonTextLabelMargin">2,0,2,8</Thickness>
@@ -1037,7 +1037,6 @@
 	<Thickness x:Key="AppBarToggleButtonTextLabelMargin">2,0,2,8</Thickness>
 	<Thickness x:Key="AppBarToggleButtonTextLabelOnRightMargin">8,11,12,13</Thickness>
 	<Thickness x:Key="AppBarToggleButtonOverflowTextLabelPadding">0,5,0,8</Thickness>
-
 
 	<!-- Default style for Windows.UI.Xaml.Controls.AppBarButton -->
 	<Style x:Key="XamlDefaultAppBarButton"
@@ -1424,6 +1423,7 @@
 												  Content="{TemplateBinding Icon}"
 												  Foreground="{TemplateBinding Foreground}" />
 							</Viewbox>
+							<!-- UNO TODO The TextLabel shouldn't need the HorizontalAlignment="Center" but the Grid aligns the content left -->
 							<TextBlock x:Name="TextLabel"
 									   Grid.Row="1"
 									   Text="{TemplateBinding Label}"
@@ -1431,6 +1431,7 @@
 									   FontSize="12"
 									   FontFamily="{TemplateBinding FontFamily}"
 									   TextAlignment="Center"
+									   HorizontalAlignment="Center"
 									   TextWrapping="Wrap"
 									   Margin="{ThemeResource AppBarButtonTextLabelMargin}"
 									   AutomationProperties.AccessibilityView="Raw" />
@@ -1998,6 +1999,7 @@
 												  Content="{TemplateBinding Icon}"
 												  Foreground="{TemplateBinding Foreground}" />
 							</Viewbox>
+							<!-- UNO TODO The TextLabel shouldn't need the HorizontalAlignment="Center" but the Grid aligns the content left -->
 							<TextBlock x:Name="TextLabel"
 									   Grid.Row="1"
 									   Text="{TemplateBinding Label}"
@@ -2005,6 +2007,7 @@
 									   FontSize="12"
 									   FontFamily="{TemplateBinding FontFamily}"
 									   TextAlignment="Center"
+									   HorizontalAlignment="Center"
 									   TextWrapping="Wrap"
 									   Margin="{ThemeResource AppBarToggleButtonTextLabelMargin}"
 									   AutomationProperties.AccessibilityView="Raw" />

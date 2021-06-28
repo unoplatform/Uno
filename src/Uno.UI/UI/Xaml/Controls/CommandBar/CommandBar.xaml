@@ -314,7 +314,7 @@
 	<Style x:Key="XamlDefaultCommandBar"
 		   TargetType="CommandBar">
 		<Setter Property="Background"
-				Value="Orange" />
+				Value="{ThemeResource CommandBarBackground}" />
 		<Setter Property="Foreground"
 				Value="{ThemeResource CommandBarForeground}" />
 		<Setter Property="IsTabStop"

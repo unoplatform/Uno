@@ -2860,7 +2860,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 
 					if (isFound)
 					{
-						m_tpDynamicPrimaryCommands.RemoveAt(i - 1);
+						m_tpDynamicPrimaryCommands.RemoveAt(primaryIndexForTransitionCommand);
 					}
 
 					m_tpPrimaryCommandsInTransition.RemoveAt(i - 1);
@@ -2876,7 +2876,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 
 			if (primaryElement is { })
 			{
-				if (primaryElement is AppBarSeparator elementAsSeparator)
+				if (primaryElement is AppBarSeparator)
 				{
 					isAppBarSeparator = true;
 				}
@@ -2906,6 +2906,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 						indexMovingBackward,
 						out hasNonSeparator,
 						out indexNonSeparator);
+
 					if (!hasNonSeparator)
 					{
 						while (indexMovingBackward >= 0)
@@ -2916,7 +2917,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 					}
 					else
 					{
-						while (indexMovingBackward > indexNonSeparator && indexMovingBackward - indexNonSeparator > 1)
+						while (indexMovingBackward > indexNonSeparator && (indexMovingBackward - indexNonSeparator) > 1)
 						{
 							InsertSeparatorToPrimaryCommandsInTransition(indexMovingBackward, ref primaryCommandsCountInTransition, ref primaryItemsControlDesiredWidth);
 							indexMovingBackward--;
@@ -2962,7 +2963,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 				}
 				else
 				{
-					while (indexMovingForward < indexNonSeparator && indexNonSeparator - indexMovingForward > 1)
+					while (indexMovingForward < indexNonSeparator && (indexNonSeparator - indexMovingForward) > 1)
 					{
 						InsertSeparatorToPrimaryCommandsInTransition(indexMovingForward, ref primaryCommandsCountInTransition, ref primaryItemsControlDesiredWidth);
 						indexMovingForward++;
