@@ -116,6 +116,7 @@
 	<ItemGroup>
 	  <UpToDateCheckInput Remove="DirectUI\IterableWrappedCollection.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBar_themeresources.xaml" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Controls\CommandBar\CommandBar.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -128,6 +129,7 @@
 
 	<ItemGroup>
 	  <Page Include="UI\Xaml\Controls\AppBar\AppBar_themeresources.xaml" />
+	  <Page Include="UI\Xaml\Controls\CommandBar\CommandBar.xaml" />
 	</ItemGroup>
 	
 	<ItemGroup>

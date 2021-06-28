@@ -12983,8 +12983,10 @@
                   <ColumnDefinition x:Name="ContentControlColumnDefinition" Width="*" />
                   <ColumnDefinition x:Name="PrimaryItemsControlColumnDefinition" Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <!-- Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
-                                     in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate. -->
+                <!--
+									Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
+									in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate.
+								-->
                 <ContentControl x:Name="ContentControl" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" IsTabStop="False" />
                 <ItemsControl x:Name="PrimaryItemsControl" HorizontalAlignment="Right" MinHeight="{ThemeResource AppBarThemeCompactHeight}" IsTabStop="False" Grid.Column="1">
                   <ItemsControl.ItemsPanel>
@@ -13740,8 +13742,10 @@
                   <ColumnDefinition x:Name="ContentControlColumnDefinition" Width="*" />
                   <ColumnDefinition x:Name="PrimaryItemsControlColumnDefinition" Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <!-- Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
-                                     in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate. -->
+                <!--
+									Use a ContentControl rather than a ContentPresenter so that IsEnabled can be set to false
+									in the Minimal/HiddenClosed states to remove it from being a tab-stop candidate.
+								-->
                 <ContentControl x:Name="ContentControl" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" IsTabStop="False" />
                 <ItemsControl x:Name="PrimaryItemsControl" HorizontalAlignment="Right" MinHeight="{ThemeResource AppBarThemeCompactHeight}" IsTabStop="False" Grid.Column="1">
                   <ItemsControl.ItemsPanel>
@@ -13778,7 +13782,7 @@
                   </CommandBarOverflowPresenter>
                 </Grid>
               </Popup>
-              <Rectangle x:Name="HighContrastBorder" x:DeferLoadStrategy="Lazy" Grid.ColumnSpan="2" Visibility="Collapsed" VerticalAlignment="Stretch" Stroke="{ThemeResource CommandBarHighContrastBorder}" StrokeThickness="1" />
+              <Rectangle x:Name="HighContrastBorder" x:DeferLoadStrategy="Lazy" Grid.ColumnSpan="2" Visibility="Collapsed" VerticalAlignment="Stretch" IsHitTestVisible="False" Stroke="{ThemeResource CommandBarHighContrastBorder}" StrokeThickness="1" />
             </Grid>
           </Grid>
         </ControlTemplate>
