@@ -14,7 +14,9 @@ using Windows.System;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Uno.UI.Extensions;
 using static Microsoft.UI.Xaml.Controls._Tracing;
+using Uno.UI.Xaml.Input;
 
 namespace Windows.UI.Xaml.Controls
 {
@@ -721,15 +723,15 @@ namespace Windows.UI.Xaml.Controls
 				// b. Down key is pressed and the overflow opens up.
 				if (allowFocusWrap || !(overflowOpensUp ^ topToBottom))
 				{
-					FocusManager.SetFocusedElement(m_tpExpandButton, FocusNavigationDirection.None, FocusState.Keyboard);
+					this.SetFocusedElement(m_tpExpandButton, FocusState.Keyboard, animateIfBringIntoView: false);
 
-					ElementSoundPlayerService.RequestInteractionSoundForElementStatic(ElementSoundKind.Focus, this);
+					DXamlCore.Current.GetElementSoundPlayerServiceNoRef().RequestInteractionSoundForElement(ElementSoundKind.Focus, this);
 				}
 			}
 			else
 			{
 				FocusManager.TryMoveFocus(topToBottom ? FocusNavigationDirection.Down : FocusNavigationDirection.Up);
-				ElementSoundPlayerService.RequestInteractionSoundForElementStatic(ElementSoundKind.Focus, this);
+				DXamlCore.Current.GetElementSoundPlayerServiceNoRef().RequestInteractionSoundForElement(ElementSoundKind.Focus, this);
 			}
 		}
 
@@ -801,20 +803,12 @@ namespace Windows.UI.Xaml.Controls
 
 				if (focusCandidate is { })
 				{
-					//ctl::ComPtr<DependencyObject> focusCandidatePeer;
-					//IFC_RETURN(DXamlCore::GetCurrent()->GetPeer(focusCandidate, &focusCandidatePeer));
-
-					//BOOLEAN ignored = FALSE;
-					//IFC_RETURN(DependencyObject::SetFocusedElement(
-					//	focusCandidatePeer.Get(),
-					//	xaml::FocusState_Keyboard,
-					//	FALSE /*animateIfBringIntoView*/,
-					//	&ignored,
-					//	true /*isProcessingTab*/,
-					//	isShiftKeyPressed)
-					//	);
-
-					FocusManager.SetFocusedElement(focusCandidate, FocusNavigationDirection.None, FocusState.Keyboard);
+					this.SetFocusedElement(
+						focusCandidate,
+						FocusState.Keyboard,
+						animateIfBringIntoView: false,
+						isProcessingTab: true,
+						isShiftPressed: isShiftKeyPressed);
 
 					if (shouldMoveFocusOutsideOfCommandBar)
 					{
@@ -823,7 +817,7 @@ namespace Windows.UI.Xaml.Controls
 						m_skipProcessTabStopOverride = true;
 
 						FocusManager.TryMoveFocus(FocusNavigationDirection.Next);
-						ElementSoundPlayerService.RequestInteractionSoundForElementStatic(ElementSoundKind.Focus, this);
+						DXamlCore.Current.GetElementSoundPlayerServiceNoRef().RequestInteractionSoundForElement(ElementSoundKind.Focus, this);
 
 						m_skipProcessTabStopOverride = false;
 					}
@@ -856,157 +850,134 @@ namespace Windows.UI.Xaml.Controls
 
 			if (focusableElement is { })
 			{
-				//ctl::ComPtr<DependencyObject> focusableElementPeer;
-				//IFC_RETURN(DXamlCore::GetCurrent()->GetPeer(focusableElement, &focusableElementPeer));
-
-				//BOOLEAN wasFocusUpdated = FALSE;
-				//IFC_RETURN(DependencyObject::SetFocusedElement(
-				//	focusableElementPeer.Get(),
-				//	xaml::FocusState_Keyboard,
-				//	FALSE /*animateIfBringIntoView*/,
-				//	&wasFocusUpdated)
-				//);
-
-				var wasFocusedUpdated = FocusManager.SetFocusedElement(focusableElement, FocusNavigationDirection.None, FocusState.Keyboard);
+				var wasFocusedUpdated = this.SetFocusedElement(focusableElement, FocusState.Keyboard, animateIfBringIntoView: false);
 				wasFocusSet = wasFocusedUpdated;
 			}
 		}
-
-		// UNO TODO: After focus implemented
 
 		// Handle the cases where focus is currently in the CommandBar and the user hits Tab. If focus
 		// is currently on the last focusable element in the bar and the user hits tab, we move the
 		// focus onto the first focusable element in overflow menu rather than letting it go out of
 		// the control.
-		//		_Check_return_ HRESULT
-		//CommandBar::ProcessTabStopOverride(
-		//	_In_opt_ DependencyObject* pFocusedElement,
-		//	_In_opt_ DependencyObject* pCandidateTabStopElement,
+		internal override TabStopProcessingResult ProcessTabStopOverride(
+			DependencyObject focusedElement,
+			DependencyObject candidateTabStopElement,
+			bool isBackward,
+			bool didCycleFocusAtRootVisualScope)
+		{
+			// Give the AppBar code a chance to override the candidate.
+			var result = base.ProcessTabStopOverride(focusedElement, candidateTabStopElement, isBackward, didCycleFocusAtRootVisualScope);
 
-		//	const bool isBackward,
+			// This method is only interested in the forward navigation case, so bail out early if otherwise.
+			if (isBackward)
+			{
+				return result;
+			}
 
-		//	const bool didCycleFocusAtRootVisualScope,
-		//	_Outptr_ DependencyObject** ppNewTabStop,
-		//	_Out_ BOOLEAN* pIsTabStopOverridden
-		//	)
-		//{
-		//	// Give the AppBar code a chance to override the candidate.
-		//		IFC_RETURN(__super::ProcessTabStopOverride(pFocusedElement, pCandidateTabStopElement, isBackward, didCycleFocusAtRootVisualScope, ppNewTabStop, pIsTabStopOverridden));
+			if (m_skipProcessTabStopOverride)
+			{
+				return result;
+			}
 
-		//	// This method is only interested in the forward navigation case, so bail out early if otherwise.
-		//	if (isBackward)
-		//	{
-		//		return S_OK;
-		//	}
+			var isOpen = IsOpen;
 
-		//	if (m_skipProcessTabStopOverride)
-		//	{
-		//		return S_OK;
-		//	}
+			if (isOpen && m_tpOverflowPresenterItemsPresenter is { })
+			{
+				var lastFocusableElement = FocusManager.FindLastFocusableElement(this);
 
-		//BOOLEAN isOpen = FALSE;
-		//IFC_RETURN(get_IsOpen(&isOpen));
+				// Move focus to the overflow menu when tabbing forwards and we're moving off
+				// of the last focusable element in the bar.
+				if (focusedElement != null && focusedElement == lastFocusableElement)
+				{
+					var newTabStop = FocusManager.FindFirstFocusableElement(m_tpOverflowPresenterItemsPresenter as ItemsPresenter);
 
-		//if (isOpen && m_tpOverflowPresenterItemsPresenter)
-		//{
-		//	xref_ptr<CDependencyObject> lastFocusableElement;
-		//	IFC_RETURN(FocusManager_GetLastFocusableElement(GetHandle(), lastFocusableElement.ReleaseAndGetAddressOf()));
+					// If we found a candidate, then query its corresponding peer.
+					if (newTabStop is { })
+					{
+						// If the AppBar overrode the tab stop, then we need to release its candidate otherwise
+						// we'll leak
+						if (result.IsOverriden)
+						{
+							MUX_ASSERT(result.NewTabStop != null);
+							result.NewTabStop = null;
+						}
 
-		//	// Move focus to the overflow menu when tabbing forwards and we're moving off
-		//	// of the last focusable element in the bar.
-		//	if (pFocusedElement != nullptr && pFocusedElement->GetHandle() == lastFocusableElement)
-		//	{
-		//		xref_ptr<CDependencyObject> newTabStop;
+						result.NewTabStop = newTabStop;
+						result.IsOverriden = true;
+					}
+				}
+			}
 
-		//		IFC_RETURN(FocusManager_GetFirstFocusableElement(m_tpOverflowPresenterItemsPresenter.Cast<ItemsPresenter>()->GetHandle(), newTabStop.ReleaseAndGetAddressOf()));
+			return result;
+		}
 
-		//		// If we found a candidate, then query its corresponding peer.
-		//		if (newTabStop)
-		//		{
-		//			// If the AppBar overrode the tab stop, then we need to release its candidate otherwise
-		//			// we'll leak.
-		//			if (*pIsTabStopOverridden)
-		//			{
-		//				ASSERT(*ppNewTabStop != nullptr);
-		//				ctl::release_interface(*ppNewTabStop);
-		//			}
+		// Handle the cases where focus is not currently in the CommandBar and the user hits Shift-Tab
+		// to focus the control. If focus is moving onto the last focusable element in the bar, then we
+		// instead move it onto the last focusable element in the overflow menu.
+		// We also end up handling the case where the AppBar::ProcessTabStopOverride() implementation
+		// tries to wrap focus back to the last element in the bar from the first element.  In that
+		// situation, we also override it to move focus into the overflow menu instead.
+		internal override TabStopProcessingResult ProcessCandidateTabStopOverride(
+			DependencyObject focusedElement,
+			DependencyObject candidateTabStopElement,
+			DependencyObject overriddenCandidateTabStopElement,
+			bool isBackward)
+		{
+			var result = new TabStopProcessingResult()
+			{
+				NewTabStop = null,
+				IsOverriden = false,
+			};
 
-		//			IFC_RETURN(DXamlCore::GetCurrent()->GetPeer(newTabStop, ppNewTabStop));
-		//			*pIsTabStopOverridden = TRUE;
-		//		}
-		//	}
-		//}
+			// This method is only interested in the backward navigation case, so bail out early if otherwise.
+			if (!isBackward)
+			{
+				return result;
+			}
 
-		//return S_OK;
-		//}
+			var isOpen = IsOpen;
 
-		//// Handle the cases where focus is not currently in the CommandBar and the user hits Shift-Tab
-		//// to focus the control. If focus is moving onto the last focusable element in the bar, then we
-		//// instead move it onto the last focusable element in the overflow menu.
-		//// We also end up handling the case where the AppBar::ProcessTabStopOverride() implementation
-		//// tries to wrap focus back to the last element in the bar from the first element.  In that
-		//// situation, we also override it to move focus into the overflow menu instead.
-		//_Check_return_ HRESULT
-		//CommandBar::ProcessCandidateTabStopOverride(
-		//	_In_opt_ DependencyObject* pFocusedElement,
-		//	_In_ DependencyObject* pCandidateTabStopElement,
-		//	_In_opt_ DependencyObject* pOverriddenCandidateTabStopElement,
-		//	const bool isBackward,
-		//	_Outptr_ DependencyObject** ppNewTabStop,
-		//	_Out_ BOOLEAN* pIsCandidateTabStopOverridden)
-		//{
-		//	// This method is only interested in the backward navigation case, so bail out early if otherwise.
-		//	if (!isBackward)
-		//	{
-		//		return S_OK;
-		//	}
+			if (isOpen && m_tpOverflowPresenterItemsPresenter is { })
+			{
+				var lastFocusableElement = FocusManager.FindLastFocusableElement(this);
 
-		//	BOOLEAN isOpen = FALSE;
-		//	IFC_RETURN(get_IsOpen(&isOpen));
+				// Move focus to the overflow menu when tabbing backwards and we're moving onto
+				// the last focusable element in the bar.
+				if (candidateTabStopElement != null && candidateTabStopElement == lastFocusableElement)
+				{
+					DependencyObject newTabStop = null;
 
-		//	if (isOpen && m_tpOverflowPresenterItemsPresenter)
-		//	{
-		//		xref_ptr<CDependencyObject> lastFocusableElement;
-		//		IFC_RETURN(FocusManager_GetLastFocusableElement(GetHandle(), lastFocusableElement.ReleaseAndGetAddressOf()));
+					// When overriding focus to go into the overflow menu, since TabNavigation==Once means that focus
+					// only moves into a particular tree once, if that is set then the element we'll focus
+					// is the first overflow item.  If it is any other value, we focus the last element since
+					// this method is only applicable during backward navigation.
+					{
+						var overflowNavigationMode = KeyboardNavigationMode.Local;
+						if (m_tpSecondaryItemsControlPart is { })
+						{
+							overflowNavigationMode = m_tpSecondaryItemsControlPart.TabNavigation;
+						}
 
-		//		// Move focus to the overflow menu when tabbing backwards and we're moving onto
-		//		// the last focusable element in the bar.
-		//		if (pCandidateTabStopElement != nullptr && pCandidateTabStopElement->GetHandle() == lastFocusableElement)
-		//		{
-		//			xref_ptr<CDependencyObject> newTabStop;
+						if (overflowNavigationMode == KeyboardNavigationMode.Once)
+						{
+							newTabStop = FocusManager.FindFirstFocusableElement(m_tpOverflowPresenterItemsPresenter as ItemsPresenter);
+						}
+						else
+						{
+							newTabStop = FocusManager.FindLastFocusableElement(m_tpOverflowPresenterItemsPresenter as ItemsPresenter);
+						}
+					}
 
-		//			// When overriding focus to go into the overflow menu, since TabNavigation==Once means that focus
-		//			// only moves into a particular tree once, if that is set then the element we'll focus
-		//			// is the first overflow item.  If it is any other value, we focus the last element since
-		//			// this method is only applicable during backward navigation.
-		//			{
-		//				auto overflowNavigationMode = xaml_input::KeyboardNavigationMode_Local;
-		//				if (m_tpSecondaryItemsControlPart)
-		//				{
-		//					IFC_RETURN(m_tpSecondaryItemsControlPart.Cast<ItemsControl>()->get_TabNavigation(&overflowNavigationMode));
-		//				}
+					if (newTabStop is { })
+					{
+						result.NewTabStop = newTabStop;
+						result.IsOverriden = true;
+					}
+				}
+			}
+			return result;
+		}
 
-		//				if (overflowNavigationMode == xaml_input::KeyboardNavigationMode_Once)
-		//				{
-		//					IFC_RETURN(FocusManager_GetFirstFocusableElement(m_tpOverflowPresenterItemsPresenter.Cast<ItemsPresenter>()->GetHandle(), newTabStop.ReleaseAndGetAddressOf()));
-		//				}
-		//				else
-		//				{
-		//					IFC_RETURN(FocusManager_GetLastFocusableElement(m_tpOverflowPresenterItemsPresenter.Cast<ItemsPresenter>()->GetHandle(), newTabStop.ReleaseAndGetAddressOf()));
-		//				}
-		//			}
-
-		//			// If we found a candidate, then query its corresponding peer.
-		//			if (newTabStop)
-		//			{
-		//				IFC_RETURN(DXamlCore::GetCurrent()->GetPeer(newTabStop, ppNewTabStop));
-		//				*pIsCandidateTabStopOverridden = TRUE;
-		//			}
-		//		}
-		//	}
-
-		//	return S_OK;
-		//}
 
 		private void ShiftFocusHorizontally(bool moveToRight)
 		{
@@ -1058,7 +1029,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 
 			FocusManager.TryMoveFocus(moveToRight ? FocusNavigationDirection.Right : FocusNavigationDirection.Left);
-			ElementSoundPlayerService.RequestInteractionSoundForElementStatic(ElementSoundKind.Focus, this);
+			DXamlCore.Current.GetElementSoundPlayerServiceNoRef().RequestInteractionSoundForElement(ElementSoundKind.Focus, this);
 		}
 
 		protected override void OnOpening(object e)
@@ -1665,7 +1636,7 @@ namespace Windows.UI.Xaml.Controls
 					if (isOverflowPopupAncestorOfElement)
 					{
 						var focusState = GetFocusState(focusedElement as DependencyObject);
-						FocusManager.SetFocusedElement(m_tpExpandButton, FocusNavigationDirection.None, focusState);
+						this.SetFocusedElement(m_tpExpandButton, focusState, animateIfBringIntoView: false);
 					}
 				}
 			}
@@ -1687,15 +1658,25 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		//private bool HasFocus()
+		//Returns true if the currently focused element
+		//is a child of CommandBar OR lives in m_tpOverflowContentRoot's sub-tree
+		//_Check_return_ HRESULT
+		//CommandBar::HasFocus(_Out_ BOOLEAN * hasFocus)
 		//{
-		//	var focusedElement = FocusManager.GetFocusedElement() as DependencyObject;
 
-		//	var containsElement = ContainsElement(focusedElement);
+		//	IFCPTR_RETURN(hasFocus);
+		//	*hasFocus = FALSE;
 
-		//	return containsElement;
+		//	ctl::ComPtr<DependencyObject> focusedElement;
+		//		IFC_RETURN(GetFocusedElement(&focusedElement));
+
+		//	bool containsElement = false;
+		//		IFC_RETURN(ContainsElement(focusedElement.Get(), &containsElement));
+
+		//	*hasFocus = containsElement;
+
+		//	return S_OK;
 		//}
-
 
 		protected override void UpdateTemplateSettings()
 		{
@@ -3159,7 +3140,7 @@ _Check_return_ HRESULT CommandBar::NotifyDeferredElementStateChanged(
 					if (container is { })
 					{
 						var containerAsUIE = container as UIElement;
-						FocusManager.SetFocusedElement(containerAsUIE, FocusNavigationDirection.None, m_focusStatePriorToCollectionOrSizeChange);
+						containerAsUIE.Focus(m_focusStatePriorToCollectionOrSizeChange);
 					}
 				}
 

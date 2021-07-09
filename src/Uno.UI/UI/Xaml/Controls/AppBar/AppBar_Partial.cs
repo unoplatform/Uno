@@ -14,7 +14,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
+using Uno.UI.Extensions;
 using static Microsoft.UI.Xaml.Controls._Tracing;
+using Uno.UI.Xaml.Input;
 
 namespace Windows.UI.Xaml.Controls
 {
@@ -302,7 +304,7 @@ namespace Windows.UI.Xaml.Controls
 				var resourceLoader = ResourceLoader.GetForCurrentView();
 
 				var toolTip = new ToolTip();
-				toolTip.Content = DXamlCore.GetCurrent().GetLocalizedResourceString(TEXT_HUB_SEE_MORE);
+				toolTip.Content = DXamlCore.Current.GetLocalizedResourceString(TEXT_HUB_SEE_MORE);
 
 				ToolTipService.SetToolTip(m_tpExpandButton, toolTip);
 
@@ -455,7 +457,7 @@ namespace Windows.UI.Xaml.Controls
 			{
 				// Set a tooltip with "See Less" for the expand button.
 				var toolTip = new ToolTip();
-				toolTip.Content = DXamlCore.GetCurrent().GetLocalizedResourceString(TEXT_HUB_SEE_LESS);
+				toolTip.Content = DXamlCore.Current.GetLocalizedResourceString(TEXT_HUB_SEE_LESS);
 
 				ToolTipService.SetToolTip(m_tpExpandButton, toolTip);
 
@@ -502,7 +504,7 @@ namespace Windows.UI.Xaml.Controls
 			if (m_tpExpandButton is { })
 			{
 				// Set a tooltip with "See More" for the expand button.
-				var tooltipText = DXamlCore.GetCurrent().GetLocalizedResourceString(TEXT_HUB_SEE_MORE);
+				var tooltipText = DXamlCore.Current.GetLocalizedResourceString(TEXT_HUB_SEE_MORE);
 				var tooltip = new ToolTip();
 				tooltip.Content = tooltipText;
 
@@ -536,68 +538,52 @@ namespace Windows.UI.Xaml.Controls
 
 
 		// UNO TODO: After Focus
-		//AppBar::ProcessTabStopOverride(
-		//_In_opt_ DependencyObject* pFocusedElement,
-		//_In_opt_ DependencyObject* pCandidateTabStopElement,
 
-		//const bool isBackward,
+		internal override TabStopProcessingResult ProcessTabStopOverride(
+			DependencyObject focusedElement,
+			DependencyObject candidateTabStopElement,
+			bool isBackward,
+			bool didCycleFocusAtRootVisualScope)
+		{
+			var result = new TabStopProcessingResult()
+			{
+				NewTabStop = null,
+				IsOverriden = false,
+			};
 
-		//const bool /*didCycleFocusAtRootVisualScope*/,
-		//_Outptr_ DependencyObject** ppNewTabStop,
-		//_Out_ BOOLEAN* pIsTabStopOverridden
-	 //   )
-		//{
-		//	*ppNewTabStop = nullptr;
-		//	*pIsTabStopOverridden = FALSE;
+			if (m_Mode == AppBarMode.Inline)
+			{
+				var isOpen = IsOpen;
+				var isSticky = IsSticky;
 
-		//	// The ApplicationBarService manages focus for non-inline appbars.
-		//	if (m_Mode == AppBarMode_Inline)
-		//	{
-		//		BOOLEAN isOpen = FALSE;
-		//		IFC_RETURN(get_IsOpen(&isOpen));
+				// We don't override tab-stop behavior for closed or sticky appbars.
+				if (!isOpen || isSticky)
+				{
+					return result;
+				}
 
-		//		BOOLEAN isSticky = FALSE;
-		//		IFC_RETURN(get_IsSticky(&isSticky));
+				var isAncestorOfFocusedElement = this.IsAncestorOf(focusedElement);
+				var isAncestorOfCandidateElement = this.IsAncestorOf(candidateTabStopElement);
 
-		//		// We don't override tab-stop behavior for closed or sticky appbars.
-		//		if (!isOpen || isSticky)
-		//		{
-		//			return S_OK;
-		//		}
+				// If the element losing focus is a child of the appbar and the element
+				// we're losing focus to is not, then we override tab-stop to keep the
+				// focus within the appbar.
+				if (isAncestorOfFocusedElement && !isAncestorOfCandidateElement)
+				{
+					var newTabStop = isBackward ? FocusManager.FindLastFocusableElement(this) : FocusManager.FindFirstFocusableElement(this);
 
-		//	BOOLEAN isAncestorOfFocusedElement = FALSE;
-		//	IFC_RETURN(IsAncestorOf(pFocusedElement, &isAncestorOfFocusedElement));
+					if (newTabStop is { })
+					{
+						result.NewTabStop = newTabStop;
+						result.IsOverriden = true;
+					}
+				}
+			}
 
-		//		BOOLEAN isAncestorOfCandidateElement = FALSE;
-		//	IFC_RETURN(IsAncestorOf(pCandidateTabStopElement, &isAncestorOfCandidateElement));
+			return result;
+		}
 
-		//		// If the element losing focus is a child of the appbar and the element
-		//		// we're losing focus to is not, then we override tab-stop to keep the
-		//		// focus within the appbar.
-		//		if (isAncestorOfFocusedElement && !isAncestorOfCandidateElement)
-		//		{
-		//			xref_ptr<CDependencyObject> newTabStop;
 
-		//	IFC_RETURN(isBackward?
-		//		FocusManager_GetLastFocusableElement(GetHandle(), newTabStop.ReleaseAndGetAddressOf()) :
-
-		//				FocusManager_GetFirstFocusableElement(GetHandle(), newTabStop.ReleaseAndGetAddressOf())
-		//				);
-
-		//			// Check to see if we overrode the tab stop candidate.
-		//			if (newTabStop)
-		//			{
-		//				IFC_RETURN(DXamlCore::GetCurrent()->GetPeer(newTabStop, ppNewTabStop));
-
-		//				* pIsTabStopOverridden = TRUE;
-		//}
-		//		}
-		//	}
-
-		//	return S_OK;
-		//}
-
-		
 		private void OnContentRootSizeChanged(object sender, SizeChangedEventArgs args)
 		{
 			var didChange = RefreshContentHeight();
@@ -1230,18 +1216,11 @@ namespace Windows.UI.Xaml.Controls
 					m_savedFocusState = FocusState.Programmatic;
 				}
 
-				// UNO TODO: Focus
-				//// Now focus the first-focusable element in the appbar.
-				//xref_ptr<CDependencyObject> firstFocusableElement;
-				//IFC_RETURN(FocusManager_GetFirstFocusableElement(GetHandle(), firstFocusableElement.ReleaseAndGetAddressOf()));
-				//if (firstFocusableElement)
-				//{
-				//	ctl::ComPtr<DependencyObject> firstFocusableElementPeer;
-				//	IFC_RETURN(DXamlCore::GetCurrent()->GetPeer(firstFocusableElement, &firstFocusableElementPeer));
-
-				//	BOOLEAN wasFocused = FALSE;
-				//	IFC_RETURN(DependencyObject::SetFocusedElement(firstFocusableElementPeer.Get(), m_savedFocusState, FALSE /*animateIfBringIntoView*/, &wasFocused));
-				//}
+				var firstFocusableElement = FocusManager.FindFirstFocusableElement(this);
+				if (firstFocusableElement is { })
+				{
+					this.SetFocusedElement(firstFocusableElement, m_savedFocusState, animateIfBringIntoView: false);
+				}
 			}
 		}
 
@@ -1264,7 +1243,7 @@ namespace Windows.UI.Xaml.Controls
 		{
 			if (savedFocusedElement is { })
 			{
-				FocusManager.SetFocusedElement(savedFocusedElement, FocusNavigationDirection.None, savedFocusState);
+				this.SetFocusedElement(savedFocusedElement, m_savedFocusState, animateIfBringIntoView: false);
 			}
 		}
 

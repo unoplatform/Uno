@@ -481,7 +481,7 @@ namespace Windows.UI.Xaml.Controls
 					// then we should give ourselves a tool tip showing the label plus the accelerator text.
 					var labelText = Label;
 
-					var toolTipFormatString = DXamlCore.GetCurrent().GetLocalizedResourceString("KEYBOARD_ACCELERATOR_TEXT_TOOLTIP");
+					var toolTipFormatString = DXamlCore.Current.GetLocalizedResourceString("KEYBOARD_ACCELERATOR_TEXT_TOOLTIP");
 
 					SetValue(ToolTipService.ToolTipProperty, string.Format(toolTipFormatString, labelText, keyboardAcceleratorText));
 				}
