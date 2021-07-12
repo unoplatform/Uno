@@ -9,7 +9,7 @@ using Uno.UI.Xaml.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace DirectUI
+namespace Windows.UI.Xaml.Controls
 {
 	internal interface IApplicationBarService
 	{

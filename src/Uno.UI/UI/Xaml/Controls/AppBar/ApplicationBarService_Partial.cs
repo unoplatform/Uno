@@ -9,16 +9,13 @@ using System.Collections.Generic;
 using Uno.Disposables;
 using Uno.UI.Xaml.Input;
 using Windows.Foundation;
-using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using static Microsoft.UI.Xaml.Controls._Tracing;
 
-namespace DirectUI
+namespace Windows.UI.Xaml.Controls
 {
 	//TODO Uno: This is just a stub of the MUX class.
 	internal partial class ApplicationBarService

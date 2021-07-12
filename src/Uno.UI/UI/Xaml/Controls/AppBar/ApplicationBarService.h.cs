@@ -14,7 +14,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
-namespace DirectUI
+namespace Windows.UI.Xaml.Controls
 {
 	// Service class that provides the system implementation for managing
 	// many app bars and the edgy event.

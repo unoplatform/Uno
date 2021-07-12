@@ -114,10 +114,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <UpToDateCheckInput Remove="DirectUI\AppBar\AppBarStatus.cs" />
 	  <UpToDateCheckInput Remove="DirectUI\IApplicationBarService.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarLightDismissAutomationPeer.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBarLightDismiss_Partial.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\AppBar_themeresources.xaml" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\ApplicationBarService.h.cs" />
 	  <UpToDateCheckInput Remove="UI\Xaml\Controls\AppBar\ApplicationBarService_Partial.cs" />
 	</ItemGroup>
@@ -134,5 +134,9 @@
 	  <None Update="Mixins\Wasm\VisualStatesMixins.tt">
 	    <LastGenOutput>VisualStatesMixins.g.cs</LastGenOutput>
 	  </None>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Page Include="UI\Xaml\Controls\AppBar\AppBar_themeresources.xaml" />
 	</ItemGroup>
 </Project>
