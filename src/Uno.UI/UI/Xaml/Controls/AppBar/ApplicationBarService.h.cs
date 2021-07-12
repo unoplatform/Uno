@@ -21,7 +21,7 @@ namespace Windows.UI.Xaml.Controls
 	partial class ApplicationBarService : IApplicationBarService
 	{
 		WeakReference<UIElement?> m_pRootVisualWeakReference;
-		List<WeakReference<AppBar>>? m_ApplicationBars;
+		List<WeakReference<AppBar>> m_ApplicationBars = new List<WeakReference<AppBar>>();
 
 		// Edge Gesture Completed registration token
 		SerialDisposable m_EdgeGestureCompletedEventToken = new SerialDisposable();
