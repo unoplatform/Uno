@@ -127,7 +127,7 @@ namespace Windows.UI.Xaml.Controls
 #if XAMARIN_IOS || __MACOS__
 				this.AddSubview(_itemsPanel);
 #elif XAMARIN_ANDROID
-			this.AddView(_itemsPanel);
+				this.AddView(_itemsPanel);
 #elif UNO_REFERENCE_API || NET461
 				AddChild(_itemsPanel);
 #endif

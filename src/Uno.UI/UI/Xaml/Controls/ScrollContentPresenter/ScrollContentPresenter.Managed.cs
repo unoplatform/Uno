@@ -1,4 +1,6 @@
-﻿#if UNO_HAS_MANAGED_SCROLL_PRESENTER
+﻿#nullable enable
+
+#if UNO_HAS_MANAGED_SCROLL_PRESENTER
 using Uno.Extensions;
 using Uno.UI.DataBinding;
 using Windows.UI.Xaml.Data;
@@ -74,9 +76,7 @@ namespace Windows.UI.Xaml.Controls
 		// an appropriate size.
 		const double ScrollViewerMinHeightToReflowAroundOcclusions = 32.0f;
 
-		private readonly IScrollStrategy _strategy;
-		
-		private ScrollViewer Scroller => ScrollOwner as ScrollViewer;
+		private IScrollStrategy _strategy;
 
 		public bool CanHorizontallyScroll { get; set; }
 
@@ -90,18 +90,17 @@ namespace Windows.UI.Xaml.Controls
 
 		internal Size? CustomContentExtent => null;
 
-		public ScrollContentPresenter()
+		partial void InitializePartial()
 		{
 #if __SKIA__
 			_strategy = CompositorScrollStrategy.Instance;
 #elif __MACOS__
 			_strategy = TransformScrollStrategy.Instance;
 #endif
-
 			_strategy.Initialize(this);
 
 			// Mouse wheel support
-			PointerWheelChanged += ScrollContentPresenter_PointerWheelChanged;
+			PointerWheelChanged += WheelScroll;
 
 			// Touch scroll support
 			ManipulationMode = ManipulationModes.TranslateX | ManipulationModes.TranslateY; // Updated in PrepareTouchScroll!
@@ -109,17 +108,7 @@ namespace Windows.UI.Xaml.Controls
 			ManipulationStarted += BeginTouchScroll;
 			ManipulationDelta += UpdateTouchScroll;
 			ManipulationCompleted += CompleteTouchScroll;
-
-			// On Skia and macOS (as UWP), the Scrolling is managed by the ScrollContentPresenter, not the ScrollViewer.
-			// Note: This as direct consequences in UIElement.GetTransform and VisualTreeHelper.SearchDownForTopMostElementAt
-			RegisterAsScrollPort(this);
 		}
-
-		public void SetVerticalOffset(double offset)
-			=> Set(verticalOffset: offset);
-
-		public void SetHorizontalOffset(double offset)
-			=> Set(horizontalOffset: offset);
 
 		/// <inheritdoc />
 		protected override void OnContentChanged(object oldValue, object newValue)
@@ -209,7 +198,7 @@ namespace Windows.UI.Xaml.Controls
 			return Math.Max(minOffset, Math.Min(offset, maxOffset));
 		}
 
-		private void ScrollContentPresenter_PointerWheelChanged(object sender, Input.PointerRoutedEventArgs e)
+		private void WheelScroll(object sender, Input.PointerRoutedEventArgs e)
 		{
 			var properties = e.GetCurrentPoint(null).Properties;
 

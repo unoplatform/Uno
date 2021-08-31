@@ -23,7 +23,7 @@ namespace Windows.UI.Xaml.Controls
 {
 	partial class NativeScrollContentPresenter : UIScrollView, DependencyObject
 	{
-		private readonly WeakReference<ScrollViewer> _scrollViewer;
+		private readonly ScrollContentPresenter _managedOwnerPresenter;
 
 		/// <summary>
 		/// Is the UIScrollView currently undergoing animated scrolling, either user-initiated or programmatic.
@@ -44,9 +44,9 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		internal NativeScrollContentPresenter(ScrollViewer scroller) : this()
+		internal NativeScrollContentPresenter(ScrollContentPresenter managedOwnerPresenter) : this()
 		{
-			_scrollViewer = new WeakReference<ScrollViewer>(scroller);
+			_managedOwnerPresenter = managedOwnerPresenter;
 
 			// Because the arrange pass is asynchronous on iOS, this is required for the ScrollViewer to get up-to-date viewport dimensions
 			SizeChanged += (_, __) =>
@@ -93,7 +93,8 @@ namespace Windows.UI.Xaml.Controls
 			scroller.OnScrollInternal(clampedOffset.X, clampedOffset.Y, isIntermediate: _isInAnimatedScroll);
 		}
 
-		private ScrollViewer GetParentScrollViewer() => _scrollViewer.TryGetTarget(out var s) ? s : TemplatedParent as ScrollViewer;
+		private ScrollViewer GetParentScrollViewer()
+			=> _managedOwnerPresenter.Scroller ?? TemplatedParent as ScrollViewer;
 
 		// Called when user starts dragging
 		private void OnDraggingStarted(object sender, EventArgs e)

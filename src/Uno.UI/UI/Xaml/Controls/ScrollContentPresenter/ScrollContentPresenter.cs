@@ -1,4 +1,6 @@
-﻿using Uno.Extensions;
+﻿#nullable enable
+
+using Uno.Extensions;
 using Uno.Logging;
 using Uno.UI.DataBinding;
 using Windows.UI.Xaml.Data;
@@ -33,19 +35,40 @@ namespace Windows.UI.Xaml.Controls
 		#region ScrollOwner
 		private ManagedWeakReference _scroller;
 
-		public object ScrollOwner
+		public object? ScrollOwner
 		{
 			get => _scroller.Target;
 			set
 			{
-				if (_scroller is { } oldScroller)
+				if (value is null)
 				{
-					WeakReferencePool.ReturnWeakReference(this, oldScroller);
+					throw new NullReferenceException("ScrollOwner cannot be null");
+				}
+
+				var oldScroller = default(object?);
+				if (_scroller is { } oldScrollerRef)
+				{
+					oldScroller = oldScrollerRef.Target;
+					if (value == oldScroller)
+					{
+						return;
+					}
+
+					WeakReferencePool.ReturnWeakReference(this, oldScrollerRef);
 				}
 
 				_scroller = WeakReferencePool.RentWeakReference(this, value);
+
+				if (value is ScrollViewer newScroller)
+				{
+					OnScrollerChanged(oldScroller as ScrollViewer, newScroller);
+				}
 			}
 		}
+
+		partial void OnScrollerChanged(ScrollViewer? oldValue, ScrollViewer newValue);
+
+		internal ScrollViewer? Scroller => ScrollOwner as ScrollViewer;
 		#endregion
 
 #if __WASM__
@@ -58,10 +81,19 @@ namespace Windows.UI.Xaml.Controls
 		}
 #endif
 
-		private void InitializeScrollContentPresenter()
+		public ScrollContentPresenter()
 		{
+			// On Skia, the Scrolling is managed by the ScrollContentPresenter (as UWP), which is flagged as IsScrollPort.
+			// Note: We should still add support for the zoom factor ... which is not yet supported on Skia.
+			// Note 2: This has direct consequences in UIElement.GetTransform and VisualTreeHelper.SearchDownForTopMostElementAt
+			UIElement.RegisterAsScrollPort(this);
+
 			this.RegisterParentChangedCallback(this, OnParentChanged);
+
+			InitializePartial();
 		}
+
+		partial void InitializePartial();
 
 		private void OnParentChanged(object instance, object key, DependencyObjectParentChangedEventArgs args)
 		{
@@ -72,24 +104,6 @@ namespace Windows.UI.Xaml.Controls
 				Content = null;
 			}
 		}
-
-#if __IOS__ || __ANDROID__
-		private NativeScrollContentPresenter Native => Content as NativeScrollContentPresenter;
-		private object RealContent => Native?.Content;
-		public ScrollBarVisibility HorizontalScrollBarVisibility => Native?.HorizontalScrollBarVisibility ?? default;
-		public ScrollBarVisibility VerticalScrollBarVisibility => Native?.VerticalScrollBarVisibility ?? default;
-		public bool CanHorizontallyScroll
-		{
-			get => HorizontalScrollBarVisibility != ScrollBarVisibility.Disabled;
-			set { }
-		}
-
-		public bool CanVerticallyScroll
-		{
-			get => VerticalScrollBarVisibility != ScrollBarVisibility.Disabled;
-			set { }
-		}
-#endif
 
 		bool ILayoutConstraints.IsWidthConstrained(View requester)
 		{
@@ -160,6 +174,12 @@ namespace Windows.UI.Xaml.Controls
 
 		public double ViewportWidth => DesiredSize.Width;
 
+		public void SetVerticalOffset(double offset)
+			=> Set(verticalOffset: offset);
+
+		public void SetHorizontalOffset(double offset)
+			=> Set(horizontalOffset: offset);
+
 #if UNO_HAS_MANAGED_SCROLL_PRESENTER || __WASM__
 		protected override Size MeasureOverride(Size size)
 		{
@@ -225,6 +245,7 @@ namespace Windows.UI.Xaml.Controls
 
 		internal override bool IsViewHit()
 			=> true;
+
 #elif __IOS__ // Note: No __ANDROID__, the ICustomScrollInfo support is made directly in the NativeScrollContentPresenter
 		protected override Size MeasureOverride(Size size)
 		{
@@ -245,5 +266,5 @@ namespace Windows.UI.Xaml.Controls
 			return result;
 		}
 #endif
-			}
-		}
+	}
+}

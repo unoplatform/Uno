@@ -74,8 +74,8 @@ namespace Windows.UI.Xaml.Controls
 
 		object IScrollContentPresenter.Content
 		{
-			get { return Content; }
-			set { Content = value; }
+			get => Content;
+			set => Content = value;
 		}
 
 		internal NativeListViewBase NativePanel => (Content as ItemsPresenter)?.Panel as NativeListViewBase;

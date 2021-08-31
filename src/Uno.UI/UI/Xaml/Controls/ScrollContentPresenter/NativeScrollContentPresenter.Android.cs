@@ -22,12 +22,12 @@ namespace Windows.UI.Xaml.Controls
 	{
 		private static readonly List<View> _emptyList = new List<View>(0);
 
-		private ScrollViewer ScrollOwner => _scrollViewer.TryGetTarget(out var s) ? s : (Parent as FrameworkElement)?.TemplatedParent as ScrollViewer;
+		private ScrollViewer ScrollOwner => _managedOwnerPresenter.Scroller ?? (Parent as FrameworkElement)?.TemplatedParent as ScrollViewer;
 
 		private ScrollBarVisibility _verticalScrollBarVisibility;
 		public ScrollBarVisibility VerticalScrollBarVisibility
 		{
-			get { return _verticalScrollBarVisibility; }
+			get => _verticalScrollBarVisibility;
 			set
 			{
 				_verticalScrollBarVisibility = value;
@@ -38,7 +38,7 @@ namespace Windows.UI.Xaml.Controls
 		public ScrollBarVisibility _horizontalScrollBarVisibility;
 		public ScrollBarVisibility HorizontalScrollBarVisibility
 		{
-			get { return _horizontalScrollBarVisibility; }
+			get => _horizontalScrollBarVisibility;
 			set
 			{
 				_horizontalScrollBarVisibility = value;
@@ -46,12 +46,12 @@ namespace Windows.UI.Xaml.Controls
 			}
 		}
 
-		private ILayouter _layouter;
-		private readonly WeakReference<ScrollViewer> _scrollViewer;
+		private readonly ILayouter _layouter;
+		private readonly ScrollContentPresenter _managedOwnerPresenter;
 
-		public NativeScrollContentPresenter(ScrollViewer scroller) : this()
+		public NativeScrollContentPresenter(ScrollContentPresenter managedOwnerPresenter) : this()
 		{
-			_scrollViewer = new WeakReference<ScrollViewer>(scroller);
+			_managedOwnerPresenter = managedOwnerPresenter;
 		}
 
 		public NativeScrollContentPresenter()

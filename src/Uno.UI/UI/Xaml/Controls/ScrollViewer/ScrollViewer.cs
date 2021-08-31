@@ -37,7 +37,7 @@ using AppKit;
 using View = Windows.UI.Xaml.UIElement;
 #endif
 
-#if UNO_HAS_MANAGED_SCROLL_PRESENTER
+#if UNO_HAS_MANAGED_SCROLL_PRESENTER || true
 using _ScrollContentPresenter = Windows.UI.Xaml.Controls.ScrollContentPresenter;
 #else
 using _ScrollContentPresenter = Windows.UI.Xaml.Controls.IScrollContentPresenter;
@@ -118,13 +118,6 @@ namespace Windows.UI.Xaml.Controls
 		public ScrollViewer()
 		{
 			DefaultStyleKey = typeof(ScrollViewer);
-
-#if !UNO_HAS_MANAGED_SCROLL_PRESENTER
-			// On Skia, the Scrolling is managed by the ScrollContentPresenter (as UWP), which is flagged as IsScrollPort.
-			// Note: We should still add support for the zoom factor ... which is not yet supported on Skia.
-			// Note 2: This as direct consequences in UIElement.GetTransform and VisualTreeHelper.SearchDownForTopMostElementAt
-			UIElement.RegisterAsScrollPort(this);
-#endif
 
 			UpdatesMode = Uno.UI.Xaml.Controls.ScrollViewer.GetUpdatesMode(this);
 			InitializePartial();
@@ -634,7 +627,6 @@ namespace Windows.UI.Xaml.Controls
 		/// </summary>
 		internal bool ComputedIsVerticalScrollEnabled { get; private set; } = false;
 
-
 		internal double MinHorizontalOffset => 0;
 
 		internal double MinVerticalOffset => 0;
@@ -772,7 +764,7 @@ namespace Windows.UI.Xaml.Controls
 
 #if !UNO_HAS_MANAGED_SCROLL_PRESENTER
 			// Support for the native scroll bars (delegated to the native _presenter).
-			_presenter.VerticalScrollBarVisibility = ComputeNativeScrollBarVisibility(scrollable, visibility, mode, _verticalScrollbar);
+			_presenter.NativeVerticalScrollBarVisibility = ComputeNativeScrollBarVisibility(scrollable, visibility, mode, _verticalScrollbar);
 			if (invalidate && _verticalScrollbar is null)
 			{
 				InvalidateMeasure(); // Useless for managed ScrollBar, it will invalidate itself if needed.
@@ -809,7 +801,7 @@ namespace Windows.UI.Xaml.Controls
 
 #if !UNO_HAS_MANAGED_SCROLL_PRESENTER
 			// Support for the native scroll bars (delegated to the native _presenter).
-			_presenter.HorizontalScrollBarVisibility = ComputeNativeScrollBarVisibility(scrollable, visibility, mode, _horizontalScrollbar);
+			_presenter.NativeHorizontalScrollBarVisibility = ComputeNativeScrollBarVisibility(scrollable, visibility, mode, _horizontalScrollbar);
 			if (invalidate && _horizontalScrollbar is null)
 			{
 				InvalidateMeasure(); // Useless for managed ScrollBar, it will invalidate itself if needed.
@@ -893,17 +885,17 @@ namespace Windows.UI.Xaml.Controls
 			_isVerticalScrollBarMaterialized = false;
 			_horizontalScrollbar = null;
 			_isHorizontalScrollBarMaterialized = false;
-
-#if __IOS__ || __ANDROID__
-			if (scpTemplatePart is ScrollContentPresenter scp)
-			{
-				// For Android/iOS/MacOS, ensure that the ScrollContentPresenter contains a native scroll viewer,
-				// which will handle the actual scrolling
-				var nativeSCP = new NativeScrollContentPresenter(this);
-				scp.Content = nativeSCP;
-				_presenter = nativeSCP;
-			}
-#endif
+			
+//#if __IOS__ || __ANDROID__
+//			if (scpTemplatePart is ScrollContentPresenter scp)
+//			{
+//				// For Android/iOS/MacOS, ensure that the ScrollContentPresenter contains a native scroll viewer,
+//				// which will handle the actual scrolling
+//				var nativeSCP = new NativeScrollContentPresenter(this);
+//				scp.Content = nativeSCP;
+//				_presenter = nativeSCP;
+//			}
+//#endif
 
 			if (scpTemplatePart is ScrollContentPresenter presenter)
 			{
