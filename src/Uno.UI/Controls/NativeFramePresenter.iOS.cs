@@ -762,10 +762,9 @@ namespace Uno.UI.Controls
 			/// </summary>
 			public List<NavigationRequest> AssociatedRequests { get; } = new List<NavigationRequest>();
 
-			internal CommandBar GetCommandBar()
-			{
-				return Page.TopAppBar as CommandBar ?? Page.FindFirstChild<CommandBar>();
-			}
+			internal INativeNavigationBar GetNativeNavigationBar() =>
+				Page.TopAppBar as INativeNavigationBar
+				?? Page.FindSubviewsOfType<INativeNavigationBar>().Safe().FirstOrDefault();
 
 			public override string ToString()
 			{
@@ -783,14 +782,8 @@ namespace Uno.UI.Controls
 
 			public override UIViewController PopViewController(bool animated)
 			{
-				var lowerCommandBar = LowerController?.GetCommandBar();
-				var renderer = lowerCommandBar?.GetRenderer(() => (CommandBarRenderer)null);
-				if (renderer != null)
-				{
-					// Set navigation bar properties for page about to become visible. This gives a nice animation and works around bug on 
-					// iOS 11.2 where TitleTextAttributes aren't updated properly (https://openradar.appspot.com/37567828)
-					renderer.Native = NavigationBar;
-				}
+				var lowerCommandBar = LowerController?.GetNativeNavigationBar();
+				lowerCommandBar?.PopViewController(NavigationBar);
 
 				return base.PopViewController(animated);
 			}
