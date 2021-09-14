@@ -31,7 +31,7 @@ namespace Uno.UI.Controls
 			}
 
 			// Hook CommandBar to NavigationItem
-			topNativeNavBar.PageCreated(pageController);
+			topNativeNavBar.SetNavigationItem(pageController.NavigationItem);
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Uno.UI.Controls
 		{
 			if (pageController.FindNativeNavigationBar() is { } topNativeNavBar)
 			{
-				topNativeNavBar.PageDestroyed(pageController);
+				topNativeNavBar.SetNavigationItem(null);
 			}
 		}
 
@@ -55,7 +55,26 @@ namespace Uno.UI.Controls
 			var topNativeNavBar = pageController.FindNativeNavigationBar();
 			if (topNativeNavBar != null)
 			{
-				topNativeNavBar.PageWillAppear(pageController);
+				if (topNativeNavBar.Visibility == Visibility.Visible)
+				{
+					topNativeNavBar.SetNavigationBar(pageController.NavigationController.NavigationBar);
+
+					// When the CommandBar is visible, we need to call SetNavigationBarHidden
+					// AFTER it has been rendered. Otherwise, it causes a bug introduced
+					// in iOS 11 in which the BackButtonIcon is not rendered properly.
+					pageController.NavigationController.SetNavigationBarHidden(hidden: false, animated: true);
+				}
+				else
+				{
+					// Even if the CommandBar should technically be collapsed,
+					// we don't hide it using the NavigationController because it
+					// automatically disables the back gesture.
+					// In order to visually hide it, the CommandBarRenderer
+					// will hide the native view using the UIView.Hidden property.
+					pageController.NavigationController.SetNavigationBarHidden(hidden: false, animated: true);
+
+					topNativeNavBar.SetNavigationBar(pageController.NavigationController.NavigationBar);
+				}
 			}
 			else // No CommandBar
 			{
@@ -72,7 +91,7 @@ namespace Uno.UI.Controls
 			if (pageController.FindNativeNavigationBar() is { } topNativeNavBar)
 			{
 				// Set the native navigation bar to null so it does not render when the page is not visible
-				topNativeNavBar.PageDidDisappear(pageController);
+				topNativeNavBar.SetNavigationBar(null);
 
 			}
 		}
@@ -82,7 +101,7 @@ namespace Uno.UI.Controls
 			if (pageController.FindNativeNavigationBar() is { } topNativeNavBar)
 			{
 				// Set the native navigation bar to null so it does not render when the page is not visible
-				topNativeNavBar.PageWillDisappear(pageController);
+				topNativeNavBar.SetNavigationBar(null);
 
 			}
 		}
