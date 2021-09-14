@@ -74,6 +74,7 @@ namespace Windows.System
 			if (Interlocked.CompareExchange(ref _state, States.Running, States.Idle) == States.Idle)
 			{
 				_elapsed.Restart();
+				LastTickElapsed = TimeSpan.Zero;
 				StartNative(Interval);
 			}
 			else
@@ -83,6 +84,7 @@ namespace Windows.System
 				StopNative();
 
 				_elapsed.Restart();
+				LastTickElapsed = TimeSpan.Zero;
 				StartNative(Interval);
 			}
 		}
@@ -117,12 +119,14 @@ namespace Windows.System
 				if (IsRunning) // be sure to not self restart if the timer was Stopped by the Tick event handler
 				{
 					_elapsed.Restart();
+					LastTickElapsed = TimeSpan.Zero;
 					StartNative(interval);
 				}
 			}
 			else
 			{
 				_elapsed.Restart();
+				LastTickElapsed = TimeSpan.Zero;
 				StartNative(interval - elapsed, interval);
 			}
 		}

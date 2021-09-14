@@ -1,10 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Uno.Extensions;
 
 namespace Windows.UI.Xaml.Media.Animation
 {
+	//internal interface IAnimation<TValue>
+	//{
+	//}
+
+	internal interface IKeyFrame
+	{
+		public KeyTime KeyTime { get; }
+	}
+
+	internal interface IKeyFrame<out TValue> : IKeyFrame
+	{
+		public TValue Value { get; }
+	}
+
 	public abstract partial class DoubleKeyFrame : DependencyObject
 	{
 		public DoubleKeyFrame()

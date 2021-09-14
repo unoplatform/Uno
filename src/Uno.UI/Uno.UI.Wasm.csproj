@@ -152,6 +152,8 @@
 
 	<ItemGroup>
 	  <None Remove="tsconfig.json" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Media\Animation\KeyFrameComparer.cs" />
+	  <UpToDateCheckInput Remove="UI\Xaml\Media\Animation\KeyFrameScheduler.cs" />
 	  <Content Include="tsconfig.json" />
 	</ItemGroup>
 
@@ -185,5 +187,9 @@
 		<Copy SourceFiles="@(_OutputFiles)" DestinationFiles="@(_OutputFiles->'$(_TargetNugetFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy SourceFiles="@(_DebugSymbolsIntermediatePath)" DestinationFiles="@(_DebugSymbolsIntermediatePath->'$(_TargetNugetFolder)\%(RecursiveDir)%(Filename)%(Extension)')" />
 	</Target>
+
+	<ItemGroup>
+	  <SourceGeneratorInput Remove="UI\Xaml\Media\Animation\KeyFrameComparer.cs" />
+	</ItemGroup>
 
 </Project>
