@@ -130,7 +130,7 @@ namespace Windows.UI.Xaml.Controls
 			base.OnApplyTemplate();
 
 			// Ensures we don't keep a reference to a textBoxView that exists in a previous template
-			_textBoxView = null;
+			TextBoxView = null;
 
 			_placeHolder = GetTemplateChild(TextBoxConstants.PlaceHolderPartName) as IFrameworkElement;
 			_contentElement = GetTemplateChild(TextBoxConstants.ContentElementPartName) as ContentControl;
@@ -231,7 +231,7 @@ namespace Windows.UI.Xaml.Controls
 
 			if (!_isInputModifyingText)
 			{
-				_textBoxView?.SetTextNative(Text);
+				TextBoxView?.SetTextNative(Text);
 			}
 
 			UpdatePlaceholderVisibility();
@@ -265,7 +265,7 @@ namespace Windows.UI.Xaml.Controls
 				}
 			}
 
-			_textBoxView?.SetTextNative(Text);
+			TextBoxView?.SetTextNative(Text);
 		}
 
 		private void UpdatePlaceholderVisibility()
