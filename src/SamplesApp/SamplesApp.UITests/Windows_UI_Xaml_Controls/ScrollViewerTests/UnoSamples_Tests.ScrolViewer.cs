@@ -146,30 +146,30 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ScrollViewerTests
 
 				// Left / Top
 				ImageAssert.HasColorAt(screenshot, physicalRect.X, physicalRect.Y, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 1, physicalRect.Y + 1, Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(1), physicalRect.Y + LogicalToPhysical(1), Color.Blue);
 				ImageAssert.HasColorAt(screenshot, physicalRect.CenterX, physicalRect.Y + 21, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 11, physicalRect.Y + 11, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 24, physicalRect.Y + 24, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(11), physicalRect.Y + LogicalToPhysical(11), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(22), physicalRect.Y + LogicalToPhysical(22), Color.Red);
 				// Right / Top
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 1, physicalRect.Y, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 2, physicalRect.Y + 1, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 22, physicalRect.CenterY, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 12, physicalRect.Y + 11, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 26, physicalRect.Y + 24, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(1), physicalRect.Y, Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(2), physicalRect.Y + LogicalToPhysical(1), Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(22), physicalRect.CenterY, Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(12), physicalRect.Y + LogicalToPhysical(11), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(23), physicalRect.Y + LogicalToPhysical(22), Color.Red);
 				// Middle
 				ImageAssert.HasColorAt(screenshot, physicalRect.CenterX, physicalRect.CenterY, Color.Red);
 				// Left / Bottom
-				ImageAssert.HasColorAt(screenshot, physicalRect.X, physicalRect.Bottom - 1, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 1, physicalRect.Bottom - 2, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 21, physicalRect.CenterY, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 11, physicalRect.Bottom - 12, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 24, physicalRect.Bottom - 26, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X, physicalRect.Bottom - LogicalToPhysical(1), Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(1), physicalRect.Bottom - LogicalToPhysical(2), Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(21), physicalRect.CenterY, Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(11), physicalRect.Bottom - LogicalToPhysical(12), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(22), physicalRect.Bottom - LogicalToPhysical(23), Color.Red);
 				// Right / Bottom
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 1, physicalRect.Bottom - 1, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 2, physicalRect.Bottom - 2, Color.Blue);
-				ImageAssert.HasColorAt(screenshot, physicalRect.CenterX, physicalRect.Bottom - 22, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 12, physicalRect.Bottom - 12, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 26, physicalRect.Bottom - 26, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(1), physicalRect.Bottom - LogicalToPhysical(1), Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(2), physicalRect.Bottom - LogicalToPhysical(2), Color.Blue);
+				ImageAssert.HasColorAt(screenshot, physicalRect.CenterX, physicalRect.Bottom - LogicalToPhysical(22), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(12), physicalRect.Bottom - LogicalToPhysical(12), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(23), physicalRect.Bottom - LogicalToPhysical(23), Color.Red);
 
 			}
 		}
@@ -198,19 +198,19 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ScrollViewerTests
 				var physicalRect = _app.GetPhysicalRect($"ctl{i}");
 
 				// Left / Top
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 10, physicalRect.Y + 10, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 22, physicalRect.Y + 22, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(10), physicalRect.Y + LogicalToPhysical(10), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(20), physicalRect.Y + LogicalToPhysical(20), Color.Red);
 				// Right / Top
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 11, physicalRect.Y + 10, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 24, physicalRect.Y + 22, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(11), physicalRect.Y + LogicalToPhysical(10), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(21), physicalRect.Y + LogicalToPhysical(20), Color.Red);
 				// Middle
 				ImageAssert.HasColorAt(screenshot, physicalRect.CenterX, physicalRect.CenterY, Color.Red);
 				// Left / Bottom
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 10, physicalRect.Bottom - 11, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.X + 22, physicalRect.Bottom - 24, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(10), physicalRect.Bottom - LogicalToPhysical(11), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.X + LogicalToPhysical(20), physicalRect.Bottom - LogicalToPhysical(21), Color.Red);
 				// Right / Bottom
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 11, physicalRect.Bottom - 11, Color.Orange);
-				ImageAssert.HasColorAt(screenshot, physicalRect.Right - 24, physicalRect.Bottom - 24, Color.Red);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(11), physicalRect.Bottom - LogicalToPhysical(11), Color.Orange);
+				ImageAssert.HasColorAt(screenshot, physicalRect.Right - LogicalToPhysical(21), physicalRect.Bottom - LogicalToPhysical(21), Color.Red);
 			}
 		}
 
