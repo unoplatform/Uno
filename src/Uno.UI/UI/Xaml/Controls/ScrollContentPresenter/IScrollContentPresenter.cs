@@ -33,6 +33,9 @@ namespace Windows.UI.Xaml.Controls
 
 		object Content { get; set; }
 
+		double ExtentHeight { get; set; }
+		double ExtentWidth { get; set; }
+
 		void OnMinZoomFactorChanged(float newValue);
 		void OnMaxZoomFactorChanged(float newValue);
 	}

@@ -92,6 +92,43 @@ namespace SamplesApp.UITests.Windows_UI_Xaml_Controls.ScrollViewerTests
 
 		[Test]
 		[AutoRetry]
+		// Issue needs to be fixed first for WASM for Right and Bottom Margin missing
+		// Details here: https://github.com/unoplatform/uno/issues/7000
+		[ActivePlatforms(Platform.iOS, Platform.Android)]
+		public void ScrollViewer_Content_Margin()
+		{
+			Run("UITests.Windows_UI_Xaml_Controls.ScrollViewerTests.ScrollViewer_Content_Margin");
+			_app.WaitForElement("ChildStatusTextBlock");
+			var rect = _app.GetPhysicalRect("OuterBorder");
+            var outsideColor = Color.White;
+			var insideColor = Color.Pink;
+
+			AssertCurrentColors("Before-Scrolled", insideColor, outsideColor, outsideColor, outsideColor, insideColor);
+
+			_app.FastTap("ScrollToRightBottomButton");
+			_app.WaitForText("ChildStatusTextBlock", "Scrolled");
+
+			AssertCurrentColors("After-Scrolled", insideColor, insideColor, outsideColor, outsideColor, outsideColor);
+
+			void AssertCurrentColors(string description, Color centerColor, Color topLeftColor, Color topRightColor, Color bottomLeftColor, Color bottomRightColor)
+			{
+				var screenshot = TakeScreenshot(description);
+
+				// Top / Left
+				ImageAssert.HasColorAt(screenshot, rect.X, rect.Y, topLeftColor);
+				// Top / Right
+				ImageAssert.HasColorAt(screenshot, rect.Right, rect.Y, topRightColor);
+				// Center
+				ImageAssert.HasColorAt(screenshot, rect.CenterX, rect.CenterY, centerColor);
+				// Bottom / Left
+				ImageAssert.HasColorAt(screenshot, rect.X, rect.Bottom, bottomLeftColor);
+				// Bottom / Right
+				ImageAssert.HasColorAt(screenshot, rect.Right, rect.Bottom, bottomRightColor);
+			}
+		}
+
+		[Test]
+		[AutoRetry]
 		public void ScrollViewer_Removed_And_Added()
 		{
 			Run("UITests.Windows_UI_Xaml_Controls.ScrollViewerTests.ScrollViewer_Add_Remove");

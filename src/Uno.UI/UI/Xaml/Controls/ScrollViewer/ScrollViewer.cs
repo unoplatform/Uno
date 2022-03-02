@@ -721,9 +721,11 @@ namespace Windows.UI.Xaml.Controls
 			else if (Content is FrameworkElement fe)
 			{
 				var explicitHeight = fe.Height;
+				var extentHeight = 0d;
+				var extentWidth = 0d;
 				if (explicitHeight.IsFinite())
 				{
-					ExtentHeight = explicitHeight;
+					extentHeight = explicitHeight;
 				}
 				else
 				{
@@ -731,13 +733,15 @@ namespace Windows.UI.Xaml.Controls
 						fe.ActualHeight > 0 &&
 						fe.VerticalAlignment == VerticalAlignment.Stretch;
 
-					ExtentHeight = canUseActualHeightAsExtent ? fe.ActualHeight : fe.DesiredSize.Height;
+					extentHeight = canUseActualHeightAsExtent ? fe.ActualHeight : fe.DesiredSize.Height;
 				}
+
+				ExtentHeight = extentHeight + fe.Margin.Top + fe.Margin.Bottom;
 
 				var explicitWidth = fe.Width;
 				if (explicitWidth.IsFinite())
 				{
-					ExtentWidth = explicitWidth;
+					extentWidth = explicitWidth;
 				}
 				else
 				{
@@ -745,8 +749,10 @@ namespace Windows.UI.Xaml.Controls
 						fe.ActualWidth > 0 &&
 						fe.HorizontalAlignment == HorizontalAlignment.Stretch;
 
-					ExtentWidth = canUseActualWidthAsExtent ? fe.ActualWidth : fe.DesiredSize.Width;
+					extentWidth = canUseActualWidthAsExtent ? fe.ActualWidth : fe.DesiredSize.Width;
 				}
+
+				ExtentWidth = extentWidth + fe.Margin.Left + fe.Margin.Right;
 			}
 			else
 			{
@@ -754,19 +760,30 @@ namespace Windows.UI.Xaml.Controls
 				ExtentWidth = 0;
 			}
 
-			ScrollableHeight = Math.Max(ExtentHeight - ViewportHeight, 0);
+			var scrollableHeight = Math.Max(ExtentHeight - ViewportHeight, 0);
 			// On Skia, the ExtentHeight can include a rounding error, which may cause
 			// unwanted ScrollBar to pop in and out of existence.
-			if (ScrollableHeight < 0.1)
+			if (scrollableHeight < 0.1)
 			{
-				ScrollableHeight = 0;
+				scrollableHeight = 0;
 			}
-			ScrollableWidth = Math.Max(ExtentWidth - ViewportWidth, 0);
+
+			ScrollableHeight = scrollableHeight;
+
+			var scrollableWidth = Math.Max(ExtentWidth - ViewportWidth, 0);
 			// On Skia, the ExtentWidth can include a rounding error, which may cause
 			// unwanted ScrollBar to pop in and out of existence.
-			if (ScrollableWidth < 0.1)
+			if (scrollableWidth < 0.1)
 			{
-				ScrollableWidth = 0;
+				scrollableWidth = 0;
+			}
+
+			ScrollableWidth = scrollableWidth;
+
+			if (_presenter is not null)
+			{
+				_presenter.ExtentHeight = ExtentHeight;
+				_presenter.ExtentWidth = ExtentWidth;
 			}
 
 			UpdateComputedVerticalScrollability(invalidate: false);
