@@ -41,16 +41,13 @@ using WpfFrameworkPropertyMetadata = System.Windows.FrameworkPropertyMetadata;
 namespace Uno.UI.Skia.Platform
 {
 	[TemplatePart(Name = NativeOverlayLayerPart, Type = typeof(WpfCanvas))]
-	public class WpfHost : WpfControl, WinUI.ISkiaHost
+	public class WpfIslandsHost : WpfControl, WinUI.ISkiaHost
 	{
 		private const string NativeOverlayLayerPart = "NativeOverlayLayer";
 
 		private readonly bool designMode;
-		private readonly Func<UnoApplication> _appBuilder;
-		
-		private bool _appStarted = false;
-		
-		[ThreadStatic] private static WpfHost _current;
+
+		[ThreadStatic] private static WpfIslandsHost _current;
 
 		private WpfCanvas? _nativeOverlayLayer = null;
 		private WriteableBitmap bitmap;
@@ -60,68 +57,44 @@ namespace Uno.UI.Skia.Platform
 
 		private DisplayInformation _displayInformation;
 
-		static WpfHost()
+		static WpfIslandsHost()
 		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(WpfHost), new WpfFrameworkPropertyMetadata(typeof(WpfHost)));
+			DefaultStyleKeyProperty.OverrideMetadata(typeof(WpfIslandsHost), new WpfFrameworkPropertyMetadata(typeof(WpfIslandsHost)));
 
-			RegisterExtensions();
+			WpfHost.RegisterExtensions();
 		}
 
-		private static bool _extensionsRegistered;
-
-		internal static void RegisterExtensions()
-		{
-			if (_extensionsRegistered)
-			{
-				return;
-			}
-
-			ApiExtensibility.Register(typeof(Windows.UI.Core.ICoreWindowExtension), o => new WpfCoreWindowExtension(o));
-			ApiExtensibility.Register<Windows.UI.Xaml.Application>(typeof(IApplicationExtension), o => new WpfApplicationExtension(o));
-			ApiExtensibility.Register(typeof(Windows.UI.ViewManagement.IApplicationViewExtension), o => new WpfApplicationViewExtension(o));
-			ApiExtensibility.Register(typeof(ISystemThemeHelperExtension), o => new WpfSystemThemeHelperExtension(o));
-			ApiExtensibility.Register(typeof(IDisplayInformationExtension), o => new WpfDisplayInformationExtension(o));
-			ApiExtensibility.Register(typeof(Windows.ApplicationModel.DataTransfer.DragDrop.Core.IDragDropExtension), o => new WpfDragDropExtension(o));
-			ApiExtensibility.Register(typeof(IFileOpenPickerExtension), o => new FileOpenPickerExtension(o));
-			ApiExtensibility.Register<FolderPicker>(typeof(IFolderPickerExtension), o => new FolderPickerExtension(o));
-			ApiExtensibility.Register(typeof(IFileSavePickerExtension), o => new FileSavePickerExtension(o));
-			ApiExtensibility.Register(typeof(IConnectionProfileExtension), o => new WindowsConnectionProfileExtension(o));
-			ApiExtensibility.Register<TextBoxView>(typeof(ITextBoxViewExtension), o => new TextBoxViewExtension(o));
-			ApiExtensibility.Register(typeof(ILauncherExtension), o => new LauncherExtension(o));
-			ApiExtensibility.Register(typeof(IClipboardExtension), o => new ClipboardExtensions(o));
-			ApiExtensibility.Register(typeof(IAnalyticsInfoExtension), o => new AnalyticsInfoExtension());
-			ApiExtensibility.Register(typeof(ISystemNavigationManagerPreviewExtension), o => new SystemNavigationManagerPreviewExtension());
-
-			_extensionsRegistered = true;
-		}
-
-		public static WpfHost Current => _current;
+		public static WpfIslandsHost Current => _current;
 
 		internal WpfCanvas? NativeOverlayLayer => _nativeOverlayLayer;
 
 		/// <summary>
 		/// Creates a WpfHost element to host a Uno-Skia into a WPF application.
 		/// </summary>
-		/// <param name="appBuilder">App builder.</param>
-		/// <param name="args">Deprecated, value ignored.</param>		
 		/// <remarks>
-		/// Args are obsolete and will be removed in the future. Environment.CommandLine is used instead
-		/// to fill LaunchEventArgs.Arguments.
+		/// If args are omitted, those from Environment.GetCommandLineArgs() will be used.
 		/// </remarks>
-		[EditorBrowsable(EditorBrowsableState.Never)]
-		public WpfHost(global::System.Windows.Threading.Dispatcher dispatcher, Func<WinUI.Application> appBuilder, string[] args = null) : this(dispatcher, appBuilder)
-		{
-		}
-		
-		public WpfHost(global::System.Windows.Threading.Dispatcher dispatcher, Func<WinUI.Application> appBuilder)
+		public WpfIslandsHost(global::System.Windows.Threading.Dispatcher dispatcher, Func<WinUI.Application> appBuilder, string[] args = null)
 		{
 			_current = this;
-			_appBuilder = appBuilder;
+
+			args ??= Environment
+				.GetCommandLineArgs()
+				.Skip(1)
+				.ToArray();
 
 			designMode = DesignerProperties.GetIsInDesignMode(this);
 
+			void CreateApp(WinUI.ApplicationInitializationCallbackParams _)
+			{
+				var app = appBuilder();
+				app.Host = this;
+			}
+
 			Windows.UI.Core.CoreDispatcher.DispatchOverride = d => dispatcher.BeginInvoke(d);
 			Windows.UI.Core.CoreDispatcher.HasThreadAccessOverride = dispatcher.CheckAccess;
+
+			WinUI.Application.Start(CreateApp, args);
 
 			WinUI.Window.InvalidateRender += () =>
 			{
@@ -166,26 +139,6 @@ namespace Uno.UI.Skia.Platform
 			base.OnApplyTemplate();
 
 			_nativeOverlayLayer = GetTemplateChild(NativeOverlayLayerPart) as WpfCanvas;
-
-			// App needs to be created after the native overlay layer is properly initialized
-			// otherwise the initially focused input element would cause exception.
-			StartApp();
-		}
-
-		private void StartApp()
-		{
-			if (_appStarted)
-			{
-				return;
-			}
-			
-			void CreateApp(WinUI.ApplicationInitializationCallbackParams _)
-			{
-				var app = _appBuilder();
-				app.Host = this;
-			}
-
-			WinUI.Application.StartWithArguments(CreateApp);
 		}
 
 		private void MainWindow_StateChanged(object? sender, EventArgs e)
