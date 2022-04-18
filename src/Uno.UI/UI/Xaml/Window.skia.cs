@@ -33,26 +33,8 @@ namespace Windows.UI.Xaml
 		{
 			Dispatcher = CoreDispatcher.Main;
 			CoreWindow = CoreWindow.GetOrCreateForCurrentThread();
-			CoreWindow.SetInvalidateRender(QueueInvalidateRender);
 			InitDragAndDrop();
-		}
-
-		internal static Action InvalidateRender = () => { };
-		private bool _renderQueued = false;
-
-		internal void QueueInvalidateRender()
-		{
-			if (!_isMeasuringOrArranging && !_renderQueued)
-			{
-				_renderQueued = true;
-
-				CoreDispatcher.Main.RunAsync(CoreDispatcherPriority.Normal, () =>
-				{
-					_renderQueued = false;
-					InvalidateRender();
-				});
-			}
-		}
+		}		
 
 		internal void OnNativeSizeChanged(Size size)
 		{
@@ -93,6 +75,8 @@ namespace Windows.UI.Xaml
 				{
 					throw new InvalidOperationException("The root visual could not be created.");
 				}
+
+				CoreWindow.SetInvalidateRender(_rootVisual.XamlRoot.QueueInvalidateRender);
 
 				UIElement.LoadingRootElement(_rootVisual);
 
