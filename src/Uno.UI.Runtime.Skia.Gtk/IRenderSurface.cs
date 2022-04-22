@@ -3,5 +3,7 @@
 	internal interface IRenderSurface
 	{
 		void TakeScreenshot(string filePath);
+
+		void InvalidateRender();
 	}
 }

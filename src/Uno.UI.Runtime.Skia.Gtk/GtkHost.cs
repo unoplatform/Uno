@@ -31,6 +31,8 @@ using Uno.UI.Runtime.Skia.GTK.System.Profile;
 using Uno.UI.Runtime.Skia.Helpers;
 using Uno.UI.Runtime.Skia.Helpers.Dpi;
 using System.Runtime.InteropServices;
+using Uno.UI.Xaml.Core;
+using Windows.UI.Core;
 using System.ComponentModel;
 
 namespace Uno.UI.Runtime.Skia
@@ -43,6 +45,7 @@ namespace Uno.UI.Runtime.Skia
 		private static bool _isDispatcherThread = false;
 
 		private readonly Func<WUX.Application> _appBuilder;
+		private IRenderSurface _renderSurface;
 		private static Gtk.Window _window;
 		private static Gtk.EventBox _eventBox;
 		private Widget _area;
@@ -153,7 +156,9 @@ namespace Uno.UI.Runtime.Skia
 			var overlay = new Overlay();
 
 			_eventBox = new EventBox();
-			_area = BuildRenderSurfaceType();
+
+			_renderSurface = BuildRenderSurfaceType();
+			_area = (Widget)_renderSurface;
 			_fix = new Fixed();
 			overlay.Add(_area);
 			overlay.AddOverlay(_fix);
@@ -188,9 +193,30 @@ namespace Uno.UI.Runtime.Skia
 
 			WUX.Application.StartWithArguments(CreateApp);
 
+			WUX.Window.Current.Activated += Current_Activated;
+			
 			UpdateWindowPropertiesFromPackage();
 
 			Gtk.Application.Run();
+		}
+
+		private void Current_Activated(object sender, WindowActivatedEventArgs e)
+		{
+			var xamlRoot = CoreServices.Instance
+				.ContentRootCoordinator?
+				.CoreWindowContentRoot?
+				.XamlRoot;
+
+			if (xamlRoot is null)
+			{
+				throw new InvalidOperationException("XamlRoot was not properly initialized");
+			}
+
+			xamlRoot.InvalidateRender += _renderSurface.InvalidateRender;
+
+			// Force initial render
+			_renderSurface.InvalidateRender();
+			WUX.Window.Current.Activated -= Current_Activated;
 		}
 
 		private void WindowClosing(object sender, DeleteEventArgs args)
