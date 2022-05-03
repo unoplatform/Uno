@@ -280,8 +280,6 @@ namespace Uno.UI.Skia.Platform
 			}
 		}
 
-		WinUI.XamlRoot? IWpfHost.XamlRoot => WinUI.Window.Current?.RootElement?.XamlRoot;
-
 		protected override void OnRender(DrawingContext drawingContext)
 		{
 			base.OnRender(drawingContext);
@@ -363,5 +361,10 @@ namespace Uno.UI.Skia.Platform
 		void IWpfHost.ReleasePointerCapture(PointerIdentifier pointer) => CaptureMouse(); //TODO:MZ:This should capture the correct type of pointer (stylus/mouse/touch)
 
 		void IWpfHost.SetPointerCapture(PointerIdentifier pointer) => ReleaseMouseCapture();
+
+		//TODO:MZ: This will need to be adjusted when multi-window support is added.
+		WinUI.XamlRoot? IWpfHost.XamlRoot => WinUI.Window.Current?.RootElement?.XamlRoot;
+
+		WpfCanvas? IWpfHost.NativeOverlayLayer => NativeOverlayLayer;
 	}
 }
