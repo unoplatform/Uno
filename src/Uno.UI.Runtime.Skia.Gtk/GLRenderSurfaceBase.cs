@@ -61,6 +61,8 @@ namespace Uno.UI.Runtime.Skia
 			AutoRender = true;
 		}
 
+		public Widget Widget => this;
+
 		public void InvalidateRender()
 		{
 			// TODO Uno: Make this invalidation less often if possible.
