@@ -11,6 +11,7 @@ using Windows.Graphics.Display;
 using WinUI = Windows.UI.Xaml;
 using WpfControl = global::System.Windows.Controls.Control;
 using WpfCanvas = global::System.Windows.Controls.Canvas;
+using System.Windows.Input;
 
 namespace Uno.UI.XamlHost.Skia.Wpf
 {
@@ -120,9 +121,28 @@ namespace Uno.UI.XamlHost.Skia.Wpf
 			drawingContext.DrawImage(_bitmap, new Rect(0, 0, ActualWidth, ActualHeight));
 		}
 
-		void IWpfHost.ReleasePointerCapture(PointerIdentifier pointer) => CaptureMouse(); //TODO:MZ:This should capture the correct type of pointer (stylus/mouse/touch)
+		void IWpfHost.ReleasePointerCapture(PointerIdentifier pointer)
+		{
+			if (pointer.Type == PointerDeviceType.Mouse)
+			{
+				ReleaseMouseCapture();
+			}
+			else if (pointer.Type == PointerDeviceType.Pen)
+			{
+				ReleaseStylusCapture();
+			}
+			else
+			{
+				ReleaseAllTouchCaptures();
+			}
+			ReleaseMouseCapture(); //TODO: This should capture the correct type of pointer (stylus/mouse/touch) #8978
+		}
 
-		void IWpfHost.SetPointerCapture(PointerIdentifier pointer) => ReleaseMouseCapture();
+		void IWpfHost.SetPointerCapture(PointerIdentifier pointer)
+		{
+			CaptureTouch()
+			CaptureMouse(); //TODO: This should capture the correct type of pointer (stylus/mouse/touch) #8978
+		}
 
 		WinUI.XamlRoot? IWpfHost.XamlRoot => ChildInternal?.XamlRoot;
 

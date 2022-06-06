@@ -57,7 +57,7 @@ internal partial class InputManager
 
 	private class PointerManager
 	{
-		private static IPointerExtension _pointerExtension;
+		private static IPointerExtension? _pointerExtension;
 
 		// TODO: Use pointer ID for the predicates
 		private static readonly Predicate<UIElement> _isOver = e => e.IsPointerOver;

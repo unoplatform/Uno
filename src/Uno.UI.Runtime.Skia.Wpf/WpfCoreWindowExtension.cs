@@ -73,10 +73,10 @@ namespace Uno.UI.Skia.Platform
 			}
 		}
 
-		public void SetPointerCapture(PointerIdentifier pointer)
+		public void SetPointerCapture(PointerDevice pointer)
 			=> WpfHost.Current?.CaptureMouse();
 
-		public void ReleasePointerCapture(PointerIdentifier pointer)
+		public void ReleasePointerCapture(PointerDevice pointer)
 			=> WpfHost.Current?.ReleaseMouseCapture();
 
 		#region Native events

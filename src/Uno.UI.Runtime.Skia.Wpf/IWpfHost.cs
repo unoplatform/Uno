@@ -2,6 +2,7 @@
 
 using Windows.Devices.Input;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Input;
 using WpfCanvas = System.Windows.Controls.Canvas;
 
 namespace Uno.UI.Runtime.Skia.Wpf
@@ -12,8 +13,8 @@ namespace Uno.UI.Runtime.Skia.Wpf
 
 		WpfCanvas? NativeOverlayLayer { get;}
 
-		void ReleasePointerCapture(PointerIdentifier pointer);
+		void ReleasePointerCapture(Pointer pointer);
 		
-		void SetPointerCapture(PointerIdentifier pointer);
+		void SetPointerCapture(Pointer pointer);
 	}
 }

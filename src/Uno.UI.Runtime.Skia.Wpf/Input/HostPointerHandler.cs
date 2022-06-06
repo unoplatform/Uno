@@ -249,13 +249,7 @@ namespace Uno.UI.XamlHost.Skia.Wpf
 				throw new ArgumentNullException(nameof(args));
 			}
 
-			return args.Device switch
-			{
-				System.Windows.Input.MouseDevice _ => PointerDevice.For(PointerDeviceType.Mouse),
-				StylusDevice _ => PointerDevice.For(PointerDeviceType.Pen),
-				TouchDevice _ => PointerDevice.For(PointerDeviceType.Touch),
-				_ => PointerDevice.For(PointerDeviceType.Mouse),
-			};
+			return PointerDeviceManager.GetForInputDevice(args.Device);
 		}
 
 		private VirtualKeyModifiers GetKeyModifiers()

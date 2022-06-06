@@ -8,8 +8,8 @@ namespace Windows.UI.Core
 	{
 		public CoreCursor PointerCursor { get; set; }
 
-		void ReleasePointerCapture(PointerIdentifier pointer);
+		void ReleasePointerCapture(PointerDevice pointer);
 
-		void SetPointerCapture(PointerIdentifier pointer);
+		void SetPointerCapture(PointerDevice pointer);
 	}
 }
