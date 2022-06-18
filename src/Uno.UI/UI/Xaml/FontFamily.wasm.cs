@@ -1,20 +1,35 @@
 ﻿#if __WASM__
+#nullable enable
+
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Uno;
 
 namespace Windows.UI.Xaml.Media
 {
 	public partial class FontFamily
 	{
-		partial void Init(string fontName)
-		{
-			ParsedSource = ParseFontFamilySource(fontName);
-		}
+		private FontLoader _loader;
+
+		partial void Init(string fontName) => _loader = FontLoader.GetLoaderForFontFamily(this);
 
 		/// <summary>
-		/// Contains the parsed font family for use in WASM
-		/// (matches CSS @font-face's font-family)
+		/// Contains the font-face name to use in CSS.
 		/// </summary>
-		internal string ParsedSource { get; private set; }
+		internal string CssFontName => _loader.CssFontName;
+
+		/// <summary>
+		/// Use this to launch the loading of a font before it is actually required to
+		/// minimize loading time and prevent potential flicking.
+		/// </summary>
+		public static void Preload(FontFamily family) => family._loader.LaunchLoading();
+
+		/// <summary>
+		/// Use this to launch the loading of a font before it is actually required to
+		/// minimize loading time and prevent potential flicking.
+		/// </summary>
+		public static void Preload(string familyName) => Preload(new FontFamily(familyName));
 
 		private string ParseFontFamilySource(string familyName)
 		{
@@ -25,6 +40,7 @@ namespace Windows.UI.Xaml.Media
 			{
 				throw new ArgumentException("Font family name must not be empty string nor null", nameof(familyName));
 			}
+
 			//check if family name is a pure name or a path
 			if (familyName.Contains(ForwardSlash) || familyName.Contains(Hash))
 			{
@@ -53,6 +69,19 @@ namespace Windows.UI.Xaml.Media
 			}
 			return familyName;
 		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		internal void RegisterForInvalidateMeasureOnFontLoaded(UIElement uiElement)
+		{
+			_loader.RegisterRemeasureOnFontLoaded(uiElement);
+		}
+
+		/// <summary>
+		/// Callback from javascript when the font is loaded in the browser.
+		/// </summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		[Preserve]
+		public static void NotifyFontLoaded(string cssFontName) => FontLoader.NotifyFontLoaded(cssFontName);
 	}
 }
 #endif
