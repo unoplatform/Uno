@@ -18,6 +18,14 @@
 				<ComboBoxItem>Friday</ComboBoxItem>
 				<ComboBoxItem>Saturday</ComboBoxItem>
 			</ComboBox>
+			<ComboBox x:Name="format" Header="Format">
+				<!-- https://docs.microsoft.com/en-us/uwp/api/windows.globalization.datetimeformatting.datetimeformatter -->
+				<ComboBoxItem Content="{}{dayofweek.full}, {month.full} {day.integer}, {year.full}" IsSelected="True"></ComboBoxItem>
+				<ComboBoxItem Content="{} {day} {month.abbreviated} {year.abbreviated}"></ComboBoxItem>
+				<ComboBoxItem Content="{} {day} {month} {year}"></ComboBoxItem>
+				<ComboBoxItem Content="{}{day}/{month}/{year}"></ComboBoxItem>
+				<ComboBoxItem Content="{}{dayofweek}/{year}/{month}/{year}"></ComboBoxItem>
+			</ComboBox>
 			<ComboBox x:Name="dowf" Header="DOW Format">
 				<!-- https://docs.microsoft.com/en-us/uwp/api/windows.globalization.datetimeformatting.datetimeformatter -->
 				<ComboBoxItem Content="{}{dayofweek.full}"></ComboBoxItem>
@@ -54,6 +62,7 @@
 				Header="Stock CalendarDatePicker"
 				CalendarIdentifier="{Binding SelectedItem.Content, ElementName=cid, FallbackValue=GregorianCalendar}"
 				FirstDayOfWeek="{Binding SelectedItem.Content, ElementName=dow, FallbackValue=Sunday}"
+				DateFormat="{Binding SelectedItem.Content, ElementName=format}"
 				DayOfWeekFormat="{Binding SelectedItem.Content, ElementName=dowf}"
 				IsTodayHighlighted="{Binding IsChecked, ElementName=today}"/>
 			<ToggleButton IsChecked="{Binding IsEnabled, ElementName=cdp1, Mode=TwoWay}">
@@ -73,6 +82,7 @@
 				IsCalendarOpen="True"
 				IsEnabled="False"
 				FirstDayOfWeek="{Binding SelectedItem.Content, ElementName=dow}"
+				DateFormat="{Binding SelectedItem.Content, ElementName=format}"
 				DayOfWeekFormat="{Binding SelectedItem.Content, ElementName=dowf}"
 				IsTodayHighlighted="{Binding IsChecked, ElementName=today}" />
 			<ToggleButton IsChecked="{Binding IsEnabled, ElementName=cdp2, Mode=TwoWay}">
@@ -92,6 +102,7 @@
 				Header="IsGroupLabelVisible=False"
 				PlaceholderText="--PLACEHOLDER--"
 				IsGroupLabelVisible="False"
+				DateFormat="{Binding SelectedItem.Content, ElementName=format}"
 				DayOfWeekFormat="{Binding SelectedItem.Content, ElementName=dowf}"
 				FirstDayOfWeek="{Binding SelectedItem.Content, ElementName=dow}"
 				IsTodayHighlighted="{Binding IsChecked, ElementName=today}" />
