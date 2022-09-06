@@ -10,7 +10,9 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<UnoForceHotReloadCodeGen>true</UnoForceHotReloadCodeGen>
 	</PropertyGroup>
-
+	<PropertyGroup>
+		<UnoUISourceGeneratorDebuggerBreak>True</UnoUISourceGeneratorDebuggerBreak>
+	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>full</DebugType>

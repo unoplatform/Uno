@@ -7,6 +7,8 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Uno.UI.SourceGenerators.XamlGenerator.XamlRedirection;
+using Microsoft.Cci;
+using System.Runtime.InteropServices;
 
 namespace Uno.UI.SourceGenerators.XamlGenerator
 {
@@ -526,6 +528,9 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 			return false;
 		}
 
+		private bool IsAttachedProperty(INamedTypeSymbol declaringType, string name)
+			=> _isAttachedProperty(declaringType, name);
+
 		private bool IsRelevantNamespace(string? xamlNamespace)
 		{
 			if (XamlConstants.XmlXmlNamespace.Equals(xamlNamespace, StringComparison.OrdinalIgnoreCase))
@@ -916,6 +921,31 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 				}
 
 				type = type.BaseType;
+			}
+		}
+
+		private IEnumerable<(INamedTypeSymbol ownerType, string property)> FindLocalizableAttachedProperties(string uid)
+		{
+			foreach (var key in _resourceKeys.Where(k => k.StartsWith(uid + "/")))
+			{
+				// fullKey = $"{uidName}/[using:{ns}]{type}/{memberName}";
+
+				var parts = key.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+				if(parts.Length == 3)
+				{
+					var propertyName = parts[2];
+					var typeName = parts[1].Substring("[using:".Length).Replace(']', '.');
+
+					if(GetType(typeName) is { } typeSymbol)
+					{
+						yield return (typeSymbol, propertyName);
+					}
+					else
+					{
+						throw new Exception($"Unable to find the type {typeName} in key {key}");
+					}
+				}
 			}
 		}
 
