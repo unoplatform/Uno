@@ -1,15 +1,14 @@
-namespace Windows.UI.Xaml.Input
+namespace Windows.UI.Xaml.Input;
+
+/// <summary>
+/// Data for event which occurs when access keys should no longer be displayed.
+/// </summary>
+public partial class AccessKeyDisplayDismissedEventArgs
 {
 	/// <summary>
-	/// Data for event which occurs when access keys should no longer be displayed.
+	/// Initializes a new instance of the AccessKeyDisplayDismissedEventArgs class.
 	/// </summary>
-	public partial class AccessKeyDisplayDismissedEventArgs
+	public AccessKeyDisplayDismissedEventArgs()
 	{
-		/// <summary>
-		/// Initializes a new instance of the AccessKeyDisplayDismissedEventArgs class.
-		/// </summary>
-		public AccessKeyDisplayDismissedEventArgs()
-		{
-		}
 	}
 }
