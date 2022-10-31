@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Globalization;
+using Windows.Foundation;
 using Windows.System;
 
 namespace Windows.UI.Xaml.Input;
@@ -17,6 +18,13 @@ public partial class KeyboardAccelerator : DependencyObject
 	{
 	}
 
+#pragma warning disable CS0067
+	/// <summary>
+	/// Occurs when the key combination for this KeyboardAccelerator is pressed.
+	/// </summary>
+	public event TypedEventHandler<KeyboardAccelerator, KeyboardAcceleratorInvokedEventArgs> Invoked;
+#pragma warning restore CS0067
+
 	/// <summary>
 	/// Gets or sets whether a keyboard shortcut (accelerator) is available to the user.
 	/// </summary>
@@ -25,38 +33,85 @@ public partial class KeyboardAccelerator : DependencyObject
 		get => (bool)GetValue(IsEnabledProperty);
 		set => SetValue(IsEnabledProperty, value);
 	}
+
+	/// <summary>
+	/// Identifies the IsEnabled dependency property.
+	/// </summary>
+	public static DependencyProperty IsEnabledProperty { get; } =
+		DependencyProperty.Register(
+			nameof(IsEnabled),
+			typeof(bool),
+			typeof(KeyboardAccelerator),
+			new FrameworkPropertyMetadata(true));
 	
-	public DependencyObject ScopeOwner
-	{
-		get => (DependencyObject)GetValue(ScopeOwnerProperty);
-		set => SetValue(ScopeOwnerProperty, value);
-	}
-
-	public VirtualKeyModifiers Modifiers
-	{
-		get => (VirtualKeyModifiers)GetValue(ModifiersProperty);
-		set => SetValue(ModifiersProperty, value);
-	}
-
+	/// <summary>
+	/// Gets or sets the virtual key (used in conjunction with one or more modifier keys) for a keyboard shortcut (accelerator).
+	/// </summary>
+	/// <remarks>
+	/// A keyboard shortcut is invoked when the modifier keys associated with the shortcut are pressed and then the non-modifier
+	/// key is pressed at the same time. For example, Ctrl+C for copy and Ctrl+S for save.
+	/// </remarks>
 	public VirtualKey Key
 	{
 		get => (VirtualKey)GetValue(KeyProperty);
 		set => SetValue(KeyProperty, value);
 	}
 
-
-	public static DependencyProperty ScopeOwnerProperty { get; } =
-		DependencyProperty.Register(nameof(ScopeOwner), typeof(DependencyObject), typeof(KeyboardAccelerator), new FrameworkPropertyMetadata(default(DependencyObject), FrameworkPropertyMetadataOptions.ValueDoesNotInheritDataContext));
-
-	public static DependencyProperty ModifiersProperty { get; } =
-		DependencyProperty.Register(nameof(Modifiers), typeof(VirtualKeyModifiers), typeof(KeyboardAccelerator), new FrameworkPropertyMetadata(default(VirtualKeyModifiers)));
-
+	/// <summary>
+	/// Identifies the Key dependency property.
+	/// </summary>
 	public static DependencyProperty KeyProperty { get; } =
-		DependencyProperty.Register(nameof(Key), typeof(VirtualKey), typeof(KeyboardAccelerator), new FrameworkPropertyMetadata(default(VirtualKey)));
+		DependencyProperty.Register(
+			nameof(Key),
+			typeof(VirtualKey),
+			typeof(KeyboardAccelerator),
+			new FrameworkPropertyMetadata(default(VirtualKey)));
 
-	public static DependencyProperty IsEnabledProperty { get; } =
-		DependencyProperty.Register(nameof(IsEnabled), typeof(bool), typeof(KeyboardAccelerator), new FrameworkPropertyMetadata(default(bool)));
+	/// <summary>
+	/// Gets or sets the virtual key used to modify another keypress for a keyboard shortcut (accelerator).
+	/// </summary>
+	/// <remarks>
+	/// A keyboard shortcut is invoked when the modifier keys associated with the shortcut are pressed and then the non-modifier
+	/// key is pressed at the same time. For example, Ctrl+C for copy and Ctrl+S for save.
+	/// </remarks>
+	public VirtualKeyModifiers Modifiers
+	{
+		get => (VirtualKeyModifiers)GetValue(ModifiersProperty);
+		set => SetValue(ModifiersProperty, value);
+	}
 
+	/// <summary>
+	/// Identifies the Modifiers dependency property.
+	/// </summary>
+	public static DependencyProperty ModifiersProperty { get; } =
+		DependencyProperty.Register(
+			nameof(Modifiers),
+			typeof(VirtualKeyModifiers),
+			typeof(KeyboardAccelerator),
+			new FrameworkPropertyMetadata(default(VirtualKeyModifiers)));
+
+	/// <summary>
+	/// Gets or sets the scope (or target) of the keyboard accelerator.
+	/// </summary>
+	/// <remarks>
+	/// The default is null (global scope).
+	/// </remarks>
+	public DependencyObject ScopeOwner
+	{
+		get => (DependencyObject)GetValue(ScopeOwnerProperty);
+		set => SetValue(ScopeOwnerProperty, value);
+	}
+
+	/// <summary>
+	/// Identifies the ScopeOwner dependency property.
+	/// </summary>
+	public static DependencyProperty ScopeOwnerProperty { get; } =
+		DependencyProperty.Register(
+			nameof(ScopeOwner),
+			typeof(DependencyObject),
+			typeof(KeyboardAccelerator),
+			new FrameworkPropertyMetadata(default(DependencyObject), FrameworkPropertyMetadataOptions.ValueDoesNotInheritDataContext));
+	
 	internal static string GetStringRepresentationForUIElement(UIElement uiElement)
 	{
 		// We don't want to bother doing anything if we've never actually set a keyboard accelerator,
@@ -80,7 +135,7 @@ public partial class KeyboardAccelerator : DependencyObject
 		return null;
 	}
 
-	string GetStringRepresentation()
+	private string GetStringRepresentation()
 	{
 		var key = Key;
 		var modifiers = Modifiers;
@@ -111,7 +166,7 @@ public partial class KeyboardAccelerator : DependencyObject
 		return stringRepresentationLocal;
 	}
 
-	void ConcatVirtualKey(VirtualKey key, ref string keyboardAcceleratorString)
+	private void ConcatVirtualKey(VirtualKey key, ref string keyboardAcceleratorString)
 	{
 		string keyName;
 

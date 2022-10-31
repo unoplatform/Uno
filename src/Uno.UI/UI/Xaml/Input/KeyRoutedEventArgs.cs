@@ -21,9 +21,13 @@ public partial class KeyRoutedEventArgs : RoutedEventArgs, IHandleableRoutedEven
 
 	public VirtualKey Key { get; }
 
-	#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || false || __NETSTD_REFERENCE__ || __MACOS__
+	public VirtualKey OriginalKey { get; }
+
+	internal VirtualKeyModifiers KeyboardModifiers { get; }
+
+#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || false || __NETSTD_REFERENCE__ || __MACOS__
 	[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__NETSTD_REFERENCE__", "__MACOS__")]
-	#endif
+#endif
 	public CorePhysicalKeyStatus KeyStatus
 	{
 		get
@@ -39,8 +43,4 @@ public partial class KeyRoutedEventArgs : RoutedEventArgs, IHandleableRoutedEven
 			}
 		}
 	}
-
-	public global::Windows.System.VirtualKey OriginalKey { get; }
-
-	internal VirtualKeyModifiers KeyboardModifiers { get; }
 }
