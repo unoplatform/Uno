@@ -80,7 +80,6 @@ namespace Uno.UI.Controls
 		{
 			var handled = false;
 
-#if __MACCATALYST__
 			foreach (UIPress press in presses)
 			{
 				var virtualKey = VirtualKeyHelper.FromKeyCode(press.Key.KeyCode);
@@ -120,7 +119,6 @@ namespace Uno.UI.Controls
 					Application.Current.RaiseRecoverableUnhandledException(e);
 				}
 			}
-#endif
 
 			if (!handled)
 			{
@@ -132,9 +130,18 @@ namespace Uno.UI.Controls
 		{
 			var handled = false;
 
-#if __MACCATALYST__
 			foreach (UIPress press in presses)
 			{
+				if (press.Key is null)
+				{
+					continue;
+				}
+
+				// In UWP the keyboard processing is flows as follows (ignoring Preview events for now):
+				// KeyDown/KeyUp routed event is raised on focused element
+				// CoreWindow key event is raised
+				// Focus navigation is processed unless the event was handled and key is tab/arrows
+
 				var virtualKey = VirtualKeyHelper.FromKeyCode(press.Key.KeyCode);
 
 				var args = new KeyEventArgs(
@@ -157,14 +164,19 @@ namespace Uno.UI.Controls
 					{
 						_ownerEvents.RaiseKeyDown(args);
 
-						var routerArgs = new KeyRoutedEventArgs(this, virtualKey)
+						handled = args.Handled;
+
+						if (!handled)
 						{
-							CanBubbleNatively = false
-						};
+							var routedArgs = new KeyRoutedEventArgs(this, virtualKey)
+							{
+								CanBubbleNatively = false
+							};
 
-						(FocusManager.GetFocusedElement() as FrameworkElement)?.RaiseEvent(UIElement.KeyDownEvent, routerArgs);
+							(FocusManager.GetFocusedElement() as FrameworkElement)?.RaiseEvent(UIElement.KeyDownEvent, routedArgs);
 
-						handled = true;
+							handled = routedArgs.Handled;
+						}
 					}
 				}
 				catch (Exception e)
@@ -172,38 +184,46 @@ namespace Uno.UI.Controls
 					Application.Current.RaiseRecoverableUnhandledException(e);
 				}
 			}
-#else
-			var focusInputHandler = Uno.UI.Xaml.Core.CoreServices.Instance.MainRootVisual?.AssociatedVisualTree?.UnoFocusInputHandler;
-			if (Uno.WinRTFeatureConfiguration.Focus.EnableExperimentalKeyboardFocus && focusInputHandler != null)
+
+			if (!handled)
 			{
-				foreach (UIPress press in presses)
+				var focusInputHandler = Uno.UI.Xaml.Core.CoreServices.Instance.MainRootVisual?.AssociatedVisualTree?.UnoFocusInputHandler;
+				if (Uno.WinRTFeatureConfiguration.Focus.EnableExperimentalKeyboardFocus && focusInputHandler != null)
 				{
-					if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardTab)
+					foreach (UIPress press in presses)
 					{
-						var shift =
-							press.Key.ModifierFlags.HasFlag(UIKeyModifierFlags.AlphaShift) ||
-							press.Key.ModifierFlags.HasFlag(UIKeyModifierFlags.Shift);
-						handled |= focusInputHandler.TryHandleTabFocus(shift);
-					}
-					else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardLeftArrow)
-					{
-						handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Left);
-					}
-					else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardRightArrow)
-					{
-						handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Right);
-					}
-					else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardUpArrow)
-					{
-						handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Up);
-					}
-					else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardDownArrow)
-					{
-						handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Down);
+						if (press.Key is null)
+						{
+							continue;
+						}
+
+						if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardTab)
+						{
+							var shift =
+								press.Key.ModifierFlags.HasFlag(UIKeyModifierFlags.AlphaShift) ||
+								press.Key.ModifierFlags.HasFlag(UIKeyModifierFlags.Shift);
+							handled |= focusInputHandler.TryHandleTabFocus(shift);
+						}
+						else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardLeftArrow)
+						{
+							handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Left);
+						}
+						else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardRightArrow)
+						{
+							handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Right);
+						}
+						else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardUpArrow)
+						{
+							handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Up);
+						}
+						else if (press.Key.KeyCode == UIKeyboardHidUsage.KeyboardDownArrow)
+						{
+							handled |= focusInputHandler.TryHandleDirectionalFocus(Windows.System.VirtualKey.Down);
+						}
 					}
 				}
 			}
-#endif
+			
 			if (!handled)
 			{
 				base.PressesBegan(presses, evt);
