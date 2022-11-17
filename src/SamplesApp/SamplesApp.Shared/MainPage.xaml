@@ -7,5 +7,75 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
 
-	<controls:SampleChooserControl x:Name="sampleControl" />
+	<StackPanel Spacing="8">
+		<Border	x:Name="Sample8996"
+              Background="Red"
+              Width="100"
+              Height="100" />
+		<Border	x:Name="Sample1"
+                Background="Red"
+                Width="100"
+                Height="100"
+                CornerRadius="50" />
+
+		<!-- Sample for https://github.com/unoplatform/uno/issues/5440 -->
+		<Border Height="30" />
+		<Border x:Name="Sample2"
+                Width="128"
+                Height="64"
+                Background="Red"
+                CornerRadius="128" />
+
+		<Border Height="30" />
+		<Border Width="100"
+                Height="50"
+                CornerRadius="4"
+                BorderThickness="1"
+                BorderBrush="Black" />
+
+		<Border Height="30" />
+		<Border Background="Red"
+                Width="100"
+                Height="100"
+                CornerRadius="24,50,50,12" />
+
+
+		<Border Height="30" />
+		<Border Background="Red"
+                Width="100"
+                Height="50"
+                CornerRadius="24,50,50,12" />
+
+		<Border Height="30" />
+		<Border Background="Black">
+			<Border Background="Red"
+                    Width="150"
+                    Height="50"
+                    BorderBrush="Aqua"
+                    BorderThickness="5"
+                    CornerRadius="75" />
+		</Border>
+
+		<Border Height="30" />
+		<Border Width="100"
+                Height="50"
+                Background="Red"
+                CornerRadius="12"
+                BorderBrush="#66121212"
+                BorderThickness="1" />
+
+		<Border Height="30" />
+		<Border Width="100"
+                Height="50"
+                Background="Red"
+                CornerRadius="12"
+                BorderBrush="#66121212"
+                BorderThickness="5" />
+
+		<Border Height="30" />
+		<Border Width="100"
+                Height="50"
+                Background="Red"
+                CornerRadius="15" />
+	</StackPanel>
 </Page>
