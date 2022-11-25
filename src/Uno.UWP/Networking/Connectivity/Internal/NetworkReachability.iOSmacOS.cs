@@ -10,6 +10,7 @@ using CoreTelephony;
 using CoreFoundation;
 using SystemConfiguration;
 using Windows.Networking.Connectivity;
+using Network;
 
 #pragma warning disable BI1234 // 'CTCellularDataRestrictedState' is obsolete: 'Starting with ios14.0 Use the 'CallKit' API instead.'
 
@@ -136,24 +137,30 @@ namespace Uno.Networking.Connectivity.Internal
 
     class ReachabilityListener : IDisposable
     {
-        NetworkReachability defaultRouteReachability;
-        NetworkReachability remoteHostReachability;
+        private readonly NetworkReachability _defaultRouteReachability;
+        private readonly NetworkReachability _remoteHostReachability;
+		private readonly NWPathMonitor _networkMonitor;
 
-        internal ReachabilityListener()
+
+		internal ReachabilityListener()
         {
-            var ip = new IPAddress(0);
-            defaultRouteReachability = new NetworkReachability(ip);
-            defaultRouteReachability.SetNotification(OnChange);
-            defaultRouteReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
+			var ip = new IPAddress(0);
+            _defaultRouteReachability = new NetworkReachability(ip);
+            _defaultRouteReachability.SetNotification(OnChange);
+            _defaultRouteReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
 
-            remoteHostReachability = new NetworkReachability(WinRTFeatureConfiguration.NetworkInformation.ReachabilityHostname);
+            _remoteHostReachability = new NetworkReachability(WinRTFeatureConfiguration.NetworkInformation.ReachabilityHostname);
+			
+			_networkMonitor = new NWPathMonitor();
+			_networkMonitor.SnapshotHandler = OnPathMonitorChange;
+			_networkMonitor.Start();
+			
+			// Need to probe before we queue, or we wont get any meaningful values
+			// this only happens when you create NetworkReachability from a hostname
+			_remoteHostReachability.TryGetFlags(out var flags);
 
-            // Need to probe before we queue, or we wont get any meaningful values
-            // this only happens when you create NetworkReachability from a hostname
-            remoteHostReachability.TryGetFlags(out var flags);
-
-            remoteHostReachability.SetNotification(OnChange);
-            remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
+            _remoteHostReachability.SetNotification(OnChange);
+            _remoteHostReachability.Schedule(CFRunLoop.Main, CFRunLoop.ModeDefault);
 
 #if __IOS__ && !__MACCATALYST__
             NetworkInformation.CellularData.RestrictionDidUpdateNotifier = new Action<CTCellularDataRestrictedState>(OnRestrictedStateChanged);
@@ -166,13 +173,13 @@ namespace Uno.Networking.Connectivity.Internal
 
         internal void Dispose()
         {
-            defaultRouteReachability?.Dispose();
-            defaultRouteReachability = null;
-            remoteHostReachability?.Dispose();
-            remoteHostReachability = null;
-
+            _defaultRouteReachability?.Dispose();
+            _remoteHostReachability?.Dispose();
+			_networkMonitor.SnapshotHandler = null;
+			_networkMonitor?.Dispose();			
+			
 #if __IOS__ && !__MACCATALYST__
-            NetworkInformation.CellularData.RestrictionDidUpdateNotifier = null;
+			NetworkInformation.CellularData.RestrictionDidUpdateNotifier = null;
 #endif
         }
 
@@ -191,6 +198,11 @@ namespace Uno.Networking.Connectivity.Internal
 
             ReachabilityChanged?.Invoke();
         }
-    }
+
+		private void OnPathMonitorChange(NWPath path)
+		{
+			ReachabilityChanged?.Invoke();
+		}
+	}
 }
 #endif
