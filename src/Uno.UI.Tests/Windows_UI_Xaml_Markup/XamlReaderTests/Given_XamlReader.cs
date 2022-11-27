@@ -1458,6 +1458,16 @@ namespace Uno.UI.Tests.Windows_UI_Xaml_Markup.XamlReaderTests
 			Assert.AreEqual(t1, b1.Color);
 		}
 
+		[TestMethod]
+		public void When_Geometry_Parsed()
+		{
+			var data = "<Geometry xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'>F1 M0,0  a 4,4 0 0 0 4,-4  L 4,4  a 4,4 0 0 1 4,-4  l 0,0  a 0,0 0 0 1 0,0  l 0,0  a 4,4 0 0 0 4,4 Z</Geometry>";
+			
+			var geometry = Windows.UI.Xaml.Markup.XamlReader.Load(data) as Geometry;
+
+			Assert.IsInstanceOfType(geometry, typeof(PathGeometry));
+		}
+		
 		/// <summary>
 		/// XamlReader.Load the xaml and type-check result.
 		/// </summary>
