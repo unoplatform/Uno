@@ -129,7 +129,8 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		{
 			UpdateCommonStates();
 
-			Selector?.OnSelectorItemIsSelectedChanged(this, oldIsSelected, newIsSelected);
+			//Selector?.OnSelectorItemIsSelectedChanged(this, oldIsSelected, newIsSelected);
+			Selector?.NotifyListItemSelected(this, oldIsSelected, newIsSelected);
 		}
 
 		private void UpdateCommonStatesWithoutNeedsLayout(ManipulationUpdateKind manipulationUpdate = ManipulationUpdateKind.None)
