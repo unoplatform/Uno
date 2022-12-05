@@ -31,6 +31,8 @@ namespace Windows.UI.Xaml.Controls
 
 		protected override void OnChildViewAdded(View child)
 		{
+			IsChildrenRenderOrderDirty = true;
+			
 			if (child is IFrameworkElement element)
 			{
 				OnChildAdded(element);
@@ -87,6 +89,7 @@ namespace Windows.UI.Xaml.Controls
 
 		protected virtual void OnChildrenChanged()
 		{
+			IsChildrenRenderOrderDirty = true;
 			UpdateBorder();
 		}
 
@@ -124,6 +127,8 @@ namespace Windows.UI.Xaml.Controls
 
 			//We set childrens position for the animations before the arrange
 			_transitionHelper?.SetInitialChildrenPositions();
+
+			CheckChildrenDrawingOrder();
 		}
 
 		protected override void OnAfterArrange()
@@ -155,5 +160,48 @@ namespace Windows.UI.Xaml.Controls
 
 		bool ICustomClippingElement.AllowClippingToLayoutSlot => true;
 		bool ICustomClippingElement.ForceClippingToLayoutSlot => CornerRadiusInternal != CornerRadius.None;
+
+		internal bool IsChildrenRenderOrderDirty { get; set; }
+
+		/// <summary>
+		/// Draw order of children as determined by Canvas.ZIndex
+		/// </summary>
+		private int[] _drawOrders;
+
+		private void CheckChildrenDrawingOrder()
+		{
+			// Sorting is only needed when Children count is above 1
+			if (Children.Count > 1 && IsChildrenRenderOrderDirty)
+			{
+				if (_drawOrders?.Length != Children.Count)
+				{
+					_drawOrders = new int[Children.Count];
+				}
+
+				var sorted = Children
+					.Select((view, childrenIndex) => (view, childrenIndex))
+					.OrderBy(tpl => tpl.view is DependencyObject obj ? Canvas.GetZIndex(obj) : 0); // Note: this has to be a stable sort
+
+				var drawOrder = 0;
+				foreach (var tpl in sorted)
+				{
+					_drawOrders[tpl.childrenIndex] = drawOrder;
+					drawOrder++;
+				}
+
+				ChildrenDrawingOrderEnabled = true;
+			}
+			else
+			{
+				_drawOrders = null;
+			}
+
+			IsChildrenRenderOrderDirty = false;
+		}
+
+		protected override int GetChildDrawingOrder(int childCount, int i)
+		{
+			return _drawOrders?.Length == childCount ? _drawOrders[i] : i;
+		}
 	}
 }

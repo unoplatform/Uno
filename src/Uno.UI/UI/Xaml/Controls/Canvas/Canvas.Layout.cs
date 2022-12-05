@@ -19,55 +19,54 @@ using ObjCRuntime;
 using _View = Windows.UI.Xaml.UIElement;
 #endif
 
-namespace Windows.UI.Xaml.Controls
+namespace Windows.UI.Xaml.Controls;
+
+public partial class Canvas : ICustomClippingElement
 {
-	public partial class Canvas : ICustomClippingElement
+	protected override Size MeasureOverride(Size availableSize)
 	{
-		protected override Size MeasureOverride(Size availableSize)
+		MeasureOverridePartial();
+		// A canvas does not have dimensions and will always return zero even with a children collection.
+		foreach (var child in Children)
 		{
-			MeasureOverridePartial();
-			// A canvas does not have dimensions and will always return zero even with a children collection.
-			foreach (var child in Children)
+			if (child is _View)
 			{
-				if (child is _View)
-				{
-					MeasureElement(child, new Size(double.PositiveInfinity, double.PositiveInfinity));
-				}
+				MeasureElement(child, new Size(double.PositiveInfinity, double.PositiveInfinity));
 			}
-			return new Size(0, 0);
 		}
+		return new Size(0, 0);
+	}
 
-		partial void MeasureOverridePartial();
+	partial void MeasureOverridePartial();
 
-		protected override Size ArrangeOverride(Size finalSize)
+	protected override Size ArrangeOverride(Size finalSize)
+	{
+		foreach (var child in Children)
 		{
-			foreach (var child in Children)
+			if (child is _View childView)
 			{
-				if (child is _View childView)
-				{
-					var childAsDO = child as DependencyObject;
-					var desiredSize = GetElementDesiredSize(childView);
+				var childAsDO = child as DependencyObject;
+				var desiredSize = GetElementDesiredSize(childView);
 
-					var childRect = new Rect
-					{
-						X = GetLeft(childAsDO),
-						Y = GetTop(childAsDO),
-						Width = desiredSize.Width,
-						Height = desiredSize.Height,
-					};
+				var childRect = new Rect
+				{
+					X = GetLeft(childAsDO),
+					Y = GetTop(childAsDO),
+					Width = desiredSize.Width,
+					Height = desiredSize.Height,
+				};
 
 #if __IOS__
-					child.Layer.ZPosition = (nfloat)GetZIndex(childAsDO);
+				child.Layer.ZPosition = (nfloat)GetZIndex(childAsDO);
 #endif
 
-					ArrangeElement(child, childRect);
-				}
+				ArrangeElement(child, childRect);
 			}
-
-			return finalSize;
 		}
 
-		bool ICustomClippingElement.AllowClippingToLayoutSlot => false;
-		bool ICustomClippingElement.ForceClippingToLayoutSlot => false;
+		return finalSize;
 	}
+
+	bool ICustomClippingElement.AllowClippingToLayoutSlot => false;
+	bool ICustomClippingElement.ForceClippingToLayoutSlot => false;
 }
