@@ -21,6 +21,7 @@ namespace Windows.UI.Xaml.Controls
 			_textBoxView ??= new TextBoxView(this);
 			if (ContentElement != null && ContentElement.Content != TextBoxView.DisplayBlock)
 			{
+				ContentElement.Background = SolidColorBrushHelper.Yellow;
 				ContentElement.Content = TextBoxView.DisplayBlock;
 				TextBoxView.SetTextNative(Text);
 			}
@@ -46,7 +47,6 @@ namespace Windows.UI.Xaml.Controls
 			get => TextBoxView?.GetSelectionLength() ?? 0;
 			set => Select(SelectionStart, value);
 		}
-
 
 		protected void SetIsPassword(bool isPassword) => TextBoxView?.SetIsPassword(isPassword);
 	}

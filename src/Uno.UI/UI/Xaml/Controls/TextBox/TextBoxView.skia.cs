@@ -51,7 +51,11 @@ namespace Windows.UI.Xaml.Controls
 
 		internal int GetSelectionLength() => _textBoxExtension?.GetSelectionLength() ?? 0;
 
-		public TextBlock DisplayBlock { get; } = new TextBlock();
+		private Border? _displayBlock;
+
+		public Border DisplayBlock => _displayBlock ??= new Border() { Background = new SolidColorBrush(Colors.Blue), Child = InnerText };
+		
+		public TextBlock InnerText { get; } = new TextBlock();
 
 		internal void SetTextNative(string text)
 		{
@@ -60,11 +64,11 @@ namespace Windows.UI.Xaml.Controls
 			if (_isPasswordBox && !_isPasswordRevealed)
 			{
 				// TODO: PasswordChar isn't currently implemented. It should be used here when implemented.
-				DisplayBlock.Text = new string('•', text.Length);
+				InnerText.Text = new string('•', text.Length);
 			}
 			else
 			{
-				DisplayBlock.Text = text;
+				InnerText.Text = text;
 			}
 
 			_textBoxExtension?.SetTextNative(text);
@@ -77,13 +81,13 @@ namespace Windows.UI.Xaml.Controls
 
 		internal void OnForegroundChanged(Brush brush)
 		{
-			DisplayBlock.Foreground = brush;
+			InnerText.Foreground = brush;
 			_textBoxExtension?.SetForeground(brush);
 		}
 
 		internal void OnSelectionHighlightColorChanged(SolidColorBrush brush)
 		{
-			DisplayBlock.SelectionHighlightColor = brush;
+			InnerText.SelectionHighlightColor = brush;
 			_textBoxExtension?.SetSelectionHighlightColor(brush);
 		}
 
@@ -91,7 +95,7 @@ namespace Windows.UI.Xaml.Controls
 		{
 			if (focusState != FocusState.Unfocused)
 			{
-				DisplayBlock.Opacity = 0;
+				DisplayBlock.Opacity = 0.5;
 				_textBoxExtension?.StartEntry();
 				
 				var selectionStart = this.GetSelectionStart();
