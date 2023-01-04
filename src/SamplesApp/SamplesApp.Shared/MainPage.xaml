@@ -8,7 +8,7 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d">
 
-	<!--<Page.Resources>
+	<Page.Resources>
 		<Style x:Key="TestSearchTextBoxStyle"
 	   TargetType="TextBox">
 			<Setter Property="MinWidth"
@@ -171,7 +171,7 @@
 									Margin="{TemplateBinding BorderThickness}"
 									Padding="{TemplateBinding Padding}"
 									IsHitTestVisible="False"
-									IsTabStop="False" />
+									/>
 
 							<Button x:Name="DeleteButton"
 							AutomationProperties.AccessibilityView="Raw"
@@ -191,7 +191,7 @@
 			</Setter>
 		</Style>
 	</Page.Resources>
-	<StackPanel>
+	<StackPanel Width="400">
 		<TextBox Text="huh"
 		 Style="{StaticResource TestSearchTextBoxStyle}"
 		 PlaceholderText="Search"
@@ -199,13 +199,13 @@
 		<TextBlock Text="Currently focused element" />
 		<TextBlock FontWeight="Bold" x:Name="CurrentlyFocusedTextBlock" Text="NONE" />
 		<TextBox BorderThickness="10" Padding="0" Margin="0" Text="This singleline TextBox should be focusable" x:Name="FocusableSingleLineTextBox" />
-		<TextBox Text="This singleline TextBox should not be focusable" x:Name="UnfocusableSingleLineTextBox" IsTabStop="False" />
+		<TextBox Text="This singleline TextBox should not be focusable" x:Name="UnfocusableSingleLineTextBox" />
 		<TextBox BorderThickness="20" Padding="0" Margin="0"  Text="This multiline TextBox should be focusable" x:Name="FocusableMultiLineTextBox" AcceptsReturn="True" Height="100" />
-		<TextBox Text="This multiline TextBox should not be focusable" x:Name="UnfocusableMultiLineTextBox" AcceptsReturn="True" Height="100" IsTabStop="False" />
-	</StackPanel>-->
-	<Border>
+		<TextBox Text="This multiline TextBox should not be focusable" x:Name="UnfocusableMultiLineTextBox" AcceptsReturn="True" Height="100" />
+	</StackPanel>
+	<!--<Border>
 		<ScrollViewer x:Name="ContentElement"
 			Margin="20"
 			ZoomMode="Disabled" />
-	</Border>
+	</Border>-->
 </Page>

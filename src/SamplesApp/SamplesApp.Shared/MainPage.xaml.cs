@@ -15,11 +15,11 @@ namespace SamplesApp
 			
 		}
 
-		private async void MainPage_Loaded(object sender, RoutedEventArgs e)
+		private void MainPage_Loaded(object sender, RoutedEventArgs e)
 		{
-			await Task.Delay(500);
-			var transform = ContentElement.TransformToVisual(Window.Current.Content);
-			var point = transform.TransformPoint(new Windows.Foundation.Point(0, 0));
+			//await Task.Delay(500);
+			//var transform = ContentElement.TransformToVisual(Window.Current.Content);
+			//var point = transform.TransformPoint(new Windows.Foundation.Point(0, 0));
 		}
 	}
 }
