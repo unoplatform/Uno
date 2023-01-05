@@ -83,6 +83,7 @@ internal abstract class GtkTextBoxView : ITextBoxView
 
 	public void SetSize(double width, double height)
 	{
+		RootWidget.SetSizeRequest((int)width, (int)height);
 		InputWidget.SetSizeRequest((int)width, (int)height);
 	}
 
