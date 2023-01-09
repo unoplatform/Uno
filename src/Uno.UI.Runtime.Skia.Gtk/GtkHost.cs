@@ -33,6 +33,7 @@ using Uno.Disposables;
 using System.Collections.Generic;
 using Uno.Extensions.ApplicationModel.Core;
 using Windows.ApplicationModel;
+using Uno.UI.XamlHost.Skia.Gtk.Hosting;
 
 namespace Uno.UI.Runtime.Skia
 {
@@ -55,25 +56,16 @@ namespace Uno.UI.Runtime.Skia
 		private record PendingWindowStateChangedInfo(Gdk.WindowState newState, Gdk.WindowState changedMask);
 		private List<PendingWindowStateChangedInfo> _pendingWindowStateChanged = new();
 
-		public static Gtk.Window Window => _window;
-		internal static UnoEventBox EventBox => _eventBox;
-
 		/// <summary>
-		/// Gets or sets the current Skia Render surface type.
+		/// Creates a host for a Uno Skia GTK application.
 		/// </summary>
-		/// <remarks>If <c>null</c>, the host will try to determine the most compatible mode.</remarks>
-		public RenderSurfaceType? RenderSurfaceType { get; set; }
-
-        /// <summary>
-        /// Creates a host for a Uno Skia GTK application.
-        /// </summary>
-        /// <param name="appBuilder">App builder.</param>
-        /// <param name="args">Deprecated, value ignored.</param>
-        /// <remarks>
-        /// Args are obsolete and will be removed in the future. Environment.CommandLine is used instead
-        /// to fill LaunchEventArgs.Arguments.
-        /// </remarks>
-        [EditorBrowsable(EditorBrowsableState.Never)]
+		/// <param name="appBuilder">App builder.</param>
+		/// <param name="args">Deprecated, value ignored.</param>
+		/// <remarks>
+		/// Args are obsolete and will be removed in the future. Environment.CommandLine is used instead
+		/// to fill LaunchEventArgs.Arguments.
+		/// </remarks>
+		[EditorBrowsable(EditorBrowsableState.Never)]
 		public GtkHost(Func<WUX.Application> appBuilder, string[] args) : this(appBuilder)
 		{
 		}
@@ -82,6 +74,18 @@ namespace Uno.UI.Runtime.Skia
 		{
 			_appBuilder = appBuilder;
 		}
+
+		public static Gtk.Window Window => _window;
+
+		internal static UnoEventBox EventBox => _eventBox;
+
+		internal IRenderSurface RenderSurface => _renderSurface;
+
+		/// <summary>
+		/// Gets or sets the current Skia Render surface type.
+		/// </summary>
+		/// <remarks>If <c>null</c>, the host will try to determine the most compatible mode.</remarks>
+		public RenderSurfaceType? RenderSurfaceType { get; set; }
 
 		public void Run()
 		{
@@ -338,6 +342,7 @@ namespace Uno.UI.Runtime.Skia
 				throw new InvalidOperationException("XamlRoot was not properly initialized");
 			}
 
+			XamlRootMap.Register(xamlRoot, this);
 			xamlRoot.InvalidateRender += _renderSurface.InvalidateRender;
 
 			CoreServices.Instance.ContentRootCoordinator.CoreWindowContentRootSet -= OnCoreWindowContentRootSet;
