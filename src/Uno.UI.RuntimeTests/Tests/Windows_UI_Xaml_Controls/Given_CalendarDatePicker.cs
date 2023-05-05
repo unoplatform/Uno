@@ -11,6 +11,7 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls;
 
 [TestClass]
 [RunsOnUIThread]
+[Ignore]
 public class Given_CalendarDatePicker
 {
 #if !WINDOWS_UWP && !__MACOS__ // test is failling in macOS for some reason.

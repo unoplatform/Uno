@@ -87,6 +87,10 @@ namespace Windows.UI.Xaml
 
 		private void Initialize()
 		{
+			if (!CoreDispatcher.Main.HasThreadAccess)
+			{
+				throw new InvalidOperationException("Invalid thread");
+			}
 			SubscribeToOverridenRoutedEvents();
 		}
 

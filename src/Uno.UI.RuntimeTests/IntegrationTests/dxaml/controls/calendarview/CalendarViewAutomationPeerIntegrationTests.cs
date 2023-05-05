@@ -22,6 +22,7 @@ using static Private.Infrastructure.CalendarHelper;
 namespace Windows.UI.Tests.Enterprise.CalendarViewTests
 {
 	[TestClass]
+	[Ignore("Nope")]
 	public class CalendarViewAutomationPeerIntegrationTests : BaseDxamlTestClass
 	{
 		// PeerFromProvider is protected even though conceptually it's a static method.

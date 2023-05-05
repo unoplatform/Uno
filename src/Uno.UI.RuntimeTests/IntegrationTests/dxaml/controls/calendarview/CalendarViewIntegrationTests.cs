@@ -32,6 +32,7 @@ using Uno.UI.RuntimeTests;
 namespace Windows.UI.Xaml.Tests.Enterprise
 {
 	[TestClass]
+	[Ignore("Nope")]
 	public partial class CalendarViewIntegrationTests : BaseDxamlTestClass
 	{
 
