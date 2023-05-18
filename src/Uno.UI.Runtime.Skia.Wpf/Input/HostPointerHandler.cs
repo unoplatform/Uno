@@ -8,6 +8,7 @@ using Uno.Foundation.Logging;
 using Uno.UI.Runtime.Skia.Wpf.Constants;
 using Uno.UI.Runtime.Skia.Wpf.Hosting;
 using Uno.UI.Runtime.Skia.Wpf.Input;
+using Uno.UI.Skia;
 using Windows.Devices.Input;
 using Windows.System;
 using Windows.UI.Core;
@@ -20,14 +21,14 @@ namespace Uno.UI.XamlHost.Skia.Wpf
 {
 	internal class HostPointerHandler
 	{
-		private readonly IWpfApplicationHost _host;
+		private readonly IWpfXamlRootHost _host;
 		private readonly WpfControl _hostControl;
 		private readonly ICoreWindowEvents? _coreWindow;
 		private HwndSource? _hwndSource;
 		private PointerEventArgs? _previous;
 		private WinUIInputManager? _inputManager;
 
-		public HostPointerHandler(IWpfApplicationHost host)
+		public HostPointerHandler(IWpfXamlRootHost host)
 		{
 			if (host is not WpfControl hostControl)
 			{
