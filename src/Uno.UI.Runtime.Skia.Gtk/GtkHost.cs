@@ -444,7 +444,7 @@ namespace Uno.UI.Runtime.Skia
 
 			if (!focused && focusChanged)
 			{
-				winUIWindow?.OnActivated(Windows.UI.Core.CoreWindowActivationState.Deactivated);
+				winUIWindow?.RaiseActivated(Windows.UI.Core.CoreWindowActivationState.Deactivated);
 			}
 
 			if (isVisibleChanged)
@@ -462,7 +462,7 @@ namespace Uno.UI.Runtime.Skia
 
 			if (focused && focusChanged)
 			{
-				winUIWindow?.OnActivated(Windows.UI.Core.CoreWindowActivationState.CodeActivated);
+				winUIWindow?.RaiseActivated(Windows.UI.Core.CoreWindowActivationState.CodeActivated);
 			}
 		}
 
