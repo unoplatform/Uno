@@ -3,10 +3,69 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DirectUI;
+using Uno.UI.Xaml.Core;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Automation;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
+
+using static Windows.UI.Xaml.Controls.MediaTransportControls.MTCParent;
 
 namespace Windows.UI.Xaml.Controls;
 
-public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\MediaTransportControls_Partial.h
+public partial class MediaTransportControls // dxaml\xcp\dxaml\dllsrv\winrt\Microsoft.UI.Xaml.Common.rc
+{
+	// MediaElement Transport Controls: UI Automation Name / Tooltip text
+	// todo@xy: add to .resw
+	private const string UIA_MEDIA_PLAY = nameof(UIA_MEDIA_PLAY); // "Play"
+	private const string UIA_MEDIA_PAUSE = nameof(UIA_MEDIA_PAUSE); // "Pause"
+	private const string UIA_MEDIA_TIME_ELAPSED = nameof(UIA_MEDIA_TIME_ELAPSED); // "Time elapsed"
+	private const string UIA_MEDIA_TIME_REMAINING = nameof(UIA_MEDIA_TIME_REMAINING); // "Time remaining"
+	private const string UIA_MEDIA_DOWNLOAD_PROGRESS = nameof(UIA_MEDIA_DOWNLOAD_PROGRESS); // "Download Progress"
+	private const string UIA_MEDIA_BUFFERING_PROGRESS = nameof(UIA_MEDIA_BUFFERING_PROGRESS); // "Buffering Progress"
+	private const string UIA_MEDIA_SEEK = nameof(UIA_MEDIA_SEEK); // "Seek"
+	private const string UIA_MEDIA_MUTE = nameof(UIA_MEDIA_MUTE); // "Mute"
+	private const string UIA_MEDIA_UNMUTE = nameof(UIA_MEDIA_UNMUTE); // "Unmute"
+	private const string UIA_MEDIA_VOLUME = nameof(UIA_MEDIA_VOLUME); // "Volume"
+	private const string UIA_MEDIA_ERROR = nameof(UIA_MEDIA_ERROR); // "Error"
+	private const string TEXT_MEDIA_AUDIO_TRACK_UNTITLED = nameof(TEXT_MEDIA_AUDIO_TRACK_UNTITLED); // "untitled"
+	private const string TEXT_MEDIA_AUDIO_TRACK_SELECTED = nameof(TEXT_MEDIA_AUDIO_TRACK_SELECTED); // "(On)" - Appended to name of currently selected audio track
+	private const string TEXT_MEDIA_AUDIO_TRACK_SEPARATOR = nameof(TEXT_MEDIA_AUDIO_TRACK_SEPARATOR); // " - " - Used to separate pieces of metadata in audio track name
+	private const string UIA_MEDIA_FULLSCREEN = nameof(UIA_MEDIA_FULLSCREEN); // "Full Screen"
+	private const string UIA_MEDIA_EXIT_FULLSCREEN = nameof(UIA_MEDIA_EXIT_FULLSCREEN); // "Exit Full Screen"
+	private const string UIA_MEDIA_AUDIO_SELECTION = nameof(UIA_MEDIA_AUDIO_SELECTION); // "Show audio selection menu"
+	private const string UIA_MEDIA_CC_SELECTION = nameof(UIA_MEDIA_CC_SELECTION); // "Show closed caption menu"
+	private const string TEXT_MEDIA_CC_OFF = nameof(TEXT_MEDIA_CC_OFF); // "Off"
+	private const string UIA_MEDIA_PLAYBACKRATE = nameof(UIA_MEDIA_PLAYBACKRATE); // "Show playback rate list"
+	private const string UIA_MEDIA_FASTFORWARD = nameof(UIA_MEDIA_FASTFORWARD); // "Fast forward"
+	private const string UIA_MEDIA_REWIND = nameof(UIA_MEDIA_REWIND); // "Rewind"
+	private const string UIA_MEDIA_STOP = nameof(UIA_MEDIA_STOP); // "Stop"
+	private const string UIA_MEDIA_CAST = nameof(UIA_MEDIA_CAST); // "Cast to Device"
+	private const string UIA_MEDIA_ASPECTRATIO = nameof(UIA_MEDIA_ASPECTRATIO); // "Aspect Ratio"
+	private const string UIA_MEDIA_SKIPBACKWARD = nameof(UIA_MEDIA_SKIPBACKWARD); // "Skip Backward"
+	private const string UIA_MEDIA_SKIPFORWARD = nameof(UIA_MEDIA_SKIPFORWARD); // "Skip Forward"
+	private const string UIA_MEDIA_NEXTRACK = nameof(UIA_MEDIA_NEXTRACK); // "Next Track"
+	private const string UIA_MEDIA_PREVIOUSTRACK = nameof(UIA_MEDIA_PREVIOUSTRACK); // "Previous Track"
+	private const string UIA_MEDIA_FASTFORWARD_2X = nameof(UIA_MEDIA_FASTFORWARD_2X); // "Fast forward in 2X"
+	private const string UIA_MEDIA_FASTFORWARD_4X = nameof(UIA_MEDIA_FASTFORWARD_4X); // "Fast forward in 4X"
+	private const string UIA_MEDIA_FASTFORWARD_8X = nameof(UIA_MEDIA_FASTFORWARD_8X); // "Fast forward in 8X"
+	private const string UIA_MEDIA_FASTFORWARD_16X = nameof(UIA_MEDIA_FASTFORWARD_16X); // "Fast forward in 16X"
+	private const string UIA_MEDIA_REWIND_2X = nameof(UIA_MEDIA_REWIND_2X); // "Rewind in 2X"
+	private const string UIA_MEDIA_REWIND_4X = nameof(UIA_MEDIA_REWIND_4X); // "Rewind in 4X"
+	private const string UIA_MEDIA_REWIND_8X = nameof(UIA_MEDIA_REWIND_8X); // "Rewind in 8X"
+	private const string UIA_MEDIA_REWIND_16X = nameof(UIA_MEDIA_REWIND_16X); // "Rewind in 16X"
+	private const string UIA_MEDIA_REPEAT_NONE = nameof(UIA_MEDIA_REPEAT_NONE); // "Repeat None"
+	private const string UIA_MEDIA_REPEAT_ONE = nameof(UIA_MEDIA_REPEAT_ONE); // "Repeat One"
+	private const string UIA_MEDIA_REPEAT_ALL = nameof(UIA_MEDIA_REPEAT_ALL); // "Repeat All"
+	private const string UIA_MEDIA_MINIVIEW = nameof(UIA_MEDIA_MINIVIEW); // "Enter MiniView"
+	private const string UIA_MEDIA_EXIT_MINIVIEW = nameof(UIA_MEDIA_EXIT_MINIVIEW); // "Exit MiniView"
+	private const string UIA_LESS_BUTTON = nameof(UIA_LESS_BUTTON); // "Less app bar"
+	private const string UIA_AP_APPBAR_BUTTON = nameof(UIA_AP_APPBAR_BUTTON); // "app bar button"
+	private const string UIA_AP_APPBAR_TOGGLEBUTTON = nameof(UIA_AP_APPBAR_TOGGLEBUTTON); // "app bar toggle button"
+	private const string UIA_AP_MEDIAPLAYERELEMENT = nameof(UIA_AP_MEDIAPLAYERELEMENT); // "media player" - Localized control type for the video output of MediaPlayerElement (and MediaElement)
+}
+public partial class MediaTransportControls // dxaml\xcp\dxaml\lib\MediaTransportControls_Partial.h
 {
 	//#define CREATE_MEDIA_POINTER_EVENT_HANDLER(pfnEventHandler)               \
 	//            new ClassMemberEventHandler<                                  \
@@ -24,33 +83,37 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//                    IInspectable,                                         \
 	//                    xaml_input::IKeyRoutedEventArgs>(this, pfnEventHandler)
 
-	// Indicates which parent MTC using
-	//enum MTCParent
-	//{
-	//    MTCParent_None,
-	//    MTCParent_MediaElement,
-	//    MTCParent_MediaPlayerElement
-	//};
+	/// <summary>
+	/// Indicates which parent MTC using
+	/// </summary>
+	internal enum MTCParent
+	{
+		MTCParent_None,
+		MTCParent_MediaElement,
+		MTCParent_MediaPlayerElement
+	};
 
-	//// Indicates MediaPlayer Property
-	//enum MediaPlayer_Property
-	//{
-	//    MediaPlayer_MediaOpened,
-	//    MediaPlayer_MediaFailed,
-	//    MediaPlayer_Position,
-	//    MediaPlayer_Volume,
-	//    MediaPlayer_Mute,
-	//    MediaPlayer_DownloadProgress,
-	//    MediaPlayer_CurrentState,
-	//    MediaPlayer_NaturalDuration,
-	//    MediaPlayer_Source,
-	//    MediaPlayer_ItemChanged,
-	//    MediaPlayer_PlaybackRate,
-	//    MediaPlayer_MediaBreak_CurrentState,
-	//    MediaPlayer_MediaBreak_Position,
-	//    MediaPlayer_MediaBreak_DownloadProgress,
-	//    MediaPlayer_Repeat
-	//};
+	/// <summary>
+	/// Indicates MediaPlayer Property
+	/// </summary>
+	internal enum MediaPlayer_Property
+	{
+		MediaPlayer_MediaOpened,
+		MediaPlayer_MediaFailed,
+		MediaPlayer_Position,
+		MediaPlayer_Volume,
+		MediaPlayer_Mute,
+		MediaPlayer_DownloadProgress,
+		MediaPlayer_CurrentState,
+		MediaPlayer_NaturalDuration,
+		MediaPlayer_Source,
+		MediaPlayer_ItemChanged,
+		MediaPlayer_PlaybackRate,
+		MediaPlayer_MediaBreak_CurrentState,
+		MediaPlayer_MediaBreak_Position,
+		MediaPlayer_MediaBreak_DownloadProgress,
+		MediaPlayer_Repeat
+	};
 
 	//struct TrackFields
 	//{
@@ -75,9 +138,9 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    }
 	//};
 }
-public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\MediaTransportControls_Partial.h
+public partial class MediaTransportControls // dxaml\xcp\dxaml\lib\MediaTransportControls_Partial.h
 {
-	//public:
+	#region public:
 	//// Creates a new instance of the MediaTransportControls class and
 	//// associates it with provided MediaElement.
 	//static _Check_return_ HRESULT Create(_Outptr_ MediaTransportControls** ppMediaTransportControls);
@@ -161,8 +224,8 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 
 	//_Check_return_ HRESULT ShowImpl() { return ShowControlPanel(); }
 	//_Check_return_ HRESULT HideImpl() { return HideControlPanel(true /*hideImmediately*/); }
-
-	//protected:
+	#endregion
+	#region protected:
 	//MediaTransportControls();
 
 	//~MediaTransportControls();
@@ -178,8 +241,8 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//	_In_ XBOOL bSkipNameRegistration,
 	//	_In_ XBOOL bCoercedIsEnabled,
 	//	_In_ XBOOL bVisualTreeBeingReset) sealed override;
-
-	//private:
+	#endregion
+	#region private:
 	//_Check_return_ HRESULT GetComponentSizeConstants() noexcept;
 	//_Check_return_ HRESULT HookupPartsAndHandlers();
 	//_Check_return_ HRESULT HookupVolumeAndProgressPartsAndHandlers();
@@ -472,8 +535,8 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//_Check_return_ HRESULT UpdateSafeMargins(_In_ bool applySafeMargin);
 	//_Check_return_ HRESULT UpdateSafeMarginsinFullWindow(_In_ bool applySafeMargin);
 	//_Check_return_ HRESULT SetTabIndex();
-
-	//private:
+	#endregion
+	#region private:
 	//// HNS Hunderds of Nano Seconds used for conversion in timer duration
 	//static const unsigned int HNSPerSecond;
 	//// Control Panel Timout in secs, after timeout Control Panel will be hide.
@@ -499,85 +562,86 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//static const int VolumeSliderWheelScrollStep;
 	//static const int MinSupportedPlayRate;
 
-	//ctl::WeakRefPtr m_wrOwnerParent;                    // Week reference to Parent(ME/MPE) associated with this MediaTransportControls.
+	private WeakReference m_wrOwnerParent; // Weak reference to Parent(ME/MPE) associated with this MediaTransportControls.
 
-	//// Component size constants, defined as StatisResources in Xaml
-	//double m_resControlPanelHeight;                     // Height of Control Panel
-	//double m_resVerticalVolumeSliderMinHeight;          // Minimum height of Vertical Volume slider track
-	//double m_resVerticalVolumeSliderMaxHeight;          // Maximum height of slider track
-	//double m_resVerticalVolumeSliderTopPadding;         // Padding at top of slider track, but inside the panel
-	//double m_resVerticalVolumeSliderTopGap;             // Required minimum gap between top of slider panel and top of content area
-	//double m_resSideMargins;                            // Sum of left and right margins around each subcontrol
-	//double m_resMediaButtonWidth;                       // Width of each of the round buttons (PlayPause, Volume, Mute, etc)
-	//double m_resTimeButtonWidth;                        // Width of each time button (ElapsedTime, RemainingTime)
-	//double m_resPositionSliderMinimumWidth;             // Minimum width of Position Slider
-	//double m_resHorizontalVolumeSliderWidth;            // Width of Horizontal Volume Slider
+	// Component size constants, defined as StatisResources in Xaml
+	private double m_resControlPanelHeight;                     // Height of Control Panel
+	private double m_resVerticalVolumeSliderMinHeight;          // Minimum height of Vertical Volume slider track
+	private double m_resVerticalVolumeSliderMaxHeight;          // Maximum height of slider track
+	private double m_resVerticalVolumeSliderTopPadding;         // Padding at top of slider track, but inside the panel
+	private double m_resVerticalVolumeSliderTopGap;             // Required minimum gap between top of slider panel and top of content area
+	private double m_resSideMargins;                            // Sum of left and right margins around each subcontrol
+	private double m_resMediaButtonWidth;                       // Width of each of the round buttons (PlayPause, Volume, Mute, etc)
+	private double m_resTimeButtonWidth;                        // Width of each time button (ElapsedTime, RemainingTime)
+	private double m_resPositionSliderMinimumWidth;             // Minimum width of Position Slider
+	private double m_resHorizontalVolumeSliderWidth;            // Width of Horizontal Volume Slider
 
-	//// State flags
-	//int m_dropOutLevel;
-	//BOOLEAN m_transportControlsEnabled         : 1;
-	//BOOLEAN m_stretchOnFullWindowChanged       : 1;
-	//BOOLEAN m_verticalVolumeVisibilityChanged  : 1;
-	//BOOLEAN m_verticalVolumeIsVisible          : 1;
-	//BOOLEAN m_verticalVolumeHasKeyOrProgFocus  : 1;
-	//BOOLEAN m_controlPanelVisibilityChanged    : 1;
-	//BOOLEAN m_controlPanelIsVisible            : 1;
-	//BOOLEAN m_controlPanelHasPointerOver       : 1;
-	//BOOLEAN m_shouldDismissControlPanel        : 1;     // Specifies whether Control Panel should be dismissed. It gets set when
-	//													//  - we hit FullScreen button while playing media,
-	//													//  - we tap on the screen
-	//													//  - play state is changed (to Buffering or to Pause).
-	//													// This flag overrides m_controlPanelHasPointerOver flag in ShouldHideControlPanel logic.
-	//BOOLEAN m_rootHasPointerPressed            : 1;
-	//BOOLEAN m_controlsHaveKeyOrProgFocus       : 1;     // Specifies whether one of the transport controls has keyboard or programmatic focus
-	//BOOLEAN m_positionUpdateUIOnly             : 1;     // If true, update the Position slider value only - do not set underlying ME.Position DP
-	//BOOLEAN m_volumeUpdateUIOnly               : 1;     // If true, update the Volume slider value only - do not set underlying ME.Volume DP
-	//BOOLEAN m_sourceLoaded                     : 1;
-	//BOOLEAN m_isPlaying                        : 1;     // Specifies whether we are currently playing (for setting PlayButtons state). This includes buffering also
-	//BOOLEAN m_isBuffering                      : 1;     // Specifies whether we are currently buffering
-	//BOOLEAN m_hasError                         : 1;
-	//BOOLEAN m_hasMultipleAudioStreams          : 1;
-	//BOOLEAN m_hasCCTracks                      : 1;
-	//BOOLEAN m_isInScrubMode                    : 1;
+	// State flags
+	private int m_dropOutLevel;
+	private bool m_transportControlsEnabled = true;
+	private bool m_stretchOnFullWindowChanged = true;
+	private bool m_verticalVolumeVisibilityChanged = true;
+	private bool m_verticalVolumeIsVisible = true;
+	private bool m_verticalVolumeHasKeyOrProgFocus = true;
+	private bool m_controlPanelVisibilityChanged = true;
+	private bool m_controlPanelIsVisible = true;
+	private bool m_controlPanelHasPointerOver = true;
+	private bool m_shouldDismissControlPanel = true;    /* Specifies whether Control Panel should be dismissed. It gets set when
+															  - we hit FullScreen button while playing media,
+															  - we tap on the screen
+															  - play state is changed (to Buffering or to Pause).
+															 This flag overrides m_controlPanelHasPointerOver flag in ShouldHideControlPanel logic. */
+	private bool m_rootHasPointerPressed = true;
+	private bool m_controlsHaveKeyOrProgFocus = true;   // Specifies whether one of the transport controls has keyboard or programmatic focus
+	private bool m_positionUpdateUIOnly = true;         // If true, update the Position slider value only - do not set underlying ME.Position DP
+	private bool m_volumeUpdateUIOnly = true;           // If true, update the Volume slider value only - do not set underlying ME.Volume DP
+	private bool m_sourceLoaded = true;
+	private bool m_isPlaying = true;                    // Specifies whether we are currently playing (for setting PlayButtons state). This includes buffering also
+	private bool m_isBuffering = true;                  // Specifies whether we are currently buffering
+	private bool m_hasError = true;
+	private bool m_hasMultipleAudioStreams = true;
+	private bool m_hasCCTracks = true;
+	private bool m_isInScrubMode = true;
 
-	//// Cache values which are accessed frequently
-	//BOOLEAN m_isAudioOnly                     : 1;
-	//BOOLEAN m_isFullWindow                    : 1;
-	//BOOLEAN m_isFullScreen                    : 1;
-	//BOOLEAN m_isCompact                       : 1;
-	//BOOLEAN m_isFlyoutOpen                    : 1;
-	//BOOLEAN m_isPausedForCastingSelection     : 1;
-	//BOOLEAN m_isFullScreenClicked             : 1;
-	//BOOLEAN m_isFullScreenPending             : 1;
-	//BOOLEAN m_isLaunchedAsFullScreen          : 1;
-	//BOOLEAN m_isCastSupports                  : 1;
-	//BOOLEAN m_isthruScrubber                  : 1;
-	//BOOLEAN m_isPointerMove                   : 1;
-	//BOOLEAN m_isMiniView                      : 1;
-	//BOOLEAN m_isMiniViewClicked               : 1;
-	//BOOLEAN m_isSpanningCompactEnabled        : 1;
+	// Cache values which are accessed frequently
+	private bool m_isAudioOnly = true;
+	private bool m_isFullWindow = true;
+	private bool m_isFullScreen = true;
+	private bool m_isCompact = true;
+	private bool m_isFlyoutOpen = true;
+	private bool m_isPausedForCastingSelection = true;
+	private bool m_isFullScreenClicked = true;
+	private bool m_isFullScreenPending = true;
+	private bool m_isLaunchedAsFullScreen = true;
+	private bool m_isCastSupports = true;
+	private bool m_isthruScrubber = true;
+	private bool m_isPointerMove = true;
+	private bool m_isMiniView = true;
+	private bool m_isMiniViewClicked = true;
+	private bool m_isSpanningCompactEnabled = true;
 
-	//double m_positionSliderMinimum;
-	//double m_positionSliderMaximum;
-	//double m_volumeSliderMinimum;
-	//double m_volumeSliderMaximum;
-	//xaml::Duration m_naturalDuration;
-	//xaml_media::Stretch m_stretchToRestore;
-	//double m_lastKnownMiniViewWidth = 0;
-	//double m_lastKnownMiniViewHeight = 0;
+	private double m_positionSliderMinimum;
+	private double m_positionSliderMaximum;
+	private double m_volumeSliderMinimum;
+	private double m_volumeSliderMaximum;
+	private Duration m_naturalDuration;
+	private Stretch m_stretchToRestore;
+	private double m_lastKnownMiniViewWidth;
+	private double m_lastKnownMiniViewHeight;
 
-	//MTCParent m_parentType;
+	private MTCParent m_parentType;
 
-	////Telemetry Helper Class
+	//Telemetry Helper Class
 	//CAggMediaControlEvents m_AggTelemetry;
-	////
-	//// References to control parts we need to manipulate
-	////
-	//// Reference to the control panel grid
-	//TrackerPtr<xaml_controls::IGrid> m_tpControlPanelGrid;
+
+	//
+	// References to control parts we need to manipulate
+	//
+	// Reference to the control panel grid
+	private Grid m_tpControlPanelGrid;
 
 	//// Reference to the media position slider.
-	//TrackerPtr<xaml_controls::ISlider> m_tpMediaPositionSlider;
+	private Slider m_tpMediaPositionSlider;
 
 	//// Reference to the horizontal volume slider (audio-only mode audio slider).
 	//TrackerPtr<xaml_controls::ISlider> m_tpHorizontalVolumeSlider;
@@ -597,11 +661,11 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//// Reference to the buffering indeterminate progress bar
 	//TrackerPtr<xaml_controls::IProgressBar> m_tpBufferingProgressBar;
 
-	//// Reference to the PlayPause button used in Blue and Threshold
-	//TrackerPtr<xaml_primitives::IButtonBase> m_tpPlayPauseButton;
+	// Reference to the PlayPause button used in Blue and Threshold
+	private ButtonBase m_tpPlayPauseButton;
 
-	//// Reference to the PlayPause button used only in Threshold
-	//TrackerPtr<xaml_primitives::IButtonBase> m_tpTHLeftSidePlayPauseButton;
+	// Reference to the PlayPause button used only in Threshold
+	private ButtonBase m_tpTHLeftSidePlayPauseButton;
 
 	//// Reference to the Audio Selection button
 	//TrackerPtr<xaml_controls::IButton> m_tpAudioSelectionButton;
@@ -636,20 +700,20 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//// Reference to the Threshold volume button
 	//TrackerPtr<xaml_primitives::IButtonBase> m_tpTHVolumeButton;
 
-	//// Reference to the Full Window button
-	//TrackerPtr<xaml_primitives::IButtonBase> m_tpFullWindowButton;
+	// Reference to the Full Window button
+	private ButtonBase m_tpFullWindowButton;
 
-	//// Reference to the Zoom button
-	//TrackerPtr<xaml_primitives::IButtonBase> m_tpZoomButton;
+	// Reference to the Zoom button
+	private ButtonBase m_tpZoomButton;
 
 	//// Reference to currently active volume button
 	//TrackerPtr<xaml_primitives::IToggleButton> m_tpActiveVolumeButton;
 
-	//// Reference to Time Elapsed / -30 sec seek button or Time Elapsed TextBlock
-	//TrackerPtr<xaml::IFrameworkElement> m_tpTimeElapsedElement;
+	// Reference to Time Elapsed / -30 sec seek button or Time Elapsed TextBlock
+	private FrameworkElement m_tpTimeElapsedElement;
 
-	//// Reference to Time Remaining / +30 sec seek button or Time Remaining TextBlock
-	//TrackerPtr<xaml::IFrameworkElement> m_tpTimeRemainingElement;
+	// Reference to Time Remaining / +30 sec seek button or Time Remaining TextBlock
+	private FrameworkElement m_tpTimeRemainingElement;
 
 	//// Reference to the fast forward button
 	//TrackerPtr<xaml_controls::IButton> m_tpFastForwardButton;
@@ -684,32 +748,35 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//// Reference to the Time Elapsed  preview
 	//TrackerPtr<xaml_controls::ITextBlock> m_tpTimeElapsedPreview;
 
-	//// Reference to Error TextBlock
-	//TrackerPtr<xaml_controls::ITextBlock> m_tpErrorTextBlock;
+	// Reference to Error TextBlock
+	private TextBlock m_tpErrorTextBlock;
 
-	//// Dispatcher timer responsible for updating clock and position slider
-	//TrackerPtr<xaml::IDispatcherTimer> m_tpPositionUpdateTimer;
+	// Dispatcher timer responsible for updating clock and position slider
+	private DispatcherTimer m_tpPositionUpdateTimer;
 
 	//// Dispatcher timer responsible for hiding vertical volume host border
 	//TrackerPtr<xaml::IDispatcherTimer> m_tpHideVerticalVolumeTimer;
 
-	//// Dispatcher timer responsible for hiding UI control panel
-	//TrackerPtr<xaml::IDispatcherTimer> m_tpHideControlPanelTimer;
+	// Dispatcher timer responsible for hiding UI control panel
+	private DispatcherTimer m_tpHideControlPanelTimer;
 
-	//// Dispatcher timer to detect the pointer move ends.
-	//TrackerPtr<xaml::IDispatcherTimer> m_tpPointerMoveEndTimer;
+	// Dispatcher timer to detect the pointer move ends.
+	private DispatcherTimer m_tpPointerMoveEndTimer;
 
-	//// Reference to the Visibility Border element.
-	//TrackerPtr<xaml_controls::IBorder> m_tpControlPanelVisibilityBorder;
-
-	//// Reference to the CommandBar Element.
-	//TrackerPtr<xaml_controls::ICommandBar> m_tpCommandBar;
+	// Reference to the Visibility Border element.
+	private Border m_tpControlPanelVisibilityBorder;
 
 	//// Reference to the CommandBar Element.
-	//TrackerPtr<xaml_primitives::IFlyoutBase> m_tpVolumeFlyout;
+	private CommandBar m_tpCommandBar;
+
+	//// Reference to the CommandBar Element.
+	private FlyoutBase m_tpVolumeFlyout;
 
 	//// Reference to the VisualStateGroup
 	//TrackerPtr<xaml::IVisualStateGroup> m_tpVisibilityStatesGroup;
+
+	// Cache these objects for the view as they are expensive to query via GetForCurrentView() calls.
+	private ApplicationView m_applicationView;
 
 	////
 	//// Event handlers
@@ -758,7 +825,7 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//ctl::EventPtr<DispatcherTimerTickEventCallback> m_epHideControlPanelTimerTickHandler;
 	//ctl::EventPtr<DispatcherTimerTickEventCallback> m_epHideVerticalVolumeTimerTickHandler;
 	//ctl::EventPtr<VisualStateGroupCurrentStateChangedEventCallback> m_visibilityStateChangedEventHandler;
-	//ctl::EventPtr<DispatcherTimerTickEventCallback> m_epPointerMoveEndTimerTickHandler;
+	private EventHandler<object> m_epPointerMoveEndTimerTickHandler;
 
 	//// Following handlers need to set handledEventsToo flag, so that they can get events
 	//// marked handled by source subcontrols. EventPtr template does not support this,
@@ -772,8 +839,8 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//EventRegistrationToken m_tokLayoutBoundsChanged {0};
 	//EventRegistrationToken m_tokCoreWindowKeyDown;
 	//ctl::EventPtr<FrameworkElementLoadedEventCallback> m_epCommandBarLoadedHandler;
-	//ctl::EventPtr<FlyoutBaseOpenedEventCallback> m_epFlyoutOpenedHandler;
-	//ctl::EventPtr<FlyoutBaseClosedEventCallback> m_epFlyoutClosedHandler;
+	private EventHandler<object> m_epFlyoutOpenedHandler;
+	private EventHandler<object> m_epFlyoutClosedHandler;
 	//ctl::EventPtr<UIElementPointerWheelChangedEventCallback> m_volumeSliderPointerWheelChangedHandler;
 
 	//// Vector of Click event handlers for Audio Selection MenuFlyoutItems
@@ -811,7 +878,7 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//BOOLEAN m_isTrickBackwardMode     :1;
 	//BOOLEAN m_isTrickForwardMode      :1;
 	//BOOLEAN m_isThumbnailEnabled      :1;
-	//BOOLEAN m_isTemplateApplied       :1;
+	private bool m_isTemplateApplied = true;
 	//BOOLEAN m_isBreakPlaying          :1;
 	//BOOLEAN m_isVSStateChangeExternal :1;
 
@@ -924,94 +991,103 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//									  _In_ wrl_wrappers::HString& current,
 	//									  _Out_ BOOLEAN* value);
 	//_Check_return_ HRESULT CreateLanguage(_In_z_ PCWSTR languageTag, _COM_Outptr_ wg::ILanguage** ppLanguage);
+	#endregion
 }
-public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\MediaTransportControls_partial.cpp
+public partial class MediaTransportControls // dxaml\xcp\dxaml\lib\MediaTransportControls_partial.cpp
 {
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Creates an instance of the MediaTransportControls class.
-	////
-	////------------------------------------------------------------------------
-	//MediaTransportControls::MediaTransportControls() :
-	//    m_resControlPanelHeight(0)
-	//    , m_resVerticalVolumeSliderMinHeight(0)
-	//    , m_resVerticalVolumeSliderMaxHeight(0)
-	//    , m_resVerticalVolumeSliderTopPadding(0)
-	//    , m_resVerticalVolumeSliderTopGap(0)
-	//    , m_resSideMargins(0)
-	//    , m_resMediaButtonWidth(0)
-	//    , m_resTimeButtonWidth(0)
-	//    , m_resPositionSliderMinimumWidth(0)
-	//    , m_resHorizontalVolumeSliderWidth(0)
-	//    , m_transportControlsEnabled(FALSE)
-	//    , m_sourceLoaded(FALSE)
-	//    , m_isPlaying(FALSE)
-	//    , m_isBuffering(FALSE)
-	//    , m_stretchOnFullWindowChanged(FALSE)
-	//    , m_verticalVolumeVisibilityChanged(FALSE)
-	//    , m_verticalVolumeIsVisible(FALSE)
-	//    , m_verticalVolumeHasKeyOrProgFocus(FALSE)
-	//    , m_controlPanelVisibilityChanged(FALSE)
-	//    , m_controlPanelIsVisible(FALSE)
-	//    , m_rootHasPointerPressed(FALSE)
-	//    , m_controlPanelHasPointerOver(FALSE)
-	//    , m_shouldDismissControlPanel(FALSE)
-	//    , m_controlsHaveKeyOrProgFocus(FALSE)
-	//    , m_isAudioOnly(false)
-	//    , m_isFullWindow(FALSE)
-	//    , m_isFullScreen(FALSE)
-	//    , m_isFullScreenClicked(FALSE)
-	//    , m_isLaunchedAsFullScreen(FALSE)
-	//    , m_isFullScreenPending(FALSE)
-	//    , m_hasError(FALSE)
-	//    , m_positionUpdateUIOnly(FALSE)
-	//    , m_volumeUpdateUIOnly(FALSE)
-	//    , m_stretchToRestore(Stretch_None)
-	//    , m_hasMultipleAudioStreams(FALSE)
-	//    , m_hasCCTracks(FALSE)
-	//    , m_isInScrubMode(FALSE)
-	//    , m_dropOutLevel(-1)
-	//    , m_AggTelemetry()
-	//    , m_currentTrack(-1)
-	//    , m_isCompact(FALSE)
-	//    , m_isFlyoutOpen(FALSE)
-	//    , m_isPausedForCastingSelection(FALSE)
-	//    , m_isCastSupports(TRUE)
-	//    , m_parentType(MTCParent_None)
-	//    , m_currentPlaybackRate(0.0)
-	//    , m_orginalPlaybackRate(0.0)
-	//    , m_errcodeFromMPE(MF_MEDIA_ENGINE_ERR_NOERROR)
-	//    , m_isMediaPlayerSubscribed(FALSE)
-	//    , m_isTrickBackwardMode(FALSE)
-	//    , m_isTrickForwardMode(FALSE)
-	//    , m_isThumbnailEnabled(FALSE)
-	//    , m_isTemplateApplied(FALSE)
-	//    , m_isBreakPlaying(FALSE)
-	//    , m_isthruScrubber(FALSE)
-	//    , m_isVSStateChangeExternal(FALSE)
-	//    , m_isPointerMove(FALSE)
-	//    , m_isMiniView(FALSE)
-	//    , m_isMiniViewClicked(FALSE)
-	//    , m_isSpanningCompactEnabled(FALSE)
-	//{
-	//}
+	private const uint HNSPerSecond = 10000000;
+	//const double MediaTransportControls::ControlPanelDisplayTimeoutInSecs       = 3.0;
+	//const double MediaTransportControls::VerticalVolumeDisplayTimeoutInSecs     = 3.0;
+	private const double SeekbarPositionUpdateFreqInSecs = 0.250;
+	//const long MediaTransportControls::TimeButtonUsedSeekIntervalInHNS          = 300000000;
+	//const unsigned int MediaTransportControls::MaxTimeButtonTextLength          = 9;  // [H]H:mm:ss time string has up to 8 chars; also include terminating '\0'
+	//const unsigned int MediaTransportControls::MaxProcessedLanguageNameLength   = 50; // include terminating '\0'
+	//const unsigned int MediaTransportControls::MaxDropuOutLevels                = 10;
+	//const unsigned int MediaTransportControls::AvailablePlaybackRateCount       = 5;
+	//const double MediaTransportControls::AvailablePlaybackRateList[]            = { 0.25, 0.5, 1.0, 1.5, 2.0 };
+	//const unsigned int MediaTransportControls::SkipForwardInSecs                = 30;
+	//const unsigned int MediaTransportControls::SkipBackwardInSecs               = 10;
+	//const int MediaTransportControls::VolumeSliderWheelScrollStep               = 2;
+	//const int MediaTransportControls::MinSupportedPlayRate                      = 2;
 
+	/// <summary>
+	/// Creates an instance of the MediaTransportControls class.
+	/// </summary>
+	public MediaTransportControls()
+	{
+		//m_resControlPanelHeight = 0;
+		//m_resVerticalVolumeSliderMinHeight = 0;
+		//m_resVerticalVolumeSliderMaxHeight = 0;
+		//m_resVerticalVolumeSliderTopPadding = 0;
+		//m_resVerticalVolumeSliderTopGap = 0;
+		//m_resSideMargins = 0;
+		//m_resMediaButtonWidth = 0;
+		//m_resTimeButtonWidth = 0;
+		//m_resPositionSliderMinimumWidth = 0;
+		//m_resHorizontalVolumeSliderWidth = 0;
+		m_transportControlsEnabled = false;
+		//m_sourceLoaded = false;
+		//m_isPlaying = false;
+		//m_isBuffering = false;
+		//m_stretchOnFullWindowChanged = false;
+		//m_verticalVolumeVisibilityChanged = false;
+		//m_verticalVolumeIsVisible = false;
+		//m_verticalVolumeHasKeyOrProgFocus = false;
+		//m_controlPanelVisibilityChanged = false;
+		//m_controlPanelIsVisible = false;
+		//m_rootHasPointerPressed = false;
+		//m_controlPanelHasPointerOver = false;
+		//m_shouldDismissControlPanel = false;
+		//m_controlsHaveKeyOrProgFocus = false;
+		//m_isAudioOnly = false;
+		//m_isFullWindow = false;
+		//m_isFullScreen = false;
+		m_isFullScreenClicked = false;
+		m_isLaunchedAsFullScreen = false;
+		//m_isFullScreenPending = false;
+		//m_hasError = false;
+		//m_positionUpdateUIOnly = false;
+		//m_volumeUpdateUIOnly = false;
+		//m_stretchToRestore = Stretch_None;
+		//m_hasMultipleAudioStreams = false;
+		//m_hasCCTracks = false;
+		//m_isInScrubMode = false;
+		//m_dropOutLevel(-1);
+		//m_AggTelemetry();
+		//m_currentTrack(-1);
+		//m_isCompact = false;
+		//m_isFlyoutOpen = false;
+		//m_isPausedForCastingSelection = false;
+		//m_isCastSupports = true;
+		m_parentType = MTCParent_None;
+		//m_currentPlaybackRate(0.0);
+		//m_orginalPlaybackRate(0.0);
+		//m_errcodeFromMPE = MF_MEDIA_ENGINE_ERR_NOERROR;
+		//m_isMediaPlayerSubscribed = false;
+		//m_isTrickBackwardMode = false;
+		//m_isTrickForwardMode = false;
+		//m_isThumbnailEnabled = false;
+		m_isTemplateApplied = false;
+		//m_isBreakPlaying = false;
+		//m_isthruScrubber = false;
+		//m_isVSStateChangeExternal = false;
+		//m_isPointerMove = false;
+		//m_isMiniView = false;
+		//m_isMiniViewClicked = false;
+		//m_isSpanningCompactEnabled = false;
+	}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Destroys an instance of the MediaTransportControls class.
-	////
-	////------------------------------------------------------------------------
-	//MediaTransportControls::~MediaTransportControls()
-	//{
-	//    DeinitializeTransportControls();
+	/// <summary>
+	/// Destroys an instance of the MediaTransportControls class.
+	/// </summary>
+	~MediaTransportControls()
+	{
+		DeinitializeTransportControls();
 
-	//    ReleaseMenuFlyoutItemClickHandlers();
-	//    ReleaseCCSelectionMenuFlyoutItemClickHandlers();
-	//    ReleasePlaybackRateMenuFlyoutItemClickHandlers();
-	//}
+		ReleaseMenuFlyoutItemClickHandlers();
+		ReleaseCCSelectionMenuFlyoutItemClickHandlers();
+		ReleasePlaybackRateMenuFlyoutItemClickHandlers();
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -1474,40 +1550,32 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Apply a template to the MediaTransportControls
-	////
-	////------------------------------------------------------------------------
-	//IFACEMETHODIMP MediaTransportControls::OnApplyTemplate()
-	//{
-	//    HRESULT hr = S_OK;
+	/// <summary>
+	/// Apply a template to the MediaTransportControls
+	/// </summary>
+	protected override void OnApplyTemplate()
+	{
+		//if (m_parentType == MTCParent_None || m_wrOwnerParent.Get())
+		{
+			m_isTemplateApplied = true;
 
-	//    if (m_parentType == MTCParent_None || m_wrOwnerParent.Get())
-	//    {
-	//        m_isTemplateApplied = TRUE;
-	//        // Detach any existing handlers
-	//        IFC(DeinitializeTransportControls());
+			// Detach any existing handlers
+			//DeinitializeTransportControls();
 
-	//        IFC(MediaTransportControlsGenerated::OnApplyTemplate());
+			//MediaTransportControlsGenerated::OnApplyTemplate();
 
-	//        IFC(HookupPartsAndHandlers());
+			HookupPartsAndHandlers();
 
-	//        // Initialize the visual state
-	//        IFC(InitializeVisualState());
+			// Initialize the visual state
+			//InitializeVisualState();
 
-	//        // Update MediaControl States
-	//        UpdateMediaControlAllStates();
+			// Update MediaControl States
+			UpdateMediaControlAllStates();
 
-	//        // Register Keydown Events on the onApplyTemplate.
-	//        IFC(AddRegistrationCoreWindowKeyDown());
-	//    }
-
-	//Cleanup:
-	//    return hr;
-	//}
-
+			// Register Keydown Events on the onApplyTemplate.
+			//AddRegistrationCoreWindowKeyDown();
+		}
+	}
 
 	//_Check_return_ HRESULT MediaTransportControls::UpdateSafeMargins(_In_ bool applySafeMargin)
 	//{
@@ -1556,408 +1624,259 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return S_OK;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Obtain references for control components to be
-	////       manipulated and hook up handlers for events to be handled.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::HookupPartsAndHandlers()
-	//{
-	//    HRESULT hr = S_OK;
-	//    ctl::ComPtr<xaml::IDependencyObject> spComponentAsDO;
-	//    wrl_wrappers::HString strAutomationName;
-	//    wrl_wrappers::HString strSeparator;
-	//    wrl_wrappers::HString strSkipString;
-	//    wf::TimeSpan positionUpdateTickFrequency;
-	//    wf::TimeSpan controlPanelDisplayTimeoutFrequency;
-	//    wf::TimeSpan pointerMoveEndTimeout;
-	//    ctl::ComPtr<DispatcherTimer> spPositionUpdateTimer;
-	//    ctl::ComPtr<DispatcherTimer> spHideControlPanelTimer;
-	//    ctl::ComPtr<DispatcherTimer> spPointerMoveEndTimer;
+	/// <summary>
+	/// Obtain references for control components to be
+	/// manipulated and hook up handlers for events to be handled.
+	/// </summary>
+	private void HookupPartsAndHandlers()
+	{
+		//DependencyObject spComponentAsDO;
+		string strAutomationName;
+		//wrl_wrappers::HString strSeparator;
+		//wrl_wrappers::HString strSkipString;
+		//wf::TimeSpan positionUpdateTickFrequency;
+		//wf::TimeSpan controlPanelDisplayTimeoutFrequency;
+		//wf::TimeSpan pointerMoveEndTimeout;
+		//ctl::ComPtr<DispatcherTimer> spPositionUpdateTimer;
+		//ctl::ComPtr<DispatcherTimer> spHideControlPanelTimer;
+		//ctl::ComPtr<DispatcherTimer> spPointerMoveEndTimer;
 
-	//    // Types and variables for handlers created with ClassMemberEventHandler<> (which supports setting handledEventsToo flag)
-	//    typedef CRoutedEventSource<xaml_input::IPointerEventHandler, IInspectable, xaml_input::IPointerRoutedEventArgs> PointerPressedEventSourceType;
-	//    typedef CRoutedEventSource<xaml_input::IPointerEventHandler, IInspectable, xaml_input::IPointerRoutedEventArgs> PointerReleasedEventSourceType;
-	//    typedef CRoutedEventSource<xaml_input::IKeyEventHandler, IInspectable, xaml_input::IKeyRoutedEventArgs> KeyDownEventSourceType;
-	//    typedef CRoutedEventSource<xaml_input::IKeyEventHandler, IInspectable, xaml_input::IKeyRoutedEventArgs> KeyUpEventSourceType;
-	//    ctl::ComPtr<xaml_input::IPointerEventHandler> spPositionSliderPressedHandler;
-	//    PointerPressedEventSourceType* pPositionSliderPressedEventSource = nullptr;
-	//    ctl::ComPtr<xaml_input::IPointerEventHandler> spPositionSliderReleasedHandler;
-	//    PointerReleasedEventSourceType* pPositionSliderReleasedEventSource = nullptr;
-	//    ctl::ComPtr<xaml_input::IKeyEventHandler> spPositionSliderKeyDownHandler;
-	//    KeyDownEventSourceType* pPositionSliderKeyDownEventSource = nullptr;
-	//    ctl::ComPtr<xaml_input::IKeyEventHandler> spPositionSliderKeyUpHandler;
-	//    KeyUpEventSourceType* pPositionSliderKeyUpEventSource = nullptr;
+		//// Types and variables for handlers created with ClassMemberEventHandler<> (which supports setting handledEventsToo flag)
+		//typedef CRoutedEventSource<xaml_input::IPointerEventHandler, IInspectable, xaml_input::IPointerRoutedEventArgs > PointerPressedEventSourceType;
+		//typedef CRoutedEventSource<xaml_input::IPointerEventHandler, IInspectable, xaml_input::IPointerRoutedEventArgs > PointerReleasedEventSourceType;
+		//typedef CRoutedEventSource<xaml_input::IKeyEventHandler, IInspectable, xaml_input::IKeyRoutedEventArgs > KeyDownEventSourceType;
+		//typedef CRoutedEventSource<xaml_input::IKeyEventHandler, IInspectable, xaml_input::IKeyRoutedEventArgs > KeyUpEventSourceType;
+		//ctl::ComPtr<xaml_input::IPointerEventHandler> spPositionSliderPressedHandler;
+		//PointerPressedEventSourceType* pPositionSliderPressedEventSource = nullptr;
+		//ctl::ComPtr<xaml_input::IPointerEventHandler> spPositionSliderReleasedHandler;
+		//PointerReleasedEventSourceType* pPositionSliderReleasedEventSource = nullptr;
+		//ctl::ComPtr<xaml_input::IKeyEventHandler> spPositionSliderKeyDownHandler;
+		//KeyDownEventSourceType* pPositionSliderKeyDownEventSource = nullptr;
+		//ctl::ComPtr<xaml_input::IKeyEventHandler> spPositionSliderKeyUpHandler;
+		//KeyUpEventSourceType* pPositionSliderKeyUpEventSource = nullptr;
 
-	//    // Get the parts for obtain reference
-	//    // No-op if part deosn't available
-	//    // Also set localized UIA Name and add Tooltip where applicable. Note that
-	//    // both use the same localized text strings.
+		// Get the parts for obtain reference
+		// No-op if part deosn't available
+		// Also set localized UIA Name and add Tooltip where applicable. Note that
+		// both use the same localized text strings.
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"ControlPanelGrid").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpControlPanelGrid, spComponentAsDO.Get());
+		m_tpControlPanelGrid = GetTemplateChild<Grid>("ControlPanelGrid");
 
-	//    // Need to set Title Safe zone for Xbox
-	//    if (m_tpControlPanelGrid && XboxUtility::IsOnXbox())
-	//    {
-	//        wuv::ApplicationViewBoundsMode boundsMode;
-	//        IFC(LayoutBoundsChangedHelper::GetDesiredBoundsMode(&boundsMode));
+		//// Need to set Title Safe zone for Xbox
+		//if (m_tpControlPanelGrid && XboxUtility::IsOnXbox())
+		//{
+		//	wuv::ApplicationViewBoundsMode boundsMode;
+		//	IFC(LayoutBoundsChangedHelper::GetDesiredBoundsMode(&boundsMode));
 
-	//        // Apply Title safe marigins only if desired bounds as UseCoreWindow
-	//        // If we're in UseVisible mode, then the framework is already laying things out to the TV safe bounds so the MTC doesn't need to do anything.
-	//        // In UseCoreWindow, the app has decided they're smart enough to lay out to the screen and will do TV safe bounds themselves - but for MTC
-	//        // they can't do that specifically so thy need the framework to do this anyway.Thus, the only time MTC's code needs to do TV safe correction is in UseCoreWindow.
-	//        if (wuv::ApplicationViewBoundsMode::ApplicationViewBoundsMode_UseCoreWindow == boundsMode)
-	//        {
-	//            IFC(UpdateSafeMargins(true /*apply safe region margin*/));
-	//        }
-	//    }
+		//	// Apply Title safe marigins only if desired bounds as UseCoreWindow
+		//	// If we're in UseVisible mode, then the framework is already laying things out to the TV safe bounds so the MTC doesn't need to do anything.
+		//	// In UseCoreWindow, the app has decided they're smart enough to lay out to the screen and will do TV safe bounds themselves - but for MTC
+		//	// they can't do that specifically so thy need the framework to do this anyway.Thus, the only time MTC's code needs to do TV safe correction is in UseCoreWindow.
+		//	if (wuv::ApplicationViewBoundsMode::ApplicationViewBoundsMode_UseCoreWindow == boundsMode)
+		//	{
+		//		IFC(UpdateSafeMargins(true /*apply safe region margin*/));
+		//	}
+		//}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"TimeElapsedElement").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpTimeElapsedElement, spComponentAsDO.Get());
-	//    if (m_tpTimeElapsedElement)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_TIME_ELAPSED, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpTimeElapsedElement.Cast<FrameworkElement>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpTimeElapsedElement.Cast<FrameworkElement>(), strAutomationName));
-	//    }
+		m_tpTimeElapsedElement = GetTemplateChild<FrameworkElement>("TimeElapsedElement");
+		if (m_tpTimeElapsedElement is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_TIME_ELAPSED);
+			AutomationProperties.SetName(m_tpTimeElapsedElement, strAutomationName);
+			AddTooltip(m_tpTimeElapsedElement, strAutomationName);
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"TimeRemainingElement").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpTimeRemainingElement, spComponentAsDO.Get());
+		m_tpTimeRemainingElement = GetTemplateChild<FrameworkElement>("TimeRemainingElement");
+		if (m_tpTimeRemainingElement is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_TIME_REMAINING);
+			AutomationProperties.SetName(m_tpTimeRemainingElement, strAutomationName);
+			AddTooltip(m_tpTimeRemainingElement, strAutomationName);
+		}
 
-	//    if (m_tpTimeRemainingElement)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_TIME_REMAINING, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpTimeRemainingElement.Cast<FrameworkElement>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpTimeRemainingElement.Cast<FrameworkElement>(), strAutomationName));
-	//    }
+		m_tpMediaPositionSlider = GetTemplateChild<Slider>("Slider");
+		if (m_tpMediaPositionSlider is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_SEEK);
+			AutomationProperties.SetName(m_tpMediaPositionSlider, strAutomationName);
+			AddTooltip(m_tpMediaPositionSlider, strAutomationName);
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"ProgressSlider").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpMediaPositionSlider, spComponentAsDO.Get());
-	//    if (m_tpMediaPositionSlider)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_SEEK, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpMediaPositionSlider.Cast<Slider>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpMediaPositionSlider.Cast<Slider>(), strAutomationName));
-	//    }
+		m_tpPlayPauseButton = GetTemplateChild<ButtonBase>("PlayPauseButton");
+		if (m_tpPlayPauseButton is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_PLAY);
+			AutomationProperties.SetName(m_tpPlayPauseButton, strAutomationName);
+			AddTooltip(m_tpPlayPauseButton, strAutomationName);
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"PlayPauseButton").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpPlayPauseButton, spComponentAsDO.Get());
-	//    if (m_tpPlayPauseButton)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_PLAY, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpPlayPauseButton.Cast<ButtonBase>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpPlayPauseButton.Cast<ButtonBase>(), strAutomationName));
-	//    }
+		m_tpTHLeftSidePlayPauseButton = GetTemplateChild<ButtonBase>("PlayPauseButtonOnLeft");
+		if (m_tpTHLeftSidePlayPauseButton is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_PLAY);
+			AutomationProperties.SetName(m_tpTHLeftSidePlayPauseButton, strAutomationName);
+			AddTooltip(m_tpTHLeftSidePlayPauseButton, strAutomationName);
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"PlayPauseButtonOnLeft").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpTHLeftSidePlayPauseButton, spComponentAsDO.Get());
-	//    if (m_tpTHLeftSidePlayPauseButton)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_PLAY, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpTHLeftSidePlayPauseButton.Cast<ButtonBase>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpTHLeftSidePlayPauseButton.Cast<ButtonBase>(), strAutomationName));
-	//    }
+		m_tpFullWindowButton = GetTemplateChild<ButtonBase>("FullWindowButton");
+		if (m_tpFullWindowButton is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_FULLSCREEN);
+			AutomationProperties.SetName(m_tpFullWindowButton, strAutomationName);
+			AddTooltip(m_tpFullWindowButton, strAutomationName);
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"FullWindowButton").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpFullWindowButton, spComponentAsDO.Get());
-	//    if (m_tpFullWindowButton)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_FULLSCREEN, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpFullWindowButton.Cast<ButtonBase>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpFullWindowButton.Cast<ButtonBase>(), strAutomationName));
-	//    }
+		m_tpZoomButton = GetTemplateChild<ButtonBase>("ZoomButton");
+		if (m_tpZoomButton is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_ASPECTRATIO);
+			AutomationProperties.SetName(m_tpZoomButton, strAutomationName);
+			AddTooltip(m_tpZoomButton, strAutomationName);
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"ZoomButton").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpZoomButton, spComponentAsDO.Get());
-	//    if (m_tpZoomButton)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_ASPECTRATIO, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpZoomButton.Cast<ButtonBase>(), strAutomationName));
-	//        IFC(AddTooltip(m_tpZoomButton.Cast<ButtonBase>(), strAutomationName));
-	//    }
+		m_tpErrorTextBlock = GetTemplateChild<TextBlock>("ErrorTextBlock");
+		if (m_tpErrorTextBlock is { })
+		{
+			strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString(UIA_MEDIA_ERROR);
+			AutomationProperties.SetName(m_tpErrorTextBlock, strAutomationName);
+			// no tooltip
+		}
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"ErrorTextBlock").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpErrorTextBlock, spComponentAsDO.Get());
-	//    if (m_tpErrorTextBlock)
-	//    {
-	//        IFC(DXamlCore::GetCurrentNoCreate()->GetLocalizedResourceString(UIA_MEDIA_ERROR, strAutomationName.ReleaseAndGetAddressOf()));
-	//        IFC(DirectUI::AutomationProperties::SetNameStatic(m_tpErrorTextBlock.Cast<TextBlock>(), strAutomationName));
-	//    }
+		m_tpCommandBar = GetTemplateChild<CommandBar>("MediaControlsCommandBar");
+		m_tpVolumeFlyout = GetTemplateChild<FlyoutBase>("VolumeFlyout");
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"MediaControlsCommandBar").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpCommandBar, spComponentAsDO.Get());
+		// Attach handlers for events we need to track
+		Loaded += OnRootUserControlLoaded;
 
-	//    IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"VolumeFlyout").Get(), &spComponentAsDO));
-	//    SetPtrValueWithQIOrNull(m_tpVolumeFlyout, spComponentAsDO.Get());
+		if (m_tpPlayPauseButton is { })
+		{
+			m_tpPlayPauseButton.Click += OnPlayPauseClick;
+		}
+		if (m_tpTHLeftSidePlayPauseButton is { })
+		{
+			m_tpTHLeftSidePlayPauseButton.Click += OnPlayPauseClick;
+		}
+		if (m_tpFullWindowButton is { })
+		{
+			m_tpFullWindowButton.Click += OnFullWindowClick;
+		}
+		if (m_tpZoomButton is { })
+		{
+			m_tpZoomButton.Click += OnZoomClick;
+		}
+		if (m_tpMediaPositionSlider is { })
+		{
+			m_tpMediaPositionSlider.SizeChanged += OnProgressSliderSizeChanged;
+			m_tpMediaPositionSlider.FocusDisengaged += OnProgressSliderFocusDisengaged;
+			m_tpMediaPositionSlider.ValueChanged += OnPositionSliderValueChanged;
 
-	//    // Attach handlers for events we need to track
-	//    IFC(m_epRootUserControlLoadedHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, xaml::IRoutedEventArgs* pArgs)
-	//        {
-	//            RRETURN(OnRootUserControlLoaded());
-	//        }));
-	//    if (m_tpPlayPauseButton)
-	//    {
-	//        IFC(m_epPlayPauseButtonClickHandler.AttachEventHandler(m_tpPlayPauseButton.Cast<ButtonBase>(),
-	//            [this](IInspectable* pSender, IRoutedEventArgs* pArgs)
-	//            {
-	//                RRETURN(OnPlayPauseClick());
-	//            }));
-	//    }
-	//    if (m_tpTHLeftSidePlayPauseButton)
-	//    {
-	//        IFC(m_epLeftsidePlayPauseButtonClickHandler.AttachEventHandler(m_tpTHLeftSidePlayPauseButton.Cast<ButtonBase>(),
-	//            [this](IInspectable* pSender, IRoutedEventArgs* pArgs)
-	//        {
-	//            RRETURN(OnPlayPauseClick());
-	//        }));
-	//    }
-	//    if (m_tpFullWindowButton)
-	//    {
-	//        IFC(m_epFullWindowButtonClickHandler.AttachEventHandler(m_tpFullWindowButton.Cast<ButtonBase>(),
-	//            [this](IInspectable* pSender, IRoutedEventArgs* pArgs)
-	//            {
-	//                RRETURN(OnFullWindowClick());
-	//            }));
-	//    }
-	//    if (m_tpZoomButton)
-	//    {
-	//        IFC(m_epZoomButtonClickHandler.AttachEventHandler(m_tpZoomButton.Cast<ButtonBase>(),
-	//            [this](IInspectable* pSender, IRoutedEventArgs* pArgs)
-	//            {
-	//                RRETURN(OnZoomClick());
-	//            }));
-	//    }
-	//    if (m_tpMediaPositionSlider)
-	//    {
-	//        IFC(m_epProgressSliderSizeChangedHandler.AttachEventHandler(m_tpMediaPositionSlider.Cast<Slider>(),
-	//            [this](IInspectable *pSender, ISizeChangedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnProgressSliderSizeChanged());
-	//            }));
+			// Position update timer
+			//spPositionSliderPressedHandler.Attach(CREATE_MEDIA_POINTER_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderPressed));
+			//IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetPointerPressedEventSourceNoRef(&pPositionSliderPressedEventSource));
+			//IFC(pPositionSliderPressedEventSource->AddHandler(spPositionSliderPressedHandler.Get(), TRUE /* handledEventsToo */));
+			//m_positionSliderPressedEventToken.value = reinterpret_cast<INT64>(spPositionSliderPressedHandler.Get());
 
-	//        IFC(m_epProgressSliderFocusDisengagedHandler.AttachEventHandler(m_tpMediaPositionSlider.AsOrNull<xaml_controls::IControl>().Get(),
-	//            [this](xaml_controls::IControl *pSender, IFocusDisengagedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnProgressSliderFocusDisengaged());
-	//            }));
+			//spPositionSliderReleasedHandler.Attach(CREATE_MEDIA_POINTER_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderReleased));
+			//IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetPointerReleasedEventSourceNoRef(&pPositionSliderReleasedEventSource));
+			//IFC(pPositionSliderReleasedEventSource->AddHandler(spPositionSliderReleasedHandler.Get(), TRUE /* handledEventsToo */));
+			//m_positionSliderReleasedEventToken.value = reinterpret_cast<INT64>(spPositionSliderReleasedHandler.Get());
 
+			//spPositionSliderKeyDownHandler.Attach(CREATE_MEDIA_KEY_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderKeyDown));
+			//IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetKeyDownEventSourceNoRef(&pPositionSliderKeyDownEventSource));
+			//IFC(pPositionSliderKeyDownEventSource->AddHandler(spPositionSliderKeyDownHandler.Get(), TRUE /* handledEventsToo */));
+			//m_positionSliderKeyDownEventToken.value = reinterpret_cast<INT64>(spPositionSliderKeyDownHandler.Get());
 
-	//        IFC(m_epPositionChangedHandler.AttachEventHandler(m_tpMediaPositionSlider.Cast<Slider>(),
-	//            [this](IInspectable *pSender, xaml_primitives::IRangeBaseValueChangedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnPositionSliderValueChanged(pSender, pArgs));
-	//            }));
+			//spPositionSliderKeyUpHandler.Attach(CREATE_MEDIA_KEY_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderKeyUp));
+			//IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetKeyUpEventSourceNoRef(&pPositionSliderKeyUpEventSource));
+			//IFC(pPositionSliderKeyUpEventSource->AddHandler(spPositionSliderKeyUpHandler.Get(), TRUE /* handledEventsToo */));
+			//m_positionSliderKeyUpEventToken.value = reinterpret_cast<INT64>(spPositionSliderKeyUpHandler.Get());
 
-	//        // Position update timer
-	//        spPositionSliderPressedHandler.Attach(CREATE_MEDIA_POINTER_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderPressed));
-	//        IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetPointerPressedEventSourceNoRef(&pPositionSliderPressedEventSource));
-	//        IFC(pPositionSliderPressedEventSource->AddHandler(spPositionSliderPressedHandler.Get(), TRUE /* handledEventsToo */));
-	//        m_positionSliderPressedEventToken.value = reinterpret_cast<INT64>(spPositionSliderPressedHandler.Get());
+			m_tpPositionUpdateTimer = new DispatcherTimer();
+			m_tpPositionUpdateTimer.Interval = TimeSpan.FromSeconds(SeekbarPositionUpdateFreqInSecs);
+			m_tpPositionUpdateTimer.Tick += OnPositionUpdateTimerTick;
 
-	//        spPositionSliderReleasedHandler.Attach(CREATE_MEDIA_POINTER_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderReleased));
-	//        IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetPointerReleasedEventSourceNoRef(&pPositionSliderReleasedEventSource));
-	//        IFC(pPositionSliderReleasedEventSource->AddHandler(spPositionSliderReleasedHandler.Get(), TRUE /* handledEventsToo */));
-	//        m_positionSliderReleasedEventToken.value = reinterpret_cast<INT64>(spPositionSliderReleasedHandler.Get());
+			EnableValueChangedEventThrottlingOnSliderAutomation(true);
+		}
 
-	//        spPositionSliderKeyDownHandler.Attach(CREATE_MEDIA_KEY_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderKeyDown));
-	//        IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetKeyDownEventSourceNoRef(&pPositionSliderKeyDownEventSource));
-	//        IFC(pPositionSliderKeyDownEventSource->AddHandler(spPositionSliderKeyDownHandler.Get(), TRUE /* handledEventsToo */));
-	//        m_positionSliderKeyDownEventToken.value = reinterpret_cast<INT64>(spPositionSliderKeyDownHandler.Get());
+		if (m_tpControlPanelGrid is { })
+		{
+			m_tpControlPanelGrid.PointerEntered += OnControlPanelEntered;
+			m_tpControlPanelGrid.PointerExited += OnControlPanelExited;
+			m_tpControlPanelGrid.PointerCaptureLost += OnControlPanelCaptureLost;
+			m_tpControlPanelGrid.GotFocus += OnControlPanelGotFocus;
+			m_tpControlPanelGrid.LostFocus += OnControlPanelLostFocus;
 
-	//        spPositionSliderKeyUpHandler.Attach(CREATE_MEDIA_KEY_EVENT_HANDLER(&MediaTransportControls::OnPositionSliderKeyUp));
-	//        IFC(m_tpMediaPositionSlider.Cast<Slider>()->GetKeyUpEventSourceNoRef(&pPositionSliderKeyUpEventSource));
-	//        IFC(pPositionSliderKeyUpEventSource->AddHandler(spPositionSliderKeyUpHandler.Get(), TRUE /* handledEventsToo */));
-	//        m_positionSliderKeyUpEventToken.value = reinterpret_cast<INT64>(spPositionSliderKeyUpHandler.Get());
+			m_tpHideControlPanelTimer = new DispatcherTimer();
+			m_tpHideControlPanelTimer.Interval = TimeSpan.FromSeconds(ControlPanelDisplayTimeoutInSecs);
+			m_tpHideControlPanelTimer.Tick += OnHideControlPanelTimerTick;
 
-	//        IFC(ctl::make<DispatcherTimer>(&spPositionUpdateTimer));
-	//        SetPtrValueWithQIOrNull(m_tpPositionUpdateTimer, spPositionUpdateTimer.Get());
+			// Look for TranslateVertical Transform, if exist then need to clip the border on the size change.
+			var spTranformAsII = m_tpControlPanelGrid.FindName("TranslateVertical");
+			if (spTranformAsII is { })
+			{
+				m_tpControlPanelVisibilityBorder = GetTemplateChild<Border>("ControlPanel_ControlPanelVisibilityStates_Border");
+				if (m_tpControlPanelVisibilityBorder is { })
+				{
+					m_tpControlPanelVisibilityBorder.SizeChanged += OnBorderSizeChanged;
+				}
+			}
+		}
 
-	//        positionUpdateTickFrequency.Duration = static_cast<INT64>(SeekbarPositionUpdateFreqInSecs * static_cast<DOUBLE> (HNSPerSecond));
-	//        IFC(m_tpPositionUpdateTimer.Cast<DispatcherTimer>()->put_Interval(positionUpdateTickFrequency));
+		PointerExited += OnRootExited;
+		PointerPressed += OnRootPressed;
+		PointerReleased += OnRootReleased;
+		PointerCaptureLost += OnRootCaptureLost;
+		PointerMoved += OnRootMoved;
+		SizeChanged += OnSizeChanged;
 
-	//        IFC(m_epPositionUpdateTimerTickHandler.AttachEventHandler(m_tpPositionUpdateTimer.Cast<DispatcherTimer>(),
-	//            [this](IInspectable *pSender, IInspectable *pArgs)
-	//        {
-	//            RRETURN(OnPositionUpdateTimerTick());
-	//        }));
+		if (m_tpCommandBar is { })
+		{
+			// Attach handlers for CommandBar Loaded
+			m_tpCommandBar.Loaded += OnCommandBarLoaded;
+		}
 
-	//        IFC(EnableValueChangedEventThrottlingOnSliderAutomation(true));
-	//    }
+		if (m_tpVolumeFlyout is { })
+		{
+			// Attach handler for Flyout Opened
+			;
+			m_tpVolumeFlyout.Opened += (m_epFlyoutOpenedHandler = (pSender, pArgs) =>
+			{
+				// if volume flyout open, we should not hide MTC panel
+				m_isFlyoutOpen = true;
+			});
+			// Attach handler for Flyout Closed
+			m_tpVolumeFlyout.Closed += (m_epFlyoutClosedHandler = (pSender, pArgs) =>
+			{
+				m_isFlyoutOpen = false;
+				HideControlPanel();
+			});
 
-	//    if (m_tpControlPanelGrid)
-	//    {
-	//        IFC(m_epControlPanelEnteredHandler.AttachEventHandler(m_tpControlPanelGrid.Cast<Grid>(),
-	//            [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnControlPanelEntered());
-	//            }));
+			m_tpVolumeFlyout.ShouldConstrainToRootBounds = true;
+		}
 
-	//        IFC(m_epControlPanelExitedHandler.AttachEventHandler(m_tpControlPanelGrid.Cast<Grid>(),
-	//            [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnControlPanelExited());
-	//            }));
+		m_tpPointerMoveEndTimer = new DispatcherTimer();
+		m_tpPointerMoveEndTimer.Interval = TimeSpan.Zero;
+		m_tpPointerMoveEndTimer.Tick += (m_epPointerMoveEndTimerTickHandler = (pSender, pArgs) =>
+		{
+			m_isPointerMove = false;
+			if (m_tpPointerMoveEndTimer is { })
+			{
+				m_tpPointerMoveEndTimer.Stop();
+			}
+			StartControlPanelHideTimer();
+		});
 
-	//        IFC(m_epControlPanelCaptureLostHandler.AttachEventHandler(m_tpControlPanelGrid.Cast<Grid>(),
-	//            [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnControlPanelCaptureLost(pArgs));
-	//            }));
+		HookupVolumeAndProgressPartsAndHandlers();
 
-	//        IFC(m_epControlPanelGotFocusHandler.AttachEventHandler(m_tpControlPanelGrid.Cast<Grid>(),
-	//            [this](IInspectable *pSender, xaml::IRoutedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnControlPanelGotFocus(pArgs));
-	//            }));
+		if (m_tpControlPanelGrid is { })
+		{
+			m_tpControlPanelGrid.Tapped += OnControlPanelTapped;
+		}
 
-	//        IFC(m_epControlPanelLostFocusHandler.AttachEventHandler(m_tpControlPanelGrid.Cast<Grid>(),
-	//            [this](IInspectable *pSender, xaml::IRoutedEventArgs *pArgs)
-	//            {
-	//                RRETURN(OnControlPanelLostFocus(pArgs));
-	//            }));
-
-	//        IFC(ctl::make<DispatcherTimer>(&spHideControlPanelTimer));
-	//        SetPtrValueWithQIOrNull(m_tpHideControlPanelTimer, spHideControlPanelTimer.Get());
-
-	//        controlPanelDisplayTimeoutFrequency.Duration = static_cast<INT64>(ControlPanelDisplayTimeoutInSecs * static_cast<DOUBLE> (HNSPerSecond));
-	//        IFC(m_tpHideControlPanelTimer.Cast<DispatcherTimer>()->put_Interval(controlPanelDisplayTimeoutFrequency));
-
-	//        IFC(m_epHideControlPanelTimerTickHandler.AttachEventHandler(m_tpHideControlPanelTimer.Cast<DispatcherTimer>(),
-	//            [this](IInspectable *pSender, IInspectable *pArgs)
-	//        {
-	//            RRETURN(OnHideControlPanelTimerTick());
-	//        }));
-
-	//        // Look for TranslateVertical Transform, if exist then need to clip the border on the size change.
-	//        ctl::ComPtr<IInspectable> spTranformAsII;
-	//        ctl::ComPtr<IFrameworkElement> spControlPanelGridAsIFE;
-	//        IFC(m_tpControlPanelGrid.As(&spControlPanelGridAsIFE));
-	//        IFC(spControlPanelGridAsIFE->FindName(wrl_wrappers::HStringReference(STR_LEN_PAIR(L"TranslateVertical")).Get(),
-	//                            &spTranformAsII));
-	//        if (spTranformAsII)
-	//        {
-	//            IFC(GetTemplateChild(wrl_wrappers::HStringReference(L"ControlPanel_ControlPanelVisibilityStates_Border").Get(), &spComponentAsDO));
-	//            SetPtrValueWithQIOrNull(m_tpControlPanelVisibilityBorder, spComponentAsDO.Get());
-	//            if (m_tpControlPanelVisibilityBorder)
-	//            {
-	//                IFC(m_epBorderSizeChangedHandler.AttachEventHandler(m_tpControlPanelVisibilityBorder.Cast<Border>(),
-	//                    [this](IInspectable *pSender, IInspectable *pArgs)
-	//                {
-	//                    RRETURN(OnBorderSizeChanged());
-	//                }));
-	//            }
-	//        }
-	//    }
-
-	//    IFC(m_epRootExitedHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//        {
-	//            RRETURN(OnRootExited());
-	//        }));
-
-	//    IFC(m_epRootPressedHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//        {
-	//            RRETURN(OnRootPressed());
-	//        }));
-
-	//    IFC(m_epRootReleasedHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//        {
-	//            RRETURN(OnRootReleased());
-	//        }));
-
-	//    IFC(m_epRootCaptureLostHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//        {
-	//            RRETURN(OnRootCaptureLost());
-	//        }));
-
-	//    IFC(m_epRootMovedHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, xaml_input::IPointerRoutedEventArgs *pArgs)
-	//        {
-	//            RRETURN(OnRootMoved());
-	//        }));
-
-
-	//    IFC(m_epSizeChangedHandler.AttachEventHandler(this,
-	//        [this](IInspectable *pSender, IInspectable *pArgs)
-	//        {
-	//            RRETURN(OnSizeChanged());
-	//        }));
-
-	//    if (m_tpCommandBar)
-	//    {
-	//        // Attach handlers for CommandBar Loaded
-	//        IFC(m_epCommandBarLoadedHandler.AttachEventHandler(m_tpCommandBar.Cast<CommandBar>(),
-	//            [this](IInspectable *pSender, xaml::IRoutedEventArgs* pArgs)
-	//        {
-	//            RRETURN(OnCommandBarLoaded());
-	//        }));
-	//    }
-
-	//    if (m_tpVolumeFlyout)
-	//    {
-	//        // Attach handler for Flyout Opened
-	//        IFC(m_epFlyoutOpenedHandler.AttachEventHandler(m_tpVolumeFlyout.Cast<FlyoutBase>(),
-	//            [this](IInspectable* pSender, IInspectable* pArgs)
-	//        {
-	//            // if volume flyout open, we should not hide MTC panel
-	//            m_isFlyoutOpen = TRUE;
-	//            return S_OK;
-	//        }));
-	//        // Attach handler for Flyout Closed
-	//        IFC(m_epFlyoutClosedHandler.AttachEventHandler(m_tpVolumeFlyout.Cast<FlyoutBase>(),
-	//            [this](IInspectable* pSender, IInspectable* pArgs)
-	//        {
-	//            m_isFlyoutOpen = FALSE;
-	//            HideControlPanel();
-	//            return S_OK;
-	//        }));
-
-	//        IFC(m_tpVolumeFlyout.Cast<FlyoutBase>()->put_ShouldConstrainToRootBounds(TRUE));
-	//    }
-
-	//    IFC(ctl::make<DispatcherTimer>(&spPointerMoveEndTimer));
-	//    SetPtrValueWithQIOrNull(m_tpPointerMoveEndTimer, spPointerMoveEndTimer.Get());
-
-	//    pointerMoveEndTimeout.Duration = 0;
-	//    IFC(m_tpPointerMoveEndTimer.Cast<DispatcherTimer>()->put_Interval(pointerMoveEndTimeout));
-
-	//    IFC(m_epPointerMoveEndTimerTickHandler.AttachEventHandler(m_tpPointerMoveEndTimer.Cast<DispatcherTimer>(),
-	//        [this](IInspectable *pSender, IInspectable *pArgs)
-	//    {
-	//        m_isPointerMove = FALSE;
-	//        if (m_tpPointerMoveEndTimer)
-	//        {
-	//            m_tpPointerMoveEndTimer->Stop();
-	//        }
-	//        RRETURN(StartControlPanelHideTimer());
-	//    }));
-
-	//    IFC(HookupVolumeAndProgressPartsAndHandlers());
-
-	//    if (m_tpControlPanelGrid)
-	//    {
-	//        IFC(m_epControlPanelTappedHandler.AttachEventHandler(m_tpControlPanelGrid.Cast<Grid>(),
-	//            [this](IInspectable* pSender, xaml_input::ITappedRoutedEventArgs* pArgs)
-	//            {
-	//                RRETURN(OnControlPanelTapped(pArgs));
-	//            }));
-	//    }
-
-	//    IFC(GetComponentSizeConstants());
-	//    IFC(MoreControls());
-	//    IFC(SetTabIndex());
-
-	//Cleanup:
-	//    return hr;
-	//}
+		GetComponentSizeConstants();
+		MoreControls();
+		SetTabIndex();
+	}
 
 	//_Check_return_ HRESULT
 	//MediaTransportControls::HookupVolumeAndProgressPartsAndHandlers()
@@ -2761,106 +2680,82 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Hide (fade out) the control panel, provided that pre-requisite
-	////       conditions for hiding it are met.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::HideControlPanel(_In_ bool hideImmediately)
-	//{
-	//    HRESULT hr = S_OK;
 
-	//    if (m_transportControlsEnabled && m_wrOwnerParent.Get())
-	//    {
-	//        if (m_tpHideControlPanelTimer)
-	//        {
-	//            if (hideImmediately || ShouldHideControlPanel() || m_isVSStateChangeExternal)
-	//            {
-	//                // Both CP and Vertical Volume will be hiddden, so stop their hide timers.
-	//                IFC(StopControlPanelHideTimer());
-	//                IFC(StopVerticalVolumeHideTimer());
+	/// <summary>
+	/// Hide (fade out) the control panel, provided that pre-requisite conditions for hiding it are met.
+	/// </summary>
+	private void HideControlPanel(bool hideImmediately = false)
+	{
+		if (m_transportControlsEnabled && m_wrOwnerParent.IsAlive)
+		{
+			if (m_tpHideControlPanelTimer)
+			{
+				if (hideImmediately || ShouldHideControlPanel() || m_isVSStateChangeExternal)
+				{
+					// Both CP and Vertical Volume will be hiddden, so stop their hide timers.
+					StopControlPanelHideTimer();
+					StopVerticalVolumeHideTimer();
 
-	//                // Stop position updates now that CP is not visible
-	//                IFC(StopPositionUpdateTimer());
+					// Stop position updates now that CP is not visible
+					StopPositionUpdateTimer();
 
-	//                // Flag vertical volume to hide so that it won't get displayed
-	//                // next time the ControlPanel becomes visible
-	//                if (m_verticalVolumeIsVisible)
-	//                {
-	//                    m_verticalVolumeIsVisible = FALSE;
-	//                    m_verticalVolumeVisibilityChanged = TRUE;
-	//                }
+					// Flag vertical volume to hide so that it won't get displayed
+					// next time the ControlPanel becomes visible
+					if (m_verticalVolumeIsVisible)
+					{
+						m_verticalVolumeIsVisible = false;
+						m_verticalVolumeVisibilityChanged = true;
+					}
 
-	//                // Flag control panel itself to hide
-	//                m_controlPanelIsVisible = FALSE;
-	//                if (!m_isVSStateChangeExternal) // Skip if Visual State already happen through external
-	//                {
-	//                    m_controlPanelVisibilityChanged = TRUE;
-	//                }
+					// Flag control panel itself to hide
+					m_controlPanelIsVisible = false;
+					if (!m_isVSStateChangeExternal) // Skip if Visual State already happen through external
+					{
+						m_controlPanelVisibilityChanged = true;
+					}
 
-	//                if (MTCParent_MediaElement == m_parentType)
-	//                {
-	//                    IFC(HideControlPanelFromME());
-	//                }
-	//                else if (MTCParent_MediaPlayerElement == m_parentType)
-	//                {
-	//                    IFC(HideControlPanelFromMPE());
-	//                }
+					if (MTCParent_MediaElement == m_parentType)
+					{
+						HideControlPanelFromME();
+					}
+					else if (MTCParent_MediaPlayerElement == m_parentType)
+					{
+						HideControlPanelFromMPE();
+					}
 
-	//                IFC(UpdateVisualState());
-	//            }
-	//        }
-	//        m_shouldDismissControlPanel = FALSE;
-	//        m_isthruScrubber = FALSE;
-	//        m_isVSStateChangeExternal = FALSE;
-	//    }
+					UpdateVisualState();
+				}
+			}
+			m_shouldDismissControlPanel = false;
+			m_isthruScrubber = false;
+			m_isVSStateChangeExternal = false;
+		}
+	}
 
-	//Cleanup:
-	//    return hr;
-	//}
+	/// <summary>
+	/// Called when Loaded event fires on Root UserControl.
+	/// </summary>
+	private void OnRootUserControlLoaded(object pSender, RoutedEventArgs pArgs)
+	{
+		//UpdateDownloadProgressUI();
+	}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Called when Loaded event fires on Root UserControl.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnRootUserControlLoaded()
-	//{
-	//    RRETURN(UpdateDownloadProgressUI());
-	//}
+	/// <summary>
+	/// Handler for the SizeChanged event on ProgressSlider
+	/// </summary>
+	private void OnProgressSliderSizeChanged(object pSender, SizeChangedEventArgs pArgs)
+	{
+		UpdateDownloadProgressUI();
+	}
 
-
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Handler for the SizeChanged event on ProgressSlider
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnProgressSliderSizeChanged()
-	//{
-	//    RRETURN(UpdateDownloadProgressUI());
-	//}
-
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Handler for the SizeChanged event on ProgressSlider
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnProgressSliderFocusDisengaged()
-	//{
-	//    IFC_RETURN(ShowHideThumbnail(FALSE));
-	//    IFC_RETURN(ExitScrubbingMode());
-
-	//    return S_OK;
-	//}
+	/// <summary>
+	/// Handler for the SizeChanged event on ProgressSlider
+	/// </summary>
+	private void OnProgressSliderFocusDisengaged(object pSender, RoutedEventArgs pArgs)
+	{
+		ShowHideThumbnail(false);
+		ExitScrubbingMode();
+	}
 
 
 	////------------------------------------------------------------------------
@@ -3140,25 +3035,19 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Called when m_tpPositionUpdateTimer fires.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnPositionUpdateTimerTick()
-	//{
-	//    if (m_transportControlsEnabled)
-	//    {
-	//        if (IsInLiveTree())
-	//        {
-	//            IFC_RETURN(UpdatePositionUI());
-	//        }
-	//    }
-
-	//    return S_OK;
-	//}
+	/// <summary>
+	/// Called when m_tpPositionUpdateTimer fires.
+	/// </summary>
+	private void OnPositionUpdateTimerTick(object pSender, object pArgs)
+	{
+		if (m_transportControlsEnabled)
+		{
+			if (IsInLiveTree())
+			{
+				UpdatePositionUI();
+			}
+		}
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -3292,79 +3181,67 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Called when Play/Pause button gets clicked
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnPlayPauseClick()
-	//{
-	//    HRESULT hr = S_OK;
-	//    MTCTelemetryData data;
+	/// <summary>
+	/// Called when Play/Pause button gets clicked
+	/// </summary>
+	private void OnPlayPauseClick(object pSender, RoutedEventArgs pArgs)
+	{
+		//MTCTelemetryData data;
 
-	//    if (m_transportControlsEnabled && m_wrOwnerParent.Get())
-	//    {
-	//        if (MTCParent_MediaElement == m_parentType)
-	//        {
-	//            IFC(OnPlayPauseFromME());
-	//        }
-	//        else if (MTCParent_MediaPlayerElement == m_parentType)
-	//        {
-	//            IFC(OnPlayPauseFromMPE());
-	//        }
-	//    }
+		if (m_transportControlsEnabled && m_wrOwnerParent.IsAlive) // review@xy: m_wrOwnerParent.Get() -> .IsAlive or .Target is { }
+		{
+			if (MTCParent_MediaElement == m_parentType)
+			{
+				OnPlayPauseFromME();
+			}
+			else if (MTCParent_MediaPlayerElement == m_parentType)
+			{
+				OnPlayPauseFromMPE();
+			}
+		}
 
-	//Cleanup:
-	//    data.errCode = hr;
-	//    m_AggTelemetry.AddData(MTCTelemetryType::PlayPauseClick, data);
-	//    return hr;
-	//}
+		//Cleanup:
+		//	data.errCode = hr;
+		//	m_AggTelemetry.AddData(MTCTelemetryType::PlayPauseClick, data);
+	}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Called when Full Window toggle button gets clicked
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnFullWindowClick()
-	//{
-	//    HRESULT hr = S_OK;
-	//    MTCTelemetryData data;
+	/// <summary>
+	/// Called when Full Window toggle button gets clicked
+	/// </summary>
+	private void OnFullWindowClick(object pSender, RoutedEventArgs pArgs)
+	{
+		//MTCTelemetryData data;
 
-	//    if (m_transportControlsEnabled && m_wrOwnerParent.Get())
-	//    {
-	//        m_isFullScreenClicked = TRUE;
-	//        // this state is not valid, as user change the state on tapping fullwindow button.
-	//        if (m_isLaunchedAsFullScreen)
-	//        {
-	//            m_isLaunchedAsFullScreen = FALSE;
-	//        }
+		if (m_transportControlsEnabled && m_wrOwnerParent.IsAlive)
+		{
+			m_isFullScreenClicked = true;
+			// this state is not valid, as user change the state on tapping fullwindow button.
+			if (m_isLaunchedAsFullScreen)
+			{
+				m_isLaunchedAsFullScreen = false;
+			}
 
-	//        if (!m_isMiniView)
-	//        {
-	//            IFC(SetFullWindow(!m_isFullWindow));
-	//        }
-	//        else
-	//        {
-	//            // When you are in miniView, then first exits the MiniView State.
-	//            // Then update the fullwindow UI.
-	//            m_isMiniView = FALSE;
-	//            IFC(SetMiniView(false));
-	//            IFC(UpdateFullWindowUI());
-	//        }
+			if (!m_isMiniView)
+			{
+				SetFullWindow(!m_isFullWindow);
+			}
+			else
+			{
+				// When you are in miniView, then first exits the MiniView State.
+				// Then update the fullwindow UI.
+				m_isMiniView = false;
+				SetMiniView(false);
+				UpdateFullWindowUI();
+			}
 
-	//        m_shouldDismissControlPanel |= (m_isPlaying && !m_isBuffering);
-	//        IFC(HideControlPanel());
-	//    }
+			m_shouldDismissControlPanel |= (m_isPlaying && !m_isBuffering);
+			HideControlPanel();
+		}
 
-	//Cleanup:
-	//    data.errCode = hr;
-	//    m_AggTelemetry.AddData(MTCTelemetryType::FullWindowClick, data);
-	//    return hr;
-	//}
+		//Cleanup:
+		//	data.errCode = hr;
+		//	m_AggTelemetry.AddData(MTCTelemetryType::FullWindowClick, data);
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -3396,166 +3273,143 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    RRETURN(hr);
 	//}
 
+	/// <summary>
+	/// Called when Zoom toggle button gets clicked
+	/// </summary>
+	private void OnZoomClick(object pSender, RoutedEventArgs pArgs)
+	{
+		Stretch stretch;
+		//MTCTelemetryData data;
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Called when Zoom toggle button gets clicked
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnZoomClick()
-	//{
-	//    HRESULT hr = S_OK;
-	//    xaml_media::Stretch stretch;
-	//    MTCTelemetryData data;
+		if (m_transportControlsEnabled && m_wrOwnerParent.IsAlive)
+		{
+			// Uniform goes to UniformToFill. Everything else goes to Uniform.
+			stretch = GetStretch();
+			if (m_isFullWindow && !m_stretchOnFullWindowChanged)
+			{
+				m_stretchOnFullWindowChanged = true;
+				m_stretchToRestore = stretch;
+			}
 
-	//    if (m_transportControlsEnabled && m_wrOwnerParent.Get())
-	//    {
-	//        // Uniform goes to UniformToFill. Everything else goes to Uniform.
-	//        IFC(GetStretch(&stretch));
-	//        if (m_isFullWindow && !m_stretchOnFullWindowChanged)
-	//        {
-	//            m_stretchOnFullWindowChanged = TRUE;
-	//            m_stretchToRestore = stretch;
-	//        }
+			SetStretch(stretch == Stretch_Uniform
+				? Stretch_UniformToFill
+				: Stretch_Uniform);
+		}
+		//Cleanup:
+		//    data.errCode = hr;
+		//    m_AggTelemetry.AddData(MTCTelemetryType::ZoomClick, data);
+	}
 
-	//        IFC(SetStretch(
-	//            stretch == Stretch_Uniform
-	//            ? Stretch_UniformToFill
-	//            : Stretch_Uniform
-	//            ));
-	//    }
-	//Cleanup:
-	//    data.errCode = hr;
-	//    m_AggTelemetry.AddData(MTCTelemetryType::ZoomClick, data);
-	//    return hr;
-	//}
+	/// <summary>
+	/// Called when the size of the transport controls changes.
+	/// </summary>
+	private void OnSizeChanged(object pSender, RoutedEventArgs pArgs)
+	{
+		//MTCTelemetryData data;
 
+		if (m_transportControlsEnabled)
+		{
+			SetMeasureCommandBar();
+			// If error is showing, may need to switch between long / short / shortest form
+			UpdateErrorUI();
+			UpdateVisualState();
+		}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Called when the size of the transport controls changes.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnSizeChanged()
-	//{
-	//    HRESULT hr = S_OK;
-	//    MTCTelemetryData data;
+		// This is arise when clicks the exit fullscreen screen on the title bar, then reset back from the full window
+		if (m_isFullWindow && m_isFullScreen)
+		{
+			bool fullscreenmode = GetFullScreenView()?.IsFullScreenMode ?? false;
+			if (!fullscreenmode)
+			{
+				if (!m_isFullScreenPending) // if true means still we are not under fullscreen, exit through titlebar doesn't occur still
+				{
+					if (!m_isMiniView)
+					{
+						OnFullWindowClick();
+					}
+					else
+					{
+						// While switching from Fullscreen to MiniView, just update the fullscren states.
+						UpdateFullWindowUI();
+						m_isFullScreen = false;
+					}
+				}
+			}
+			else
+			{
+				// m_isFullScreenPending Complete.
+				m_isFullScreenPending = false;
 
-	//    if (m_transportControlsEnabled)
-	//    {
-	//        IFC(SetMeasureCommandBar());
-	//        // If error is showing, may need to switch between long / short / shortest form
-	//        IFC(UpdateErrorUI());
-	//        IFC(UpdateVisualState());
-	//    }
+				//// Find out if the API is available (currently behind a velocity key)
+				//ctl::ComPtr<wf::Metadata::IApiInformationStatics> apiInformationStatics;
+				//IFC(ctl::GetActivationFactory(
+				//	wrl_wrappers::HStringReference(RuntimeClass_Windows_Foundation_Metadata_ApiInformation).Get(),
+				//	&apiInformationStatics));
 
-	//    // This is arise when clicks the exit fullscreen screen on the title bar, then reset back from the full window
-	//    if (m_isFullWindow && m_isFullScreen)
-	//    {
-	//        ctl::ComPtr<wuv::IApplicationView3> spAppView3;
-	//        BOOLEAN fullscreenmode = FALSE;
+				// we are in full screen, so check for spanning mode
+				uint regionCount = 0;
 
-	//        IFC(GetFullScreenView(&spAppView3));
-	//        if (spAppView3)
-	//        {
-	//            IFC(spAppView3->get_IsFullScreenMode(&fullscreenmode));
-	//        }
-	//        if (!fullscreenmode)
-	//        {
-	//            if (!m_isFullScreenPending) // if true means still we are not under fullscreen, exit through titlebar doesn't occur still
-	//            {
-	//                if (!m_isMiniView)
-	//                {
-	//                    IFC(OnFullWindowClick());
-	//                }
-	//                else
-	//                {
-	//                    // While switching from Fullscreen to MiniView, just update the fullscren states.
-	//                    IFC(UpdateFullWindowUI());
-	//                    m_isFullScreen = FALSE;
-	//                }
-	//            }
-	//        }
-	//        else
-	//        {
-	//            // m_isFullScreenPending Complete.
-	//            m_isFullScreenPending = FALSE;
+				//boolean isPresent = false;
+				//IFC(apiInformationStatics->IsMethodPresent(
+				//	wrl_wrappers::HStringReference(L"Windows.UI.ViewManagement.ApplicationView").Get(),
+				//	wrl_wrappers::HStringReference(L"GetDisplayRegions").Get(),
+				//	&isPresent));
 
-	//            // Find out if the API is available (currently behind a velocity key)
-	//            ctl::ComPtr<wf::Metadata::IApiInformationStatics> apiInformationStatics;
-	//            IFC(ctl::GetActivationFactory(
-	//                wrl_wrappers::HStringReference(RuntimeClass_Windows_Foundation_Metadata_ApiInformation).Get(),
-	//                &apiInformationStatics));
+				//if (isPresent)
+				//{
+				//	// Get regions for current view
+				//	ctl::ComPtr<wuv::IApplicationViewStatics2> applicationViewStatics;
+				//	IFC(ctl::GetActivationFactory(wrl_wrappers::HStringReference(
+				//											RuntimeClass_Windows_UI_ViewManagement_ApplicationView)
+				//											.Get(),
+				//											&applicationViewStatics));
 
-	//            // we are in full screen, so check for spanning mode
-	//            uint32_t regionCount = 0;
+				//	ctl::ComPtr<wuv::IApplicationView> applicationView;
 
-	//            boolean isPresent = false;
-	//            IFC(apiInformationStatics->IsMethodPresent(
-	//                wrl_wrappers::HStringReference(L"Windows.UI.ViewManagement.ApplicationView").Get(),
-	//                wrl_wrappers::HStringReference(L"GetDisplayRegions").Get(),
-	//                &isPresent));
+				//	// Get Display Regions doesn't work on Win32 Apps, because there is no
+				//	// application view. For the time being, just don't return an empty vector
+				//	// when running in an unsupported mode.
+				//	if (SUCCEEDED(applicationViewStatics->GetForCurrentView(&applicationView)))
+				//	{
+				//		ctl::ComPtr<wuv::IApplicationView9> applicationView9;
+				//		IFC(applicationView.As(&applicationView9));
 
-	//            if (isPresent)
-	//            {
-	//                // Get regions for current view
-	//                ctl::ComPtr<wuv::IApplicationViewStatics2> applicationViewStatics;
-	//                IFC(ctl::GetActivationFactory(wrl_wrappers::HStringReference(
-	//                                                        RuntimeClass_Windows_UI_ViewManagement_ApplicationView)
-	//                                                        .Get(),
-	//                                                        &applicationViewStatics));
+				//		HRESULT hrGetForCurrentView;
+				//		ctl::ComPtr<wfc::IVectorView<wuwm::DisplayRegion*>> regions;
+				//		hrGetForCurrentView = applicationView9->GetDisplayRegions(&regions);
+				//		if (FAILED(hrGetForCurrentView))
+				//		{
+				//			// bug 14084372: APIs currently return a failure when there is only one display region.
+				//			return S_OK;
+				//		}
 
-	//                ctl::ComPtr<wuv::IApplicationView> applicationView;
+				//		IFC(regions->get_Size(&regionCount));
+				//	}
+				//}
 
-	//                // Get Display Regions doesn't work on Win32 Apps, because there is no
-	//                // application view. For the time being, just don't return an empty vector
-	//                // when running in an unsupported mode.
-	//                if (SUCCEEDED(applicationViewStatics->GetForCurrentView(&applicationView)))
-	//                {
-	//                    ctl::ComPtr<wuv::IApplicationView9> applicationView9;
-	//                    IFC(applicationView.As(&applicationView9));
+				if (regionCount > 1 &&
+					!m_isCompact &&
+					!m_isSpanningCompactEnabled)
+				{
+					IsCompact = true;
+					m_isSpanningCompactEnabled = true;
+				}
+			}
+		}
+		else
+		{
+			// not fullscreen, in spanning compact mode is enabled, reset it
+			if (m_isSpanningCompactEnabled)
+			{
+				IsCompact = false;
+				m_isSpanningCompactEnabled = false;
+			}
+		}
 
-	//                    HRESULT hrGetForCurrentView;
-	//                    ctl::ComPtr<wfc::IVectorView<wuwm::DisplayRegion*>> regions;
-	//                    hrGetForCurrentView = applicationView9->GetDisplayRegions(&regions);
-	//                    if (FAILED(hrGetForCurrentView))
-	//                    {
-	//                        // bug 14084372: APIs currently return a failure when there is only one display region.
-	//                        return S_OK;
-	//                    }
-
-	//                    IFC(regions->get_Size(&regionCount));
-	//                }
-	//            }
-
-	//            if (regionCount > 1  &&
-	//                !m_isCompact &&
-	//                !m_isSpanningCompactEnabled)
-	//            {
-	//                put_IsCompact(true);
-	//                m_isSpanningCompactEnabled = TRUE;
-	//            }
-	//        }
-	//    }
-	//    else
-	//    {
-	//        // not fullscreen, in spanning compact mode is enabled, reset it
-	//        if(m_isSpanningCompactEnabled)
-	//        {
-	//            put_IsCompact(false);
-	//            m_isSpanningCompactEnabled = FALSE;
-	//        }
-	//    }
-
-	//Cleanup:
-	//    data.errCode = hr;
-	//    m_AggTelemetry.AddData(MTCTelemetryType::SizeChanged, data);
-	//    return hr;
-	//}
+		//Cleanup:
+		//	data.errCode = hr;
+		//	m_AggTelemetry.AddData(MTCTelemetryType::SizeChanged, data);
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -3692,87 +3546,76 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      When Position slider value changes, we will apply change to UI and
-	////      update the MediaElement DP.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnPositionSliderValueChanged(
-	//    _In_ IInspectable* pSender,
-	//    _In_ xaml_primitives::IRangeBaseValueChangedEventArgs* pArgs)
-	//{
-	//    HRESULT hr = S_OK;
-	//    DOUBLE newSliderValue = 0.0;
-	//    wf::TimeSpan newMediaPosition;
-	//    BOOLEAN isMediaClosed;
+	/// <summary>
+	/// When Position slider value changes, we will apply change to UI and update the MediaElement DP.
+	/// </summary>
+	private void OnPositionSliderValueChanged(object pSender, RangeBaseValueChangedEventArgs pArgs)
+	{
+		double newSliderValue = 0.0;
+		TimeSpan newMediaPosition;
+		bool isMediaClosed;
 
-	//    if (m_transportControlsEnabled && m_wrOwnerParent.Get())
-	//    {
-	//        // If slider was updated internally in response to Position DP change,
-	//        // do not update the DP again.
-	//        if (m_positionUpdateUIOnly)
-	//        {
-	//            goto Cleanup;
-	//        }
+		if (m_transportControlsEnabled && m_wrOwnerParent.IsAlive)
+		{
+			// If slider was updated internally in response to Position DP change,
+			// do not update the DP again.
+			if (m_positionUpdateUIOnly)
+			{
+				return;
+			}
 
-	//        if (MTCParent_MediaElement == m_parentType)
-	//        {
-	//            IFC(IsMediaStateClosedFromME(&isMediaClosed));
-	//        }
-	//        else if (MTCParent_MediaPlayerElement == m_parentType)
-	//        {
-	//            IFC(IsMediaStateClosedFromMPE(&isMediaClosed));
-	//        }
+			if (MTCParent_MediaElement == m_parentType)
+			{
+				isMediaClosed = IsMediaStateClosedFromME();
+			}
+			else if (MTCParent_MediaPlayerElement == m_parentType)
+			{
+				isMediaClosed = IsMediaStateClosedFromMPE();
+			}
 
-	//        // If user tried to set the slider while in Closed state or for live content,
-	//        // do not update the DP, but refresh Position UI (snap slider back to 0 position, etc).
-	//        if (isMediaClosed || IsLiveContent())
-	//        {
-	//            IFC(UpdatePositionUI());
-	//            goto Cleanup;
-	//        }
+			// If user tried to set the slider while in Closed state or for live content,
+			// do not update the DP, but refresh Position UI (snap slider back to 0 position, etc).
+			if (isMediaClosed || IsLiveContent())
+			{
+				UpdatePositionUI();
+				return;
+			}
 
-	//        IFC(pArgs->get_NewValue(&newSliderValue));
+			newSliderValue = pArgs.NewValue;
 
-	//        // If NaturalDuration is not known (i.e. is 0), new position also evaluates to 0.
-	//        newMediaPosition.Duration =
-	//            static_cast<INT64>((newSliderValue - m_positionSliderMinimum) / (m_positionSliderMaximum - m_positionSliderMinimum) *
-	//                               static_cast<DOUBLE>(m_naturalDuration.TimeSpan.Duration));
+			// If NaturalDuration is not known (i.e. is 0), new position also evaluates to 0.
+			newMediaPosition =
+				(newSliderValue - m_positionSliderMinimum) / (m_positionSliderMaximum - m_positionSliderMinimum) *
+				m_naturalDuration.TimeSpan;
 
-	//        // Without below call to EnterScrubbingMode(), the order of events for a single Seek using PositionSlider during playback is:
-	//        //
-	//        // ... Content is playing ...
-	//        // 1. Set Position (user seeks, Xaml  MediaTransportControls layer responds to ValueChanged event on position slider, call SetCurrentPlaybackTime())
-	//        // 2. Set PlaybackRate = 0   ( Xaml MTC responds to PointerPressed on position slider, enter scrubbing mode)
-	//        //      (i) Get MF_MEDIA_ENGINE_EVENT_SEEKING
-	//        //     (ii) Get MF_MEDIA_ENGINE_EVENT_SEEKED
-	//        // 3. Set PlaybackRate = 1 ( Xaml MTC responds to PointerReleased on position slider, exits scrubbing mode)
-	//        //
-	//        // Seek is issued before we set the PlaybackRate, This is due to bubble up pattern for raising routed events.
-	//        // Both OnPositionSliderValueChanged() and OnPositionSliderPressed() handlers are called in response to a
-	//        // PointerPressed event on a rectangle inside the slider. Slider implementation listens to event directly on
-	//        // the rectangle, and gets the event first, calling OnPositionSliderValueChanged() as part of handling.
-	//        // Later the event bubble's to MTC OnPositionSliderPressed() handler on the slider.
-	//        //
-	//        // The order above is not intended, but is acceptable for a single seek since in that case we don't really benefit from entering scrubbing mode.
-	//        // However, issuing a seek just before toggling PlaybackRate very frequently reproes the following MediaEngine bug:
-	//        // 289704: When changing rate immediately after seeking in MediaEngine during playback we sometimes end up Paused state unexpetedly
-	//        //
-	//        // To avoid hitting scenario above and work around 289704, we make sure to enter scrub mode before doing the seek.
-	//        // The next call to EnterScrubMode()(via OnPositionSlidePressed()) will just no-op. We will leave scrub mode via
-	//        // OnPositionSliderReleased(), OnPositionSliderKeyUp() or OnPositionSliderFocusDisengaged() as usual.
-	//        IFC(EnterScrubbingMode());
-	//        IFC(SetPosition(newMediaPosition));
-	//        IFC(FireThumbnailEvent());
-	//        m_isthruScrubber = TRUE;
-	//    }
-
-	//Cleanup:
-	//    return hr;
-	//}
+			// Without below call to EnterScrubbingMode(), the order of events for a single Seek using PositionSlider during playback is:
+			//
+			// ... Content is playing ...
+			// 1. Set Position (user seeks, Xaml  MediaTransportControls layer responds to ValueChanged event on position slider, call SetCurrentPlaybackTime())
+			// 2. Set PlaybackRate = 0   ( Xaml MTC responds to PointerPressed on position slider, enter scrubbing mode)
+			//      (i) Get MF_MEDIA_ENGINE_EVENT_SEEKING
+			//     (ii) Get MF_MEDIA_ENGINE_EVENT_SEEKED
+			// 3. Set PlaybackRate = 1 ( Xaml MTC responds to PointerReleased on position slider, exits scrubbing mode)
+			//
+			// Seek is issued before we set the PlaybackRate, This is due to bubble up pattern for raising routed events.
+			// Both OnPositionSliderValueChanged() and OnPositionSliderPressed() handlers are called in response to a
+			// PointerPressed event on a rectangle inside the slider. Slider implementation listens to event directly on
+			// the rectangle, and gets the event first, calling OnPositionSliderValueChanged() as part of handling.
+			// Later the event bubble's to MTC OnPositionSliderPressed() handler on the slider.
+			//
+			// The order above is not intended, but is acceptable for a single seek since in that case we don't really benefit from entering scrubbing mode.
+			// However, issuing a seek just before toggling PlaybackRate very frequently reproes the following MediaEngine bug:
+			// 289704: When changing rate immediately after seeking in MediaEngine during playback we sometimes end up Paused state unexpetedly
+			//
+			// To avoid hitting scenario above and work around 289704, we make sure to enter scrub mode before doing the seek.
+			// The next call to EnterScrubMode()(via OnPositionSlidePressed()) will just no-op. We will leave scrub mode via
+			// OnPositionSliderReleased(), OnPositionSliderKeyUp() or OnPositionSliderFocusDisengaged() as usual.
+			EnterScrubbingMode();
+			SetPosition(newMediaPosition);
+			FireThumbnailEvent();
+			m_isthruScrubber = true;
+		}
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -4538,29 +4381,21 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Start timer responsible for control panel fadeout,
-	////      provided that pre-requisite conditions for hiding it are met.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::StartControlPanelHideTimer()
-	//{
-	//    HRESULT hr = S_OK;
-	//    if (m_transportControlsEnabled)
-	//    {
-	//        if (m_tpHideControlPanelTimer &&
-	//            ShouldHideControlPanel())
-	//        {
-	//            IFC(m_tpHideControlPanelTimer->Start());
-	//        }
-	//    }
-
-	//Cleanup:
-	//    return hr;
-	//}
+	/// <summary>
+	/// Start timer responsible for control panel fadeout,
+	/// provided that pre-requisite conditions for hiding it are met.
+	/// </summary>
+	private void StartControlPanelHideTimer()
+	{
+		if (m_transportControlsEnabled)
+		{
+			if (m_tpHideControlPanelTimer &&
+				ShouldHideControlPanel())
+			{
+				m_tpHideControlPanelTimer.Start();
+			}
+		}
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -4585,34 +4420,30 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return hr;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Helper to add Tooltip to a component control.
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::AddTooltip(
-	//    _In_ xaml::IDependencyObject* pTooltipTarget,
-	//    _In_ HSTRING hstrTooltipText)
-	//{
-	//    HRESULT hr = S_OK;
+	/// <summary>
+	/// Helper to add Tooltip to a component control.
+	/// </summary>
+	private void AddTooltip(DependencyObject pTooltipTarget, string hstrTooltipText)
+	{
+#if false
+		//ctl::ComPtr<ToolTip> spToolTip;
+		//ctl::ComPtr<wf::IPropertyValueStatics> spPropertyValueFactory;
+		//ctl::ComPtr<wf::IPropertyValue> spContentAsPV;
 
-	//    ctl::ComPtr<ToolTip> spToolTip;
-	//    ctl::ComPtr<wf::IPropertyValueStatics> spPropertyValueFactory;
-	//    ctl::ComPtr<wf::IPropertyValue> spContentAsPV;
+		//IFC(ctl::make<ToolTip>(&spToolTip));
 
-	//    IFC(ctl::make<ToolTip>(&spToolTip));
+		//IFC(wf::GetActivationFactory(wrl_wrappers::HStringReference(RuntimeClass_Windows_Foundation_PropertyValue).Get(), spPropertyValueFactory.ReleaseAndGetAddressOf()));
+		//IFC(spPropertyValueFactory->CreateString(hstrTooltipText, &spContentAsPV));
+		//IFC(spToolTip->put_Content(ctl::as_iinspectable(spContentAsPV.Get())));
 
-	//    IFC(wf::GetActivationFactory(wrl_wrappers::HStringReference(RuntimeClass_Windows_Foundation_PropertyValue).Get(), spPropertyValueFactory.ReleaseAndGetAddressOf()));
-	//    IFC(spPropertyValueFactory->CreateString(hstrTooltipText, &spContentAsPV));
-	//    IFC(spToolTip->put_Content(ctl::as_iinspectable(spContentAsPV.Get())));
+		//IFC(ToolTipServiceFactory::SetToolTipStatic(pTooltipTarget, ctl::as_iinspectable(spToolTip.Get())));
+#else
+		var spToolTip = new ToolTip();
+		spToolTip.Content = hstrTooltipText;
 
-	//    IFC(ToolTipServiceFactory::SetToolTipStatic(pTooltipTarget, ctl::as_iinspectable(spToolTip.Get())));
-
-	//Cleanup:
-	//    return hr;
-	//}
+		ToolTipService.SetToolTip(pTooltipTarget, spToolTip);
+#endif
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -5493,66 +5324,51 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	//    return S_OK;
 	//}
 
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////      Called for property changes via DXaml SetValue()
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::OnPropertyChanged2(_In_ const PropertyChangedParams& args)
-	//{
-	//    HRESULT hr = S_OK;
+	/// <summary>
+	/// Called for property changes via DXaml SetValue()
+	/// </summary>
+	/// <param name="args"></param>
+	internal override void OnPropertyChanged2(DependencyPropertyChangedEventArgs args)
+	{
+		base.OnPropertyChanged2(args);
 
-	//    IFC(MediaTransportControlsGenerated::OnPropertyChanged2(args));
-	//    IFC(UpdateMediaControlState(args.m_pDP->GetIndex()));
+		//IFC(MediaTransportControlsGenerated::OnPropertyChanged2(args));
+		UpdateMediaControlState(args.Property);
+	}
 
-	//Cleanup:
-	//    return hr;
-	//}
-
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Update all MediaControl States
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::UpdateMediaControlAllStates()
-	//{
-	//    HRESULT hr = S_OK;
-
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsFullWindowButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsZoomButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsSeekBarVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsVolumeButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsFullWindowEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsVolumeEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsZoomEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsSeekEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsPlaybackRateButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsPlaybackRateEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsFastForwardButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsFastForwardEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsFastRewindEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsFastRewindButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsStopEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsStopButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsCompact));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsSkipForwardEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsSkipBackwardEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsSkipForwardButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsSkipBackwardButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsNextTrackButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsPreviousTrackButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsRepeatButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsRepeatEnabled));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsCompactOverlayButtonVisible));
-	//    IFC(UpdateMediaControlState(KnownPropertyIndex::MediaTransportControls_IsCompactOverlayEnabled));
-
-	//Cleanup:
-	//    return hr;
-	//}
+	/// <summary>
+	/// Update all MediaControl States
+	/// </summary>
+	private void UpdateMediaControlAllStates()
+	{
+		UpdateMediaControlState(IsFullWindowButtonVisibleProperty);
+		UpdateMediaControlState(IsZoomButtonVisibleProperty);
+		UpdateMediaControlState(IsSeekBarVisibleProperty);
+		UpdateMediaControlState(IsVolumeButtonVisibleProperty);
+		UpdateMediaControlState(IsFullWindowEnabledProperty);
+		UpdateMediaControlState(IsVolumeEnabledProperty);
+		UpdateMediaControlState(IsZoomEnabledProperty);
+		UpdateMediaControlState(IsSeekEnabledProperty);
+		UpdateMediaControlState(IsPlaybackRateButtonVisibleProperty);
+		UpdateMediaControlState(IsPlaybackRateEnabledProperty);
+		UpdateMediaControlState(IsFastForwardButtonVisibleProperty);
+		UpdateMediaControlState(IsFastForwardEnabledProperty);
+		UpdateMediaControlState(IsFastRewindEnabledProperty);
+		UpdateMediaControlState(IsFastRewindButtonVisibleProperty);
+		UpdateMediaControlState(IsStopEnabledProperty);
+		UpdateMediaControlState(IsStopButtonVisibleProperty);
+		UpdateMediaControlState(IsCompactProperty);
+		UpdateMediaControlState(IsSkipForwardEnabledProperty);
+		UpdateMediaControlState(IsSkipBackwardEnabledProperty);
+		UpdateMediaControlState(IsSkipForwardButtonVisibleProperty);
+		UpdateMediaControlState(IsSkipBackwardButtonVisibleProperty);
+		UpdateMediaControlState(IsNextTrackButtonVisibleProperty);
+		UpdateMediaControlState(IsPreviousTrackButtonVisibleProperty);
+		UpdateMediaControlState(IsRepeatButtonVisibleProperty);
+		UpdateMediaControlState(IsRepeatEnabledProperty);
+		UpdateMediaControlState(IsCompactOverlayButtonVisibleProperty);
+		UpdateMediaControlState(IsCompactOverlayEnabledProperty);
+	}
 
 	////------------------------------------------------------------------------
 	////
@@ -5560,396 +5376,329 @@ public partial class MediaTransportControls_partial // dxaml\xcp\dxaml\lib\Media
 	////       Handling common to Dxaml level and core level property changes
 	////
 	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::UpdateMediaControlState(_In_ KnownPropertyIndex propertyIndex) noexcept
-	//{
-	//    HRESULT hr = S_OK;
-	//    BOOLEAN value = FALSE;
-	//    BOOLEAN compact = FALSE;
-	//    ctl::ComPtr<xaml::IDependencyObject> spOwnerParent;
-	//    ctl::ComPtr<xaml_controls::ITextBlock> spTimeElapsedTextBlock;
-	//    ctl::ComPtr<xaml_controls::ITextBlock> spTimeRemainingTextBlock;
 
-	//    switch (propertyIndex)
-	//    {
-	//        case KnownPropertyIndex::MediaTransportControls_IsFullWindowButtonVisible:
-	//        {
-	//            if (m_tpFullWindowButton)
-	//            {
+	private void UpdateMediaControlState(DependencyProperty propertyIndex)
+	{
+		bool value = false;
+		bool compact = false;
+		//ctl::ComPtr<xaml::IDependencyObject> spOwnerParent;
+		//ctl::ComPtr<xaml_controls::ITextBlock> spTimeElapsedTextBlock;
+		//ctl::ComPtr<xaml_controls::ITextBlock> spTimeRemainingTextBlock;
 
-	//                // Remove this code to disable and hide only after Deliverable 19012797: Fullscreen media works in ApplicationWindow and Win32 XAML Islands is complete
-	//                CContentRoot* contentRoot = VisualTree::GetContentRootForElement(GetHandle());
-	//                if( contentRoot->GetType() == CContentRoot::Type::XamlIsland )
-	//                {
-	//                    IFC(m_tpFullWindowButton.Cast<ButtonBase>()->put_Visibility(xaml::Visibility_Collapsed));
-	//                }
-	//                else
-	//                {
-	//                    IFC(get_IsFullWindowButtonVisible(&value));
-	//                    IFC(m_tpFullWindowButton.Cast<ButtonBase>()->put_Visibility(
-	//                        (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//                }
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsZoomButtonVisible:
-	//        {
-	//            if (m_tpZoomButton)
-	//            {
-	//                IFC(get_IsZoomButtonVisible(&value));
-	//                IFC(m_tpZoomButton.Cast<ButtonBase>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsSeekBarVisible:
-	//        {
-	//            IFC(get_IsSeekBarVisible(&value));
-	//            IFC(get_IsCompact(&compact));
-	//            if (m_tpTimeElapsedElement && !compact)
-	//            {
-	//                IFC(m_tpTimeElapsedElement.As(&spTimeElapsedTextBlock));
-	//                IFC(spTimeElapsedTextBlock.Cast<TextBlock>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            if (m_tpTimeRemainingElement && !compact)
-	//            {
-	//                IFC(m_tpTimeRemainingElement.As(&spTimeRemainingTextBlock));
-	//                IFC(spTimeRemainingTextBlock.Cast<TextBlock>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            if (m_tpMediaPositionSlider)
-	//            {
-	//                IFC(m_tpMediaPositionSlider.Cast<Slider>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsVolumeButtonVisible:
-	//        {
+		if (false)
+		{
+		}
+		else if (propertyIndex == IsFullWindowButtonVisibleProperty)
+		{
+			if (m_tpFullWindowButton is { })
+			{
 
-	//            if (m_tpTHVolumeButton)
-	//            {
-	//                IFC(get_IsVolumeButtonVisible(&value));
-	//                IFC(m_tpTHVolumeButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsPlaybackRateButtonVisible:
-	//        {
+				// Remove this code to disable and hide only after Deliverable 19012797: Fullscreen media works in ApplicationWindow and Win32 XAML Islands is complete
+				var contentRoot = VisualTree.GetContentRootForElement(this);
+				if (contentRoot.Type == ContentRootType.XamlIsland)
+				{
+					m_tpFullWindowButton.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					m_tpFullWindowButton.Visibility = IsFullWindowButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+				}
+			}
+		}
+		else if (propertyIndex == IsFullWindowButtonVisibleProperty)
+		{
+			if (m_tpFullWindowButton is { })
+			{
+				// Remove this code to disable and hide only after Deliverable 19012797: Fullscreen media works in ApplicationWindow and Win32 XAML Islands is complete
+				var contentRoot = VisualTree.GetContentRootForElement(this);
+				if (contentRoot.Type == ContentRootType.XamlIsland)
+				{
+					m_tpFullWindowButton.Visibility = Visibility.Collapsed;
+				}
+				else
+				{
+					m_tpFullWindowButton.Visibility = IsFullWindowButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+				}
+			}
+		}
+		else if (propertyIndex == IsZoomButtonVisibleProperty)
+		{
+			if (m_tpZoomButton is { })
+			{
+				m_tpZoomButton.Visibility = IsZoomButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsSeekBarVisibleProperty)
+		{
+			value = IsSeekBarVisible;
+			compact = IsCompact;
 
-	//            if (m_tpPlaybackRateButton)
-	//            {
-	//                IFC(get_IsPlaybackRateButtonVisible(&value));
-	//                IFC(m_tpPlaybackRateButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsFastForwardButtonVisible:
-	//        {
+			if (m_tpTimeElapsedElement is TextBlock spTimeElapsedTextBlock && !compact)
+			{
+				spTimeElapsedTextBlock.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+			}
+			if (m_tpTimeRemainingElement is TextBlock spTimeRemainingTextBlock && !compact)
+			{
+				spTimeRemainingTextBlock.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+			}
+			if (m_tpMediaPositionSlider is { })
+			{
+				m_tpMediaPositionSlider.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsVolumeButtonVisibleProperty)
+		{
+			if (m_tpTHVolumeButton is { })
+			{
+				IFC(get_IsVolumeButtonVisible(&value));
+				IFC(m_tpTHVolumeButton.Cast<Button>()->put_Visibility(
+					(value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
+				m_tpMediaPositionSlider.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsPlaybackRateButtonVisibleProperty)
+		{
+			if (m_tpPlaybackRateButton is { })
+			{
+				m_tpPlaybackRateButton.Visibility = IsPlaybackRateButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsFastForwardButtonVisibleProperty)
+		{
+			if (m_tpFastForwardButton is { })
+			{
+				m_tpFastForwardButton.Visibility = IsFastForwardButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsFastRewindButtonVisibleProperty)
+		{
+			if (m_tpFastRewindButton is { })
+			{
+				m_tpFastRewindButton.Visibility = IsFastRewindButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsStopButtonVisibleProperty)
+		{
+			if (m_tpStopButton is { })
+			{
+				m_tpStopButton.Visibility = IsStopButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsSkipForwardButtonVisibleProperty)
+		{
+			if (m_tpSkipForwardButton is { })
+			{
+				m_tpSkipForwardButton.Visibility = IsSkipForwardButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsSkipBackwardButtonVisibleProperty)
+		{
+			if (m_tpSkipBackwardButton is { })
+			{
+				m_tpSkipBackwardButton.Visibility = IsSkipBackwardButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsNextTrackButtonVisibleProperty)
+		{
+			if (m_tpNextTrackButton is { })
+			{
+				m_tpNextTrackButton.Visibility = IsNextTrackButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsPreviousTrackButtonVisibleProperty)
+		{
+			if (m_tpPreviousTrackButton is { })
+			{
+				m_tpPreviousTrackButton.Visibility = IsPreviousTrackButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsRepeatButtonVisibleProperty)
+		{
+			if (m_tpRepeatButton is { })
+			{
+				m_tpRepeatButton.Visibility = IsRepeatButtonVisible ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsCompactOverlayButtonVisibleProperty)
+		{
+			if (m_tpCompactOverlayButton)
+			{
+				m_applicationView ??= ApplicationView.GetForCurrentView();
+				var isSupport = m_applicationView?.IsViewModeSupported(ApplicationViewMode.CompactOverlay) ?? false;
 
-	//            if (m_tpFastForwardButton)
-	//            {
-	//                IFC(get_IsFastForwardButtonVisible(&value));
-	//                IFC(m_tpFastForwardButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsFastRewindButtonVisible:
-	//        {
+				m_tpCompactOverlayButton.Visibility = (IsCompactOverlayButtonVisible && isSupport) ? Visibility.Visible : Visibility.Collapsed;
+			}
+		}
+		else if (propertyIndex == IsFullWindowEnabledProperty)
+		{
+			//if (m_tpFullWindowButton)
+			//{
+			//	// Remove this code to disable and hide only after Deliverable 19012797: Fullscreen media works in ApplicationWindow and Win32 XAML Islands is complete
+			//	CContentRoot* contentRoot = VisualTree::GetContentRootForElement(GetHandle());
+			//	if (contentRoot->GetType() == CContentRoot::Type::XamlIsland)
+			//	{
+			//		IFC(m_tpFullWindowButton.Cast<ButtonBase>()->put_IsEnabled(false));
+			//	}
+			//	else
+			//	{
+			//		IFC(get_IsFullWindowEnabled(&value));
+			//		IFC(m_tpFullWindowButton.Cast<ButtonBase>()->put_IsEnabled(value));
+			//	}
+			//}
+		}
+		else if (propertyIndex == IsVolumeEnabledProperty)
+		{
+			//if (m_tpTHVolumeButton)
+			//{
+			//	IFC(get_IsVolumeEnabled(&value));
+			//	IFC(m_tpTHVolumeButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsZoomEnabledProperty)
+		{
+			//if (m_tpZoomButton)
+			//{
+			//	IFC(get_IsZoomEnabled(&value));
+			//	IFC(m_tpZoomButton.Cast<ButtonBase>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsSeekEnabledProperty)
+		{
+			//if (m_tpMediaPositionSlider)
+			//{
+			//	IFC(get_IsSeekEnabled(&value));
+			//	IFC(m_tpMediaPositionSlider.Cast<Slider>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsPlaybackRateEnabledProperty)
+		{
+			//if (m_tpPlaybackRateButton)
+			//{
+			//	IFC(get_IsPlaybackRateEnabled(&value));
+			//	IFC(m_tpPlaybackRateButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsFastForwardEnabledProperty)
+		{
+			//if (m_tpFastForwardButton)
+			//{
+			//	IFC(get_IsFastForwardEnabled(&value));
+			//	IFC(m_tpFastForwardButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsFastRewindEnabledProperty)
+		{
+			//if (m_tpFastRewindButton)
+			//{
+			//	IFC(get_IsFastRewindEnabled(&value));
+			//	IFC(m_tpFastRewindButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsSkipForwardEnabledProperty)
+		{
+			//if (m_tpSkipForwardButton)
+			//{
+			//	IFC(get_IsSkipForwardEnabled(&value));
+			//	IFC(m_tpSkipForwardButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsSkipBackwardEnabledProperty)
+		{
+			//if (m_tpSkipBackwardButton)
+			//{
+			//	IFC(get_IsSkipBackwardEnabled(&value));
+			//	IFC(m_tpSkipBackwardButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsStopEnabledProperty)
+		{
+			//if (m_tpStopButton)
+			//{
+			//	IFC(get_IsStopEnabled(&value));
+			//	IFC(m_tpStopButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsRepeatEnabledProperty)
+		{
+			//if (m_tpRepeatButton)
+			//{
+			//	IFC(get_IsRepeatEnabled(&value));
+			//	IFC(m_tpRepeatButton.Cast<ToggleButton>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsCompactOverlayEnabledProperty)
+		{
+			//if (m_tpCompactOverlayButton)
+			//{
+			//	IFC(get_IsCompactOverlayEnabled(&value));
+			//	IFC(m_tpCompactOverlayButton.Cast<Button>()->put_IsEnabled(value));
+			//}
+		}
+		else if (propertyIndex == IsCompactProperty)
+		{
+			//IFC(m_wrOwnerParent.As(&spOwnerParent));
+			//if (m_transportControlsEnabled && spOwnerParent.Get())
+			//{
+			//	IFC(get_IsCompact(&compact));
+			//	if (m_isCompact != compact)
+			//	{
+			//		m_isCompact = compact;
+			//		IFC(UpdateVisualState());
+			//		IFC(SetMeasureCommandBar());
+			//		IFC(SetTabIndex());
+			//	}
+			//}
+		}
+		else if (propertyIndex == FastPlayFallbackBehaviourProperty)
+		{
+			//IFC(UpdateTrickModeFallbackUI());
+		}
+		else if (propertyIndex == ShowAndHideAutomaticallyProperty)
+		{
+			//BOOLEAN isAutoShowHide = false;
+			//IFC(get_ShowAndHideAutomatically(&isAutoShowHide));
+			//// If MTC is hides and AutoHide is disabled then show immediately
+			//if (!m_controlPanelIsVisible && !isAutoShowHide)
+			//{
+			//	IFC(ShowControlPanel());
+			//}
+		}
+	}
 
-	//            if (m_tpFastRewindButton)
-	//            {
-	//                IFC(get_IsFastRewindButtonVisible(&value));
-	//                IFC(m_tpFastRewindButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsStopButtonVisible:
-	//        {
-
-	//            if (m_tpStopButton)
-	//            {
-	//                IFC(get_IsStopButtonVisible(&value));
-	//                IFC(m_tpStopButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsSkipForwardButtonVisible:
-	//        {
-
-	//            if (m_tpSkipForwardButton)
-	//            {
-	//                IFC(get_IsSkipForwardButtonVisible(&value));
-	//                IFC(m_tpSkipForwardButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsSkipBackwardButtonVisible:
-	//        {
-
-	//            if (m_tpSkipBackwardButton)
-	//            {
-	//                IFC(get_IsSkipBackwardButtonVisible(&value));
-	//                IFC(m_tpSkipBackwardButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsNextTrackButtonVisible:
-	//        {
-
-	//            if (m_tpNextTrackButton)
-	//            {
-	//                IFC(get_IsNextTrackButtonVisible(&value));
-	//                IFC(m_tpNextTrackButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsPreviousTrackButtonVisible:
-	//        {
-
-	//            if (m_tpPreviousTrackButton)
-	//            {
-	//                IFC(get_IsPreviousTrackButtonVisible(&value));
-	//                IFC(m_tpPreviousTrackButton.Cast<Button>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsRepeatButtonVisible:
-	//        {
-
-	//            if (m_tpRepeatButton)
-	//            {
-	//                IFC(get_IsRepeatButtonVisible(&value));
-	//                IFC(m_tpRepeatButton.Cast<ToggleButton>()->put_Visibility(
-	//                    (value) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsCompactOverlayButtonVisible:
-	//        {
-	//            if (m_tpCompactOverlayButton)
-	//            {
-	//                ctl::ComPtr<wuv::IApplicationView4> spAppView4;
-	//                boolean isSupport = false;
-	//                IFC(GetMiniView(&spAppView4));
-	//                if (spAppView4)
-	//                {
-	//                    IFC(spAppView4->IsViewModeSupported(wuv::ApplicationViewMode::ApplicationViewMode_CompactOverlay, &isSupport));
-	//                }
-	//                IFC(get_IsCompactOverlayButtonVisible(&value));
-
-	//                IFC(m_tpCompactOverlayButton.Cast<Button>()->put_Visibility(
-	//                    (value && isSupport) ? xaml::Visibility_Visible : xaml::Visibility_Collapsed));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsFullWindowEnabled:
-	//        {
-	//            if (m_tpFullWindowButton)
-	//            {
-	//                // Remove this code to disable and hide only after Deliverable 19012797: Fullscreen media works in ApplicationWindow and Win32 XAML Islands is complete
-	//                CContentRoot* contentRoot = VisualTree::GetContentRootForElement(GetHandle());
-	//                if( contentRoot->GetType() == CContentRoot::Type::XamlIsland )
-	//                {
-	//                    IFC(m_tpFullWindowButton.Cast<ButtonBase>()->put_IsEnabled(false));
-	//                }
-	//                else
-	//                {
-	//                    IFC(get_IsFullWindowEnabled(&value));
-	//                    IFC(m_tpFullWindowButton.Cast<ButtonBase>()->put_IsEnabled(value));
-	//                }
-
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsVolumeEnabled:
-	//        {
-	//            if (m_tpTHVolumeButton)
-	//            {
-	//                IFC(get_IsVolumeEnabled(&value));
-	//                IFC(m_tpTHVolumeButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsZoomEnabled:
-	//        {
-	//            if (m_tpZoomButton)
-	//            {
-	//                IFC(get_IsZoomEnabled(&value));
-	//                IFC(m_tpZoomButton.Cast<ButtonBase>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsSeekEnabled:
-	//        {
-	//            if (m_tpMediaPositionSlider)
-	//            {
-	//                IFC(get_IsSeekEnabled(&value));
-	//                IFC(m_tpMediaPositionSlider.Cast<Slider>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsPlaybackRateEnabled:
-	//        {
-	//            if (m_tpPlaybackRateButton)
-	//            {
-	//                IFC(get_IsPlaybackRateEnabled(&value));
-	//                IFC(m_tpPlaybackRateButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsFastForwardEnabled:
-	//        {
-	//            if (m_tpFastForwardButton)
-	//            {
-	//                IFC(get_IsFastForwardEnabled(&value));
-	//                IFC(m_tpFastForwardButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsFastRewindEnabled:
-	//        {
-	//            if (m_tpFastRewindButton)
-	//            {
-	//                IFC(get_IsFastRewindEnabled(&value));
-	//                IFC(m_tpFastRewindButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsSkipForwardEnabled:
-	//        {
-	//            if (m_tpSkipForwardButton)
-	//            {
-	//                IFC(get_IsSkipForwardEnabled(&value));
-	//                IFC(m_tpSkipForwardButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsSkipBackwardEnabled:
-	//        {
-	//            if (m_tpSkipBackwardButton)
-	//            {
-	//                IFC(get_IsSkipBackwardEnabled(&value));
-	//                IFC(m_tpSkipBackwardButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsStopEnabled:
-	//        {
-	//            if (m_tpStopButton)
-	//            {
-	//                IFC(get_IsStopEnabled(&value));
-	//                IFC(m_tpStopButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsRepeatEnabled:
-	//        {
-	//            if (m_tpRepeatButton)
-	//            {
-	//                IFC(get_IsRepeatEnabled(&value));
-	//                IFC(m_tpRepeatButton.Cast<ToggleButton>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsCompactOverlayEnabled:
-	//        {
-	//            if (m_tpCompactOverlayButton)
-	//            {
-	//                IFC(get_IsCompactOverlayEnabled(&value));
-	//                IFC(m_tpCompactOverlayButton.Cast<Button>()->put_IsEnabled(value));
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_IsCompact:
-	//        {
-	//            IFC(m_wrOwnerParent.As(&spOwnerParent))
-	//            if (m_transportControlsEnabled && spOwnerParent.Get())
-	//            {
-	//                IFC(get_IsCompact(&compact));
-	//                if (m_isCompact != compact)
-	//                {
-	//                    m_isCompact = compact;
-	//                    IFC(UpdateVisualState());
-	//                    IFC(SetMeasureCommandBar());
-	//                    IFC(SetTabIndex());
-	//                }
-	//            }
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_FastPlayFallbackBehaviour:
-	//        {
-	//            IFC(UpdateTrickModeFallbackUI());
-	//            break;
-	//        }
-	//        case KnownPropertyIndex::MediaTransportControls_ShowAndHideAutomatically:
-	//        {
-	//            BOOLEAN isAutoShowHide = false;
-	//            IFC(get_ShowAndHideAutomatically(&isAutoShowHide));
-	//            // If MTC is hides and AutoHide is disabled then show immediately
-	//            if (!m_controlPanelIsVisible && !isAutoShowHide)
-	//            {
-	//                IFC(ShowControlPanel());
-	//            }
-	//            break;
-	//        }
-	//    }
-	//Cleanup:
-	//    return hr;
-	//}
-
-	////------------------------------------------------------------------------
-	////
-	////  Synopsis:
-	////       Setup the default values for the MediaControls States
-	////
-	////------------------------------------------------------------------------
-	//_Check_return_ HRESULT
-	//MediaTransportControls::SetupDefaultProperties()
-	//{
-	//    HRESULT hr = S_OK;
-	//    IFC(put_IsFullWindowButtonVisible(true));
-	//    IFC(put_IsFullWindowEnabled(true));
-	//    IFC(put_IsZoomButtonVisible(true));
-	//    IFC(put_IsZoomEnabled(true));
-	//    IFC(put_IsFastForwardButtonVisible(false));
-	//    IFC(put_IsFastForwardEnabled(false));
-	//    IFC(put_IsFastRewindButtonVisible(false));
-	//    IFC(put_IsFastRewindEnabled(false));
-	//    IFC(put_IsStopButtonVisible(false));
-	//    IFC(put_IsStopEnabled(false));
-	//    IFC(put_IsVolumeButtonVisible(true));
-	//    IFC(put_IsVolumeEnabled(true));
-	//    IFC(put_IsSeekBarVisible(true));
-	//    IFC(put_IsSeekEnabled(true));
-	//    IFC(put_IsPlaybackRateButtonVisible(false));
-	//    IFC(put_IsPlaybackRateEnabled(false));
-	//    IFC(put_IsSkipBackwardButtonVisible(false));
-	//    IFC(put_IsSkipBackwardEnabled(false));
-	//    IFC(put_IsSkipForwardButtonVisible(false));
-	//    IFC(put_IsSkipForwardEnabled(false));
-	//    IFC(put_IsPreviousTrackButtonVisible(false));
-	//    IFC(put_IsNextTrackButtonVisible(false));
-	//    IFC(put_FastPlayFallbackBehaviour(xaml_media::FastPlayFallbackBehaviour::FastPlayFallbackBehaviour_Skip));
-	//    IFC(put_ShowAndHideAutomatically(true));
-	//    IFC(put_IsRepeatEnabled(false));
-	//    IFC(put_IsRepeatButtonVisible(false));
-	//    IFC(put_IsCompactOverlayEnabled(false));
-	//    IFC(put_IsCompactOverlayButtonVisible(false));
-
-	//Cleanup:
-	//    return hr;
-	//}
+	/// <summary>
+	/// Setup the default values for the MediaControls States
+	/// </summary>
+	private void SetupDefaultProperties()
+	{
+		IsFullWindowButtonVisible = true;
+		IsFullWindowEnabled = true;
+		IsZoomButtonVisible = true;
+		IsZoomEnabled = true;
+		IsFastForwardButtonVisible = false;
+		IsFastForwardEnabled = false;
+		IsFastRewindButtonVisible = false;
+		IsFastRewindEnabled = false;
+		IsStopButtonVisible = false;
+		IsStopEnabled = false;
+		IsVolumeButtonVisible = true;
+		IsVolumeEnabled = true;
+		IsSeekBarVisible = true;
+		IsSeekEnabled = true;
+		IsPlaybackRateButtonVisible = false;
+		IsPlaybackRateEnabled = false;
+		IsSkipBackwardButtonVisible = false;
+		IsSkipBackwardEnabled = false;
+		IsSkipForwardButtonVisible = false;
+		IsSkipForwardEnabled = false;
+		IsPreviousTrackButtonVisible = false;
+		IsNextTrackButtonVisible = false;
+		//FastPlayFallbackBehaviour = FastPlayFallbackBehaviour.FastPlayFallbackBehaviour_Skip;
+		ShowAndHideAutomatically = true;
+		IsRepeatEnabled = false;
+		IsRepeatButtonVisible = false;
+		IsCompactOverlayEnabled = false;
+		IsCompactOverlayButtonVisible = false;
+	}
 
 	//// Called when a user selects a track from the CC menu, the old value
 	//// needs to be deselected and the new value selected

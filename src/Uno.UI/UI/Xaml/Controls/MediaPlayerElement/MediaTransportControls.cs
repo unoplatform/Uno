@@ -7,6 +7,9 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Uno.UI.Xaml.Controls.MediaPlayer.Internal;
+using Windows.Graphics.Printing.OptionDetails;
+using DirectUI;
+using Windows.UI.Xaml.Automation;
 
 #if __IOS__
 using UIKit;
@@ -107,6 +110,7 @@ namespace Windows.UI.Xaml.Controls
 		private bool _isInteractive;
 		private MediaPlayerElement _mpe;
 
+#if false
 		public MediaTransportControls() : base()
 		{
 			_controlsVisibilityTimer = new Timer()
@@ -117,6 +121,7 @@ namespace Windows.UI.Xaml.Controls
 			_controlsVisibilityTimer.Elapsed += ControlsVisibilityTimerElapsed;
 			DefaultStyleKey = typeof(MediaTransportControls);
 		}
+#endif
 
 		internal void SetMediaPlayerElement(MediaPlayerElement mediaPlayerElement)
 		{
@@ -148,6 +153,7 @@ namespace Windows.UI.Xaml.Controls
 			_controlsVisibilityTimer.Stop();
 		}
 
+#if false
 		protected override void OnApplyTemplate()
 		{
 			base.OnApplyTemplate();
@@ -207,10 +213,15 @@ namespace Windows.UI.Xaml.Controls
 			_compactOverlayButton.Tapped += UpdateMediaTransportControlMode;
 
 			_repeatVideoButton = this.GetTemplateChild(RepeatVideoButtonName) as Button;
-			_repeatVideoButton?.SetBinding(Button.VisibilityProperty, new Binding { Path = "IsRepeatButtonVisible", Source = this, Mode = BindingMode.OneWay, FallbackValue = Visibility.Collapsed, Converter = trueToVisible });
-			_repeatVideoButton?.SetBinding(Button.IsEnabledProperty, new Binding { Path = "IsRepeatEnabled", Source = this, Mode = BindingMode.OneWay, FallbackValue = true });
-			_repeatVideoButton.Tapped -= IsRepeatEnabledButtonTapped;
-			_repeatVideoButton.Tapped += IsRepeatEnabledButtonTapped;
+			if (_repeatVideoButton is { })
+			{
+				// @1471
+				var strAutomationName = DXamlCore.GetCurrentNoCreate().GetLocalizedResourceString("UIA_MEDIA_REPEAT_NONE"); // const this
+				AutomationProperties.SetName(_repeatVideoButton, strAutomationName);
+				//AddTooltip(_repeatVideoButton, strAutomationName);
+				_repeatVideoButton.Tapped -= IsRepeatEnabledButtonTapped; // move: DeinitializeTransportControls
+				_repeatVideoButton.Tapped += OnRepeatButtonClicked; // f2: OnRepeatButtonClicked
+			}
 
 			_skipForwardButton = this.GetTemplateChild(SkipForwardButtonName) as Button;
 			_skipForwardButton?.SetBinding(Button.VisibilityProperty, new Binding { Path = "IsSkipForwardButtonVisible", Source = this, Mode = BindingMode.OneWay, FallbackValue = Visibility.Collapsed, Converter = trueToVisible });
@@ -271,11 +282,14 @@ namespace Windows.UI.Xaml.Controls
 				_rootGrid.Tapped += OnRootGridTapped;
 			}
 
+			UpdateMediaControlAllStates();
+
 			if (_mediaPlayer != null)
 			{
 				BindMediaPlayer();
 			}
 		}
+#endif
 
 		private void FullWindowButtonTapped(object sender, RoutedEventArgs e)
 		{
