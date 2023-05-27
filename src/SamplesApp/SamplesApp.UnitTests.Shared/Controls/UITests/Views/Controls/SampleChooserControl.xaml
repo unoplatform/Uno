@@ -49,7 +49,7 @@
 				<Setter Property="BorderThickness"
 						Value="0,0,0,1" />
 				<Setter Property="Background"
-						Value="{StaticResource ApplicationPageBackgroundThemeBrush}" />
+						Value="Green" />
 				<Setter Property="Height"
 								Value="50" />
 			</Style>
@@ -252,10 +252,9 @@
 			</VisualStateGroup>
 		</VisualStateManager.VisualStateGroups>
 		<SplitView.Pane>
-			<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+			<Grid Background="Green"
 				  BorderBrush="LightGray"
-				  BorderThickness="0,0,1,0"
-				  toolkit:VisibleBoundsPadding.PaddingMask="All">
+				  BorderThickness="0,0,1,0">
 
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
@@ -441,8 +440,7 @@
 			</Grid>
 		</SplitView.Pane>
 		<SplitView.Content>
-			<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-				  toolkit:VisibleBoundsPadding.PaddingMask="All">
+			<Grid Background="Green">
 				<Grid.RowDefinitions>
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="*" />
