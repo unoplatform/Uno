@@ -350,7 +350,7 @@ namespace Uno.UI.Toolkit
 #if HAS_UNO // Is building using Uno.UI
 				if (Owner is { } owner &&
 					!owner.GetPadding().Equals(padding) &&
-					owner.SetPadding(padding))
+					owner.SetPadding(new Thickness(50)))
 				{
 					if (_log.IsEnabled(LogLevel.Debug))
 					{

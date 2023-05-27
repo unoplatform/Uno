@@ -179,7 +179,8 @@ namespace Microsoft.UI.Xaml
 			}
 
 			return activity.Window.Attributes.Flags.HasFlag(WindowManagerFlags.TranslucentStatus)
-				|| activity.Window.Attributes.Flags.HasFlag(WindowManagerFlags.LayoutNoLimits);
+				|| activity.Window.Attributes.Flags.HasFlag(WindowManagerFlags.LayoutNoLimits)
+				|| activity.Window.Attributes.Flags.HasFlag(WindowManagerFlags.LayoutInScreen);
 		}
 		#endregion
 
@@ -193,7 +194,8 @@ namespace Microsoft.UI.Xaml
 
 			var flags = activity.Window.Attributes.Flags;
 			return flags.HasFlag(WindowManagerFlags.TranslucentNavigation)
-				|| flags.HasFlag(WindowManagerFlags.LayoutNoLimits);
+				|| flags.HasFlag(WindowManagerFlags.LayoutNoLimits)
+				|| flags.HasFlag(WindowManagerFlags.LayoutInScreen);
 		}
 		#endregion
 
