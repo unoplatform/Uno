@@ -12,10 +12,10 @@ using Windows.Foundation;
 using Windows.Media.Playback;
 using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Maps;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Maps;
+using Microsoft.UI.Xaml.Media;
 
 #if HAS_UNO_WINUI
 using Microsoft.UI;
@@ -39,8 +39,8 @@ public class MediaPlayerPresenterExtension : IMediaPlayerPresenterExtension
 		_player = new GtkMediaPlayer(_owner);
 		var contentView = new ContentControl();
 		contentView.Content = _player;
-		contentView.VerticalContentAlignment = Windows.UI.Xaml.VerticalAlignment.Stretch;
-		contentView.HorizontalContentAlignment = Windows.UI.Xaml.HorizontalAlignment.Stretch;
+		contentView.VerticalContentAlignment = Microsoft.UI.Xaml.VerticalAlignment.Stretch;
+		contentView.HorizontalContentAlignment = Microsoft.UI.Xaml.HorizontalAlignment.Stretch;
 		contentView.Background = new SolidColorBrush(Colors.Yellow);
 		_owner.Child = contentView;
 	}

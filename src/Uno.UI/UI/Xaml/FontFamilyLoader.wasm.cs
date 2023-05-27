@@ -9,10 +9,10 @@ using Uno.UI.DataBinding;
 using Windows.Storage.Helpers;
 
 #if NET7_0_OR_GREATER
-using NativeMethods = __Windows.UI.Xaml.Media.FontFamilyLoader.NativeMethods;
+using NativeMethods = __Microsoft.UI.Xaml.Media.FontFamilyLoader.NativeMethods;
 #endif
 
-namespace Windows.UI.Xaml.Media;
+namespace Microsoft.UI.Xaml.Media;
 
 /// <summary>
 /// WebAssembly-specific asynchronous font loader
@@ -188,7 +188,7 @@ internal class FontFamilyLoader
 #if NET7_0_OR_GREATER
 				NativeMethods.LoadFont(_fontFamily.CssFontName, _fontFamily.ExternalSource);
 #else
-				WebAssemblyRuntime.InvokeJS($"Windows.UI.Xaml.Media.FontFamily.loadFont(\"{_fontFamily.CssFontName}\",\"{_fontFamily.ExternalSource}\")");
+				WebAssemblyRuntime.InvokeJS($"Microsoft.UI.Xaml.Media.FontFamily.loadFont(\"{_fontFamily.CssFontName}\",\"{_fontFamily.ExternalSource}\")");
 #endif
 			}
 			else
@@ -196,7 +196,7 @@ internal class FontFamilyLoader
 #if NET7_0_OR_GREATER
 				NativeMethods.ForceFontUsage(_fontFamily.CssFontName);
 #else
-				WebAssemblyRuntime.InvokeJS($"Windows.UI.Xaml.Media.FontFamily.forceFontUsage(\"{_fontFamily.CssFontName}\")");
+				WebAssemblyRuntime.InvokeJS($"Microsoft.UI.Xaml.Media.FontFamily.forceFontUsage(\"{_fontFamily.CssFontName}\")");
 #endif
 			}
 

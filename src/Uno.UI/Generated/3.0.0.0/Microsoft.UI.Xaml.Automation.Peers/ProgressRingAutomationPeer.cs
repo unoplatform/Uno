@@ -5,7 +5,7 @@ namespace Microsoft.UI.Xaml.Automation.Peers
 	#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
 	[global::Uno.NotImplemented]
 	#endif
-	public  partial class ProgressRingAutomationPeer : global::Windows.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer,global::Windows.UI.Xaml.Automation.Provider.IRangeValueProvider
+	public  partial class ProgressRingAutomationPeer : global::Microsoft.UI.Xaml.Automation.Peers.FrameworkElementAutomationPeer,global::Microsoft.UI.Xaml.Automation.Provider.IRangeValueProvider
 	{
 		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
@@ -88,6 +88,6 @@ namespace Microsoft.UI.Xaml.Automation.Peers
 			global::Windows.Foundation.Metadata.ApiInformation.TryRaiseNotImplemented("Microsoft.UI.Xaml.Automation.Peers.ProgressRingAutomationPeer", "void ProgressRingAutomationPeer.SetValue(double value)");
 		}
 		#endif
-		// Processing: Windows.UI.Xaml.Automation.Provider.IRangeValueProvider
+		// Processing: Microsoft.UI.Xaml.Automation.Provider.IRangeValueProvider
 	}
 }

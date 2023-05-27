@@ -25,7 +25,7 @@ using NativeHandle = System.IntPtr;
 using NativeHandle = ObjCRuntime.NativeHandle;
 #endif
 
-namespace Windows.UI.Xaml
+namespace Microsoft.UI.Xaml
 {
 	[Register("UnoAppDelegate")]
 	public partial class Application : NSApplicationDelegate
@@ -34,7 +34,7 @@ namespace Windows.UI.Xaml
 
 		static partial void InitializePartialStatic()
 		{
-			ApiExtensibility.Register(typeof(IUnoCorePointerInputSource), host => new MacOSPointerInputSource((Uno.UI.Controls.Window)((Windows.UI.Xaml.Window)host).NativeWindow));
+			ApiExtensibility.Register(typeof(IUnoCorePointerInputSource), host => new MacOSPointerInputSource((Uno.UI.Controls.Window)((Microsoft.UI.Xaml.Window)host).NativeWindow));
 		}
 
 		public Application()
@@ -154,7 +154,7 @@ namespace Windows.UI.Xaml
 
 		private void OnEnteredBackground(NSNotification notification)
 		{
-			Windows.UI.Xaml.Window.Current?.OnVisibilityChanged(false);
+			Microsoft.UI.Xaml.Window.Current?.OnVisibilityChanged(false);
 
 			RaiseEnteredBackground(null);
 		}
@@ -162,17 +162,17 @@ namespace Windows.UI.Xaml
 		private void OnLeavingBackground(NSNotification notification)
 		{
 			RaiseResuming();
-			RaiseLeavingBackground(() => Windows.UI.Xaml.Window.Current?.OnVisibilityChanged(true));
+			RaiseLeavingBackground(() => Microsoft.UI.Xaml.Window.Current?.OnVisibilityChanged(true));
 		}
 
 		private void OnActivated(NSNotification notification)
 		{
-			Windows.UI.Xaml.Window.Current?.OnActivated(CoreWindowActivationState.CodeActivated);
+			Microsoft.UI.Xaml.Window.Current?.OnActivated(CoreWindowActivationState.CodeActivated);
 		}
 
 		private void OnDeactivated(NSNotification notification)
 		{
-			Windows.UI.Xaml.Window.Current?.OnActivated(CoreWindowActivationState.Deactivated);
+			Microsoft.UI.Xaml.Window.Current?.OnActivated(CoreWindowActivationState.Deactivated);
 		}
 	}
 }

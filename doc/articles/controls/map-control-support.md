@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Controls.MapControl
 ---
 
@@ -24,7 +24,7 @@ The current implementation uses the native UIKit Map for iOS and the Google Play
 	```
 4. (Windows and Android) Obtain an API key for your app, following the instructions below.
 5. (Android) Configure permissions in the manifest, following the instructions below.
-6. Add `MapControl` to your app (`<MapControl xmlns="using:Windows.UI.Xaml.Controls.Maps" />`).
+6. Add `MapControl` to your app (`<MapControl xmlns="using:Microsoft.UI.Xaml.Controls.Maps" />`).
 
 ## Sample XAML
 
@@ -37,7 +37,7 @@ Here's a complete sample:
 	  xmlns:local="using:MapControlSample"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+	  xmlns:maps="using:Microsoft.UI.Xaml.Controls.Maps"
 	  mc:Ignorable="d"
 	  Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 

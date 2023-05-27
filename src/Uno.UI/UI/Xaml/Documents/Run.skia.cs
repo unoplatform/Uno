@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using HarfBuzzSharp;
 using SkiaSharp;
-using Windows.UI.Xaml.Documents.TextFormatting;
+using Microsoft.UI.Xaml.Documents.TextFormatting;
 
 #nullable enable
 
-namespace Windows.UI.Xaml.Documents
+namespace Microsoft.UI.Xaml.Documents
 {
 	partial class Run
 	{

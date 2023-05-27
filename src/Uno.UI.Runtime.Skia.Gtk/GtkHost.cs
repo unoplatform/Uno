@@ -23,10 +23,10 @@ using Windows.Storage.Pickers;
 using Windows.System.Profile.Internal;
 using Windows.UI.Core.Preview;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using UnoApplication = Windows.UI.Xaml.Application;
-using WUX = Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using UnoApplication = Microsoft.UI.Xaml.Application;
+using WUX = Microsoft.UI.Xaml;
 using Uno.UI.Xaml.Core;
 using System.ComponentModel;
 using Uno.Disposables;
@@ -488,7 +488,7 @@ namespace Uno.UI.Runtime.Skia
 
 					GtkHost.Window.SetIconFromFile(iconPath);
 				}
-				else if (Windows.UI.Xaml.Media.Imaging.BitmapImage.GetScaledPath(basePath) is { } scaledPath && File.Exists(scaledPath))
+				else if (Microsoft.UI.Xaml.Media.Imaging.BitmapImage.GetScaledPath(basePath) is { } scaledPath && File.Exists(scaledPath))
 				{
 					if (this.Log().IsEnabled(LogLevel.Information))
 					{

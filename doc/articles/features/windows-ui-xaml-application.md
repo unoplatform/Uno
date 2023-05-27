@@ -1,8 +1,8 @@
----
+﻿---
 uid: Uno.Features.WinUIApplication
 ---
 
-# Windows.UI.Xaml.Application
+# Microsoft.UI.Xaml.Application
 
 ## Application.Suspending event
 

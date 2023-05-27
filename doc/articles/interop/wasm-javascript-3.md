@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Interop.WasmJavaScript3
 ---
 
@@ -67,8 +67,8 @@ An easy way to achieve this is to add JavaScript code to load the CSS file direc
    using System;
    using System.Globalization;
    using Windows.UI;
-   using Windows.UI.Xaml;
-   using Windows.UI.Xaml.Media;
+   using Microsoft.UI.Xaml;
+   using Microsoft.UI.Xaml.Media;
    using Uno.Foundation;
    using Uno.Extensions;
    using Uno.UI.Runtime.WebAssembly;

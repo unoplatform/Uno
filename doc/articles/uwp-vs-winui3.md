@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Development.UwpVsWinUI3
 ---
 
@@ -17,7 +17,7 @@ WinUI 3 differs in minor ways from UWP XAML in terms of API, and in more substan
 
 ### API
 
-The main difference between WinUI 3 and UWP XAML is the change of namespace. UWP XAML namespaces begin with 'Windows' - `Windows.UI.Xaml`, `Windows.UI.Composition`, and so on. WinUI 3 namespaces begin with 'Microsoft' - `Microsoft.UI.Xaml`, `Microsoft.UI.Composition` and so on. Aside from that change, the API surface is very similar. Some of the remaining differences are listed in our [guide to upgrading to WinUI 3](updating-to-winui3.md).
+The main difference between WinUI 3 and UWP XAML is the change of namespace. UWP XAML namespaces begin with 'Windows' - `Microsoft.UI.Xaml`, `Microsoft.UI.Composition`, and so on. WinUI 3 namespaces begin with 'Microsoft' - `Microsoft.UI.Xaml`, `Microsoft.UI.Composition` and so on. Aside from that change, the API surface is very similar. Some of the remaining differences are listed in our [guide to upgrading to WinUI 3](updating-to-winui3.md).
 
 ### Technical
 

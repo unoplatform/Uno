@@ -5,7 +5,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Webkit;
 using Microsoft.Web.WebView2.Core;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 using Windows.Web;
 
 namespace Uno.UI.Xaml.Controls;

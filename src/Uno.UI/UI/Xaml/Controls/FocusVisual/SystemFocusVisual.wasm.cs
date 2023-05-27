@@ -4,9 +4,9 @@ using System;
 using Uno.Foundation;
 using Uno.UI.Xaml.Core;
 using Uno.UI.Xaml.Input;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 
 #if NET7_0_OR_GREATER
 using System.Runtime.InteropServices.JavaScript;
@@ -26,7 +26,7 @@ internal partial class SystemFocusVisual : Control
 #if NET7_0_OR_GREATER
 		NativeMethods.AttachVisual(HtmlId, FocusedElement.HtmlId);
 #else
-		WebAssemblyRuntime.InvokeJS($"Windows.UI.Xaml.Input.FocusVisual.attachVisual({HtmlId}, {FocusedElement.HtmlId})");
+		WebAssemblyRuntime.InvokeJS($"Microsoft.UI.Xaml.Input.FocusVisual.attachVisual({HtmlId}, {FocusedElement.HtmlId})");
 #endif
 	}
 
@@ -35,7 +35,7 @@ internal partial class SystemFocusVisual : Control
 #if NET7_0_OR_GREATER
 		NativeMethods.DetachVisual();
 #else
-		WebAssemblyRuntime.InvokeJS($"Windows.UI.Xaml.Input.FocusVisual.detachVisual()");
+		WebAssemblyRuntime.InvokeJS($"Microsoft.UI.Xaml.Input.FocusVisual.detachVisual()");
 #endif
 	}
 
@@ -50,10 +50,10 @@ internal partial class SystemFocusVisual : Control
 #if NET7_0_OR_GREATER
 	internal static partial class NativeMethods
 	{
-		[JSImport("globalThis.Windows.UI.Xaml.Input.FocusVisual.attachVisual")]
+		[JSImport("globalThis.Microsoft.UI.Xaml.Input.FocusVisual.attachVisual")]
 		internal static partial void AttachVisual(IntPtr htmlId, IntPtr focusedElementId);
 
-		[JSImport("globalThis.Windows.UI.Xaml.Input.FocusVisual.detachVisual")]
+		[JSImport("globalThis.Microsoft.UI.Xaml.Input.FocusVisual.detachVisual")]
 		internal static partial void DetachVisual();
 	}
 #endif

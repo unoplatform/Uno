@@ -7,11 +7,11 @@ using FluentAssertions.Execution;
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Input.Preview.Injection;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Shapes;
 using Windows.UI.ViewManagement;
 using static Private.Infrastructure.TestServices;
 using Uno.Disposables;
@@ -565,7 +565,7 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 				Spacing = 5,
 				Children =
 				{
-					new Windows.UI.Xaml.Shapes.Rectangle() { Height = 200, Fill = SolidColorBrushHelper.SkyBlue },
+					new Microsoft.UI.Xaml.Shapes.Rectangle() { Height = 200, Fill = SolidColorBrushHelper.SkyBlue },
 					SUT,
 				},
 			};
@@ -638,7 +638,7 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 				Spacing = 5,
 				Children =
 				{
-					new Windows.UI.Xaml.Shapes.Rectangle() { Height = 200, Fill = SolidColorBrushHelper.SkyBlue },
+					new Microsoft.UI.Xaml.Shapes.Rectangle() { Height = 200, Fill = SolidColorBrushHelper.SkyBlue },
 					SUT,
 				},
 			};

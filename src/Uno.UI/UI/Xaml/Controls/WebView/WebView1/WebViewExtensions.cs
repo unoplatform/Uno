@@ -2,7 +2,7 @@
 using Windows.Web;
 using WebErrorStatus = Uno.UI.Web.WebErrorStatus;
 
-namespace Windows.UI.Xaml.Controls;
+namespace Microsoft.UI.Xaml.Controls;
 
 internal static class WebViewExtensions
 {

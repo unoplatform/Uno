@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Development.PlatformSpecificCSharp
 ---
 
@@ -54,7 +54,7 @@ using _View = Android.Views.View;
 #elif __IOS__
 using _View = UIKit.UIView;
 #else
-using _View = Windows.UI.Xaml.UIElement;
+using _View = Microsoft.UI.Xaml.UIElement;
 #endif
 
 ...

@@ -2,12 +2,12 @@
 using Uno.UI.RuntimeTests.Helpers;
 using MUXControlsTestApp.Utilities;
 using Private.Infrastructure;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Common;
 using Uno.UI.RuntimeTests;
 
-namespace Windows.UI.Xaml.Tests.MUXControls.ApiTests
+namespace Microsoft.UI.Xaml.Tests.MUXControls.ApiTests
 {
 	[TestClass]
 	public class ToggleSplitButtonTests

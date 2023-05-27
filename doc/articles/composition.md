@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Development.Composition
 ---
 
@@ -9,7 +9,7 @@ The API allows developers to define and create one or many visual objects each r
 
 To get more info, you can refer to [Microsoft's documentation](https://docs.microsoft.com/en-us/windows/uwp/composition/composition-visual-tree).
 
-Uno Platform currently supports a small number of the APIs in the [`Windows.UI.Composition` namespace](https://docs.microsoft.com/en-us/uwp/api/windows.ui.composition?view=winrt).
+Uno Platform currently supports a small number of the APIs in the [`Microsoft.UI.Composition` namespace](https://docs.microsoft.com/en-us/uwp/api/windows.ui.composition?view=winrt).
 
 The rest of this article details Uno-specific considerations regarding Composition API.
 
