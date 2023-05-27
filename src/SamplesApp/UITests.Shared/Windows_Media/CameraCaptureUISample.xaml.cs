@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Uno.UI.Samples.Controls;
 using Windows.Media.Capture;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Imaging;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace UITests.Windows_Media;
 

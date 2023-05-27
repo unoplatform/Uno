@@ -1,6 +1,6 @@
 ﻿#if HAS_UNO
 using Uno.Foundation.Logging;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 
 namespace SamplesApp.Microsoft_UI_Xaml_Controls.WebView2Tests
 {

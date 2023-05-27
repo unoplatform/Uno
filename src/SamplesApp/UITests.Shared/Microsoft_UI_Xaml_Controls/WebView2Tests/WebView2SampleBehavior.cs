@@ -1,6 +1,6 @@
 ﻿#if HAS_UNO
 using System;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 using WebView2Uno = Microsoft.UI.Xaml.Controls.WebView2;
 
 namespace SamplesApp.Microsoft_UI_Xaml_Controls.WebView2Tests

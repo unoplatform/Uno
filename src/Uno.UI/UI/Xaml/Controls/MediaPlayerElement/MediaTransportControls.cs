@@ -1,17 +1,17 @@
-using System;
+﻿using System;
 using System.Timers;
 using Uno.UI.Converters;
 using Windows.Media.Playback;
 using Windows.UI.Core;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
 using Uno.UI.Xaml.Controls.MediaPlayer.Internal;
 using System.Drawing;
 using Windows.Foundation;
-using Windows.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Media.Animation;
 using Uno.Disposables;
-using Windows.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 #if HAS_UNO_WINUI
 using Microsoft.UI.Input;
@@ -29,7 +29,7 @@ using AppKit;
 using Uno.UI;
 #endif
 
-namespace Windows.UI.Xaml.Controls
+namespace Microsoft.UI.Xaml.Controls
 {
 	[TemplatePart(Name = "RootGrid", Type = typeof(Grid))]
 	[TemplatePart(Name = "PlayPauseButton", Type = typeof(Button))]

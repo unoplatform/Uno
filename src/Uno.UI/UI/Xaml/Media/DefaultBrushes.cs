@@ -3,8 +3,8 @@
 using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 using Uno.Helpers.Theming;
 
 namespace Uno.UI.Xaml.Media;

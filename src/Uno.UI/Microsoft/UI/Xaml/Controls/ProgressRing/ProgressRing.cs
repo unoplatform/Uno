@@ -1,8 +1,8 @@
 ﻿using System;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Automation.Peers;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using Uno.Extensions;
 using Uno.Foundation.Extensibility;
 using Uno.Foundation.Logging;
@@ -22,7 +22,7 @@ namespace Microsoft.UI.Xaml.Controls
 		private readonly ILottieVisualSourceProvider? _lottieProvider;
 
 
-		private Windows.UI.Xaml.Controls.AnimatedVisualPlayer? _player;
+		private Microsoft.UI.Xaml.Controls.AnimatedVisualPlayer? _player;
 		private bool _isTemplateApplied = false;
 		private Panel? _layoutRoot;
 		private double _oldValue = 0d;
@@ -84,24 +84,24 @@ namespace Microsoft.UI.Xaml.Controls
 
 
 
-		public Windows.UI.Xaml.Controls.IAnimatedVisualSource DeterminateSource
+		public Microsoft.UI.Xaml.Controls.IAnimatedVisualSource DeterminateSource
 		{
-			get { return (Windows.UI.Xaml.Controls.IAnimatedVisualSource)GetValue(DeterminateSourceProperty); }
+			get { return (Microsoft.UI.Xaml.Controls.IAnimatedVisualSource)GetValue(DeterminateSourceProperty); }
 			set { SetValue(DeterminateSourceProperty, value); }
 		}
 
 		public static readonly DependencyProperty DeterminateSourceProperty =
-			DependencyProperty.Register("DeterminateSource", typeof(Windows.UI.Xaml.Controls.IAnimatedVisualSource), typeof(ProgressRing), new FrameworkPropertyMetadata(null, (s, e) => (s as ProgressRing)?.OnDeterminateSourcePropertyChanged(e)));
+			DependencyProperty.Register("DeterminateSource", typeof(Microsoft.UI.Xaml.Controls.IAnimatedVisualSource), typeof(ProgressRing), new FrameworkPropertyMetadata(null, (s, e) => (s as ProgressRing)?.OnDeterminateSourcePropertyChanged(e)));
 
 
-		public Windows.UI.Xaml.Controls.IAnimatedVisualSource IndeterminateSource
+		public Microsoft.UI.Xaml.Controls.IAnimatedVisualSource IndeterminateSource
 		{
-			get { return (Windows.UI.Xaml.Controls.IAnimatedVisualSource)GetValue(IndeterminateSourceProperty); }
+			get { return (Microsoft.UI.Xaml.Controls.IAnimatedVisualSource)GetValue(IndeterminateSourceProperty); }
 			set { SetValue(IndeterminateSourceProperty, value); }
 		}
 
 		public static readonly DependencyProperty IndeterminateSourceProperty =
-			DependencyProperty.Register("IndeterminateSource", typeof(Windows.UI.Xaml.Controls.IAnimatedVisualSource), typeof(ProgressRing), new FrameworkPropertyMetadata(null, (s, e) => (s as ProgressRing)?.OnIndeterminateSourcePropertyChanged(e)));
+			DependencyProperty.Register("IndeterminateSource", typeof(Microsoft.UI.Xaml.Controls.IAnimatedVisualSource), typeof(ProgressRing), new FrameworkPropertyMetadata(null, (s, e) => (s as ProgressRing)?.OnIndeterminateSourcePropertyChanged(e)));
 
 		public ProgressRing()
 		{
@@ -123,7 +123,7 @@ namespace Microsoft.UI.Xaml.Controls
 		protected override void OnApplyTemplate()
 		{
 			_isTemplateApplied = true;
-			_player = GetTemplateChild(LottiePlayerName) as Windows.UI.Xaml.Controls.AnimatedVisualPlayer;
+			_player = GetTemplateChild(LottiePlayerName) as Microsoft.UI.Xaml.Controls.AnimatedVisualPlayer;
 			_layoutRoot = GetTemplateChild(LayoutRootName) as Panel;
 
 			ChangeVisualState();

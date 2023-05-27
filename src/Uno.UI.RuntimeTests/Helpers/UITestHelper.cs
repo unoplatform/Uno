@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Input.Preview.Injection;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Private.Infrastructure;
 
 namespace Uno.UI.RuntimeTests.Tests.Uno_UI_Xaml_Core;

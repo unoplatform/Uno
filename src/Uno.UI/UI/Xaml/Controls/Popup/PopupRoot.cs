@@ -8,7 +8,7 @@ using Uno.UI.Xaml.Islands;
 using Uno.UI.DataBinding;
 using Windows.Foundation;
 
-namespace Windows.UI.Xaml.Controls.Primitives;
+namespace Microsoft.UI.Xaml.Controls.Primitives;
 
 internal partial class PopupRoot : Panel
 {

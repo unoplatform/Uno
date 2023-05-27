@@ -8,10 +8,32 @@ namespace Microsoft.UI.Xaml.Controls
 	public  partial class WebView2 
 	{
 		// Skipping already declared property Source
+		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
+		public  global::Windows.UI.Color DefaultBackgroundColor
+		{
+			get
+			{
+				return (global::Windows.UI.Color)this.GetValue(DefaultBackgroundColorProperty);
+			}
+			set
+			{
+				this.SetValue(DefaultBackgroundColorProperty, value);
+			}
+		}
+		#endif
 		// Skipping already declared property CanGoForward
 		// Skipping already declared property CanGoBack
 		// Skipping already declared property CanGoBackProperty
 		// Skipping already declared property CanGoForwardProperty
+		#if __ANDROID__ || __IOS__ || NET461 || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
+		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "NET461", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
+		public static global::Microsoft.UI.Xaml.DependencyProperty DefaultBackgroundColorProperty { get; } = 
+		Microsoft.UI.Xaml.DependencyProperty.Register(
+			nameof(DefaultBackgroundColor), typeof(global::Windows.UI.Color), 
+			typeof(global::Microsoft.UI.Xaml.Controls.WebView2), 
+			new Microsoft.UI.Xaml.FrameworkPropertyMetadata(default(global::Windows.UI.Color)));
+		#endif
 		// Skipping already declared property SourceProperty
 		// Skipping already declared method Microsoft.UI.Xaml.Controls.WebView2.WebView2()
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.WebView2()
@@ -24,6 +46,8 @@ namespace Microsoft.UI.Xaml.Controls
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.CanGoForward.set
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.CanGoBack.get
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.CanGoBack.set
+		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.DefaultBackgroundColor.get
+		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.DefaultBackgroundColor.set
 		// Skipping already declared method Microsoft.UI.Xaml.Controls.WebView2.Reload()
 		// Skipping already declared method Microsoft.UI.Xaml.Controls.WebView2.GoForward()
 		// Skipping already declared method Microsoft.UI.Xaml.Controls.WebView2.GoBack()
@@ -48,6 +72,7 @@ namespace Microsoft.UI.Xaml.Controls
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.SourceProperty.get
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.CanGoForwardProperty.get
 		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.CanGoBackProperty.get
+		// Forced skipping of method Microsoft.UI.Xaml.Controls.WebView2.DefaultBackgroundColorProperty.get
 		// Skipping already declared event Microsoft.UI.Xaml.Controls.WebView2.CoreProcessFailed
 		// Skipping already declared event Microsoft.UI.Xaml.Controls.WebView2.CoreWebView2Initialized
 		// Skipping already declared event Microsoft.UI.Xaml.Controls.WebView2.NavigationCompleted

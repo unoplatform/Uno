@@ -7,12 +7,12 @@ using System.Collections.Specialized;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Uno.UI.RuntimeTests.Helpers;
 using Windows.UI;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 using static Private.Infrastructure.TestServices;
 using System.Collections.ObjectModel;
-using Windows.UI.Xaml.Data;
+using Microsoft.UI.Xaml.Data;
 
 
 #if NETFX_CORE
@@ -23,9 +23,9 @@ using _UIViewController = UIKit.UIViewController;
 using Uno.UI.Controls;
 
 using Windows.UI.Core;
-using Windows.UI.Xaml.Media.Animation;
+using Microsoft.UI.Xaml.Media.Animation;
 using static Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls.MultiFrame;
-using Windows.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 #elif __MACOS__
 using AppKit;
@@ -529,8 +529,8 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 				c.Add("2-Five");
 				c.Add("2-Six");
 
-				SUT.SetBinding(ComboBox.ItemsSourceProperty, new Windows.UI.Xaml.Data.Binding() { Path = new("MySource") });
-				SUT.SetBinding(ComboBox.SelectedItemProperty, new Windows.UI.Xaml.Data.Binding() { Path = new("SelectedItem"), Mode = Windows.UI.Xaml.Data.BindingMode.TwoWay });
+				SUT.SetBinding(ComboBox.ItemsSourceProperty, new Microsoft.UI.Xaml.Data.Binding() { Path = new("MySource") });
+				SUT.SetBinding(ComboBox.SelectedItemProperty, new Microsoft.UI.Xaml.Data.Binding() { Path = new("SelectedItem"), Mode = Microsoft.UI.Xaml.Data.BindingMode.TwoWay });
 
 				SUT.DataContext = new { MySource = c, SelectedItem = "One" };
 
@@ -571,8 +571,8 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 			{
 
 				var tb = new TextBlock();
-				tb.SetBinding(TextBlock.TextProperty, new Windows.UI.Xaml.Data.Binding { Path = "Text" });
-				tb.SetBinding(TextBlock.NameProperty, new Windows.UI.Xaml.Data.Binding { Path = "Text" });
+				tb.SetBinding(TextBlock.TextProperty, new Microsoft.UI.Xaml.Data.Binding { Path = "Text" });
+				tb.SetBinding(TextBlock.NameProperty, new Microsoft.UI.Xaml.Data.Binding { Path = "Text" });
 
 				return tb;
 			});
@@ -634,8 +634,8 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls
 			{
 
 				var tb = new TextBlock();
-				tb.SetBinding(TextBlock.TextProperty, new Windows.UI.Xaml.Data.Binding { Path = "Text" });
-				tb.SetBinding(TextBlock.NameProperty, new Windows.UI.Xaml.Data.Binding { Path = "Text" });
+				tb.SetBinding(TextBlock.TextProperty, new Microsoft.UI.Xaml.Data.Binding { Path = "Text" });
+				tb.SetBinding(TextBlock.NameProperty, new Microsoft.UI.Xaml.Data.Binding { Path = "Text" });
 
 				return tb;
 			});

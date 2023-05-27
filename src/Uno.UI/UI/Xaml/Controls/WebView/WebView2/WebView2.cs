@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
 using Windows.Foundation;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Threading.Tasks;
 using Uno;
@@ -46,7 +46,7 @@ public partial class WebView2 : Control, IWebView
 
 	protected override void OnApplyTemplate() => CoreWebView2.OnOwnerApplyTemplate();
 
-	private void WebView2_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e) =>
+	private void WebView2_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) =>
 		EnsureCoreWebView2();
 
 	public IAsyncAction EnsureCoreWebView2Async() =>

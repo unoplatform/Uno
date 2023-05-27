@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.SilverlightMigration.ReviewAppStartup
 ---
 
@@ -73,7 +73,7 @@ In order to better align with the behavior of the Silverlight version of the app
     ```csharp
     protected override void OnLaunched(LaunchActivatedEventArgs e)
     {
-        var window = Windows.UI.Xaml.Window.Current;
+        var window = Microsoft.UI.Xaml.Window.Current;
         var rootPage = window.Content as MainPage;
 
         if (rootPage == null)
@@ -182,7 +182,7 @@ In order to better align with the behavior of the Silverlight version of the app
     > You can learn more about the **NavigationView** and the **Frame** controls here:
     >
     > * [NavigationView](https://docs.microsoft.com/windows/uwp/design/controls-and-patterns/navigationview)
-    > * [Frame](https://docs.microsoft.com/uwp/api/Windows.UI.Xaml.Controls.Frame)
+    > * [Frame](https://docs.microsoft.com/uwp/api/Microsoft.UI.Xaml.Controls.Frame)
 
 ### Adding a class to help with navigation synchronization
 
@@ -196,8 +196,8 @@ In order to better align with the behavior of the Silverlight version of the app
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Navigation;
+    using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Navigation;
     ```
 
 1. Add the following private variables to the class:
@@ -326,9 +326,9 @@ In order to better align with the behavior of the Silverlight version of the app
     using System.Collections.Generic;
     using TimeEntryUno.Shared.Helpers;
     using TimeEntryUno.Shared.Views;
-    using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Navigation;
+    using Microsoft.UI.Xaml;
+    using Microsoft.UI.Xaml.Controls;
+    using Microsoft.UI.Xaml.Navigation;
     ```
 
 1. Add the following member variable to reference and instance of the **NavigationSyncHelper** class:

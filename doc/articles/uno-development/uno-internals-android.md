@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Contributing.Android
 ---
 
@@ -19,7 +19,7 @@ The `Uno.UI.BindingHelper.Android` project builds these Java types, and wraps th
 ## UIElement inherits from ViewGroup
 
 `UIElement` in Uno is a native view on Android, inheriting from the general `ViewGroup` type. To elaborate, `UIElement`'s base classes are the following:
-`Android.Views.View` → `Android.Views.ViewGroup` → `Uno.UI.UnoViewGroup` → `Uno.UI.Controls.BindableView` → `Windows.UI.Xaml.UIElement`
+`Android.Views.View` → `Android.Views.ViewGroup` → `Uno.UI.UnoViewGroup` → `Uno.UI.Controls.BindableView` → `Microsoft.UI.Xaml.UIElement`
 
 Recall that `UIElement` implements `DependencyObect` [as an interface](uno-internals-overview.md) in Uno.
 

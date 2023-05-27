@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using Uno.Extensions;
 using Windows.Media.Playback;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media;
 using Uno.Foundation.Logging;
 
-namespace Windows.UI.Xaml.Controls
+namespace Microsoft.UI.Xaml.Controls
 {
 	[TemplatePart(Name = PosterImageName, Type = typeof(Image))]
 	[TemplatePart(Name = TransportControlsPresenterName, Type = typeof(ContentPresenter))]
@@ -168,14 +168,14 @@ namespace Windows.UI.Xaml.Controls
 					_mediaPlayerPresenter?.RequestFullScreen();
 #endif
 #if !__NETSTD_REFERENCE__ && !NET461
-					Windows.UI.Xaml.Window.Current.DisplayFullscreen(_layoutRoot);
+					Microsoft.UI.Xaml.Window.Current.DisplayFullscreen(_layoutRoot);
 #endif
 				}
 				else
 				{
 					ApplicationView.GetForCurrentView().ExitFullScreenMode();
 #if !__NETSTD_REFERENCE__ && !NET461
-					Windows.UI.Xaml.Window.Current.DisplayFullscreen(null);
+					Microsoft.UI.Xaml.Window.Current.DisplayFullscreen(null);
 #endif
 
 #if __ANDROID__

@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Tutorials.StatusBarThemeColor
 ---
 
@@ -98,7 +98,7 @@ The complete sample code can be found here: [StatusBarThemeColor](https://github
             {
     #if __ANDROID__
                 var backgroundColor = _uiSettings.GetColorValue(UIColorType.Background);
-                var isDarkMode = backgroundColor == Windows.UI.Colors.Black;
+                var isDarkMode = backgroundColor == Microsoft.UI.Colors.Black;
 
                 // Prevent deadlock as setting StatusBar.ForegroundColor will also trigger this event.
                 if (_wasDarkMode == isDarkMode) return;
@@ -123,17 +123,17 @@ The complete sample code can be found here: [StatusBarThemeColor](https://github
         // === 1. Determine the current theme from the background value,
         // which is calculated from the theme and can only be black or white.
         var backgroundColor = _uiSettings.GetColorValue(UIColorType.Background);
-        var isDarkMode = backgroundColor == Windows.UI.Colors.Black;
+        var isDarkMode = backgroundColor == Microsoft.UI.Colors.Black;
 
     #if __IOS__ || __ANDROID__
         // === 2. Set the foreground color.
         // note: The foreground color can only be set to a "dark/light" value. See uno remarks on StatusBar.ForegroundColor.
         // note: For ios in dark mode, setting this value will have no effect.
-        var foreground = isDarkMode ? Windows.UI.Colors.White : Windows.UI.Colors.Black;
+        var foreground = isDarkMode ? Microsoft.UI.Colors.White : Microsoft.UI.Colors.Black;
         Windows.UI.ViewManagement.StatusBar.GetForCurrentView().ForegroundColor = foreground;
 
         // === 3. Set the background color.
-        var background = isDarkMode ? Windows.UI.Colors.MidnightBlue : Windows.UI.Colors.SkyBlue;
+        var background = isDarkMode ? Microsoft.UI.Colors.MidnightBlue : Microsoft.UI.Colors.SkyBlue;
     #if __ANDROID__
         // On Android, this is done by calling Window.SetStatusBarColor.
         if (Uno.UI.ContextHelper.Current is Android.App.Activity activity)

@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Contributing.MemoryIssues
 ---
 
@@ -34,7 +34,7 @@ private void EnableViewsMemoryStatistics()
 	// in the logger settings, so that the statistics are showing up.
 	//
 
-	var unused = Windows.UI.Xaml.Window.Current.Dispatcher.RunAsync(
+	var unused = Microsoft.UI.Xaml.Window.Current.Dispatcher.RunAsync(
 		CoreDispatcherPriority.Normal,
 		async () =>
 		{

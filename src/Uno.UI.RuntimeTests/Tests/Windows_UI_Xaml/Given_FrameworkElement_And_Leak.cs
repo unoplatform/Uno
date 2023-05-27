@@ -17,9 +17,9 @@ using Private.Infrastructure;
 using Uno.Extensions;
 using Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml.Controls;
 using Windows.UI.Core;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 
 #if __MACOS__
 using AppKit;
@@ -54,16 +54,16 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml
 		[DataRow(typeof(TextBlock), 15)]
 		[DataRow(typeof(CheckBox), 15)]
 		[DataRow(typeof(ListView), 15)]
-		[DataRow(typeof(Windows.UI.Xaml.Controls.ProgressBar), 15)]
 		[DataRow(typeof(Microsoft.UI.Xaml.Controls.ProgressBar), 15)]
-		[DataRow(typeof(Windows.UI.Xaml.Controls.ProgressRing), 15)]
+		[DataRow(typeof(Microsoft.UI.Xaml.Controls.ProgressBar), 15)]
+		[DataRow(typeof(Microsoft.UI.Xaml.Controls.ProgressRing), 15)]
 		//[DataRow(typeof(Microsoft.UI.Xaml.Controls.ProgressRing), 15)] This leaks, issue #9078
 		[DataRow(typeof(Pivot), 15)]
 		[DataRow(typeof(ScrollBar), 15)]
 		[DataRow(typeof(Slider), 15)]
 		[DataRow(typeof(SymbolIcon), 15)]
 		[DataRow(typeof(Viewbox), 15)]
-		[DataRow(typeof(Windows.UI.Xaml.Controls.MenuBar), 15)]
+		[DataRow(typeof(Microsoft.UI.Xaml.Controls.MenuBar), 15)]
 		[DataRow(typeof(ComboBox), 15)]
 		[DataRow(typeof(Canvas), 15)]
 		[DataRow(typeof(AutoSuggestBox), 15)]
@@ -79,7 +79,7 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml
 		[DataRow(typeof(Page), 15)]
 		[DataRow(typeof(Image), 15)]
 		[DataRow(typeof(ToggleSwitch), 15)]
-		[DataRow(typeof(Windows.UI.Xaml.Controls.SwipeControl), 15)]
+		[DataRow(typeof(Microsoft.UI.Xaml.Controls.SwipeControl), 15)]
 		[DataRow(typeof(SplitView), 15)]
 		[DataRow(typeof(Microsoft.UI.Xaml.Controls.AnimatedIcon), 15)]
 		[DataRow(typeof(Microsoft.UI.Xaml.Controls.BreadcrumbBar), 15)]

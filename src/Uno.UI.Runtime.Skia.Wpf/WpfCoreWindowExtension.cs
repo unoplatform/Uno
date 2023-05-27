@@ -21,7 +21,7 @@ using Uno.Foundation.Logging;
 using Uno.UI.Runtime.Skia.Wpf.Constants;
 using Uno.UI.Runtime.Skia.Wpf.Input;
 using WpfCanvas = System.Windows.Controls.Canvas;
-using Windows.UI.Xaml;
+using Microsoft.UI.Xaml;
 using Uno.UI.XamlHost.Skia.Wpf.Hosting;
 
 namespace Uno.UI.Skia.Platform

@@ -8,7 +8,7 @@ using SkiaSharp;
 using Uno.UI.XamlHost.Skia.Wpf;
 using Windows.Devices.Input;
 using Windows.Graphics.Display;
-using WinUI = Windows.UI.Xaml;
+using WinUI = Microsoft.UI.Xaml;
 using WpfControl = global::System.Windows.Controls.Control;
 using WpfCanvas = global::System.Windows.Controls.Canvas;
 using Uno.UI.Controls;
@@ -31,11 +31,11 @@ namespace Uno.UI.XamlHost.Skia.Wpf
 		private bool _ignorePixelScaling;
 		private WpfCanvas _nativeOverlayLayer;
 		private IWpfRenderer _renderer;
-		private Windows.UI.Xaml.UIElement? _rootElement;
+		private Microsoft.UI.Xaml.UIElement? _rootElement;
 
 		public bool IsIsland => true;
 
-		public Windows.UI.Xaml.UIElement? RootElement =>
+		public Microsoft.UI.Xaml.UIElement? RootElement =>
 			_rootElement ??= _xamlSource?.GetVisualTreeRoot();
 
 		/// <summary>

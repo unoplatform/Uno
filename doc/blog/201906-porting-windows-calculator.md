@@ -1,4 +1,4 @@
----
+﻿---
 uid: Uno.Blog.PortingWindowsCalculator
 ---
 
@@ -80,7 +80,7 @@ The Uno Platform supports the use of `resw` files, which means that those files 
 Note that the resources use the [attached property syntax](https://github.com/microsoft/calculator/blob/06c0dd9bd0f5971db9b17a782e1386037da38026/src/Calculator/Resources/de-DE/Resources.resw#L460) for narrator and tooltip support, such as:
 
 ```xml
-  <data name="MemoryPivotItem.[using:Windows.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+  <data name="MemoryPivotItem.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
     <value>Arbeitsspeicher</value>
     <comment>The automation name for the Memory pivot item that is shown when Calculator is in wide layout.</comment>
   </data>

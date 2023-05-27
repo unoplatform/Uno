@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Uno.UI.RuntimeTests.Helpers;
-using Windows.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls;
 using static Private.Infrastructure.TestServices;
 
 namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls;

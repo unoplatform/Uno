@@ -2,7 +2,7 @@
 uid: Uno.Features.WinUIWindow
 ---
 
-# Windows.UI.Xaml.Window
+# Microsoft.UI.Xaml.Window
 
 ## Setting the background color for the Window
 
