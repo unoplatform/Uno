@@ -29,7 +29,7 @@ namespace Uno.UI.Skia.Platform
 	internal partial class WpfCoreWindowExtension : ICoreWindowExtension
 	{
 		private readonly ICoreWindowEvents _ownerEvents;
-		private readonly WpfHost? _host;
+		//private readonly WpfHost? _host;
 
 		public CoreCursor PointerCursor
 		{
@@ -42,7 +42,7 @@ namespace Uno.UI.Skia.Platform
 			_ownerEvents = (ICoreWindowEvents)owner;
 
 			// TODO:MZ: Multi-window, attach to main window
-			_host = WpfHost.Current;
+			//_host = WpfHost.Current;
 			//if (_host is null)
 			//{
 			//	return;
