@@ -1,12 +1,20 @@
 ﻿#nullable enable
-#if HAS_UNO_WINUI
+#if !HAS_UNO_WINUI
 
+using Uno.UI.Xaml;
 using Windows.UI.ViewManagement;
+using Microsoft.UI.Dispatching;
 
 namespace Windows.UI.Xaml;
 
 public sealed partial class Window
 {
+	public Window() : this(WindowType.Plain)
+	{
+	}
+
+	public DispatcherQueue DispatcherQueue { get; } = DispatcherQueue.GetForCurrentThread();
+
 #if !__IOS__ // This can be added when iOS uses SceneDelegate #8341.
 	/// <summary>
 	/// Gets or sets a string used for the window title.

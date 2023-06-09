@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Markup;
 using WinUICoreServices = Uno.UI.Xaml.Core.CoreServices;
-using Uno.Helpers.Theming;
+using Uno.UI.Xaml;
 
 namespace Windows.UI.Xaml
 {
@@ -39,19 +39,10 @@ namespace Windows.UI.Xaml
 		private List<WeakEventHelper.GenericEventHandler> _sizeChangedHandlers = new List<WeakEventHelper.GenericEventHandler>();
 		private List<WeakEventHelper.GenericEventHandler> _backgroundChangedHandlers;
 
-#if HAS_UNO_WINUI
-		public global::Microsoft.UI.Dispatching.DispatcherQueue DispatcherQueue { get; } = global::Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
-#endif
-
-#if HAS_UNO_WINUI
-		public Window() : this(false)
+		internal Window(WindowType windowType)
 		{
-		}
-#endif
-
-		internal Window(bool internalUse)
-		{
-			if (!internalUse)
+#if !__SKIA__
+			if (windowType == WindowType.Plain)
 			{
 				if (this.Log().IsEnabled(LogLevel.Warning))
 				{
@@ -61,6 +52,7 @@ namespace Windows.UI.Xaml
 						"between Uno Platform targets and Windows App SDK).");
 				}
 			}
+#endif
 
 			InitPlatform();
 
