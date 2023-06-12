@@ -498,8 +498,16 @@ public partial class MediaPlayerExtension : IMediaPlayerExtension
 			{
 				if (_isPlayRequested)
 				{
-					_player.Play();
-					_owner.PlaybackSession.PlaybackState = MediaPlaybackState.Playing;
+					try
+					{
+						_player.Play();
+						_owner.PlaybackSession.PlaybackState = MediaPlaybackState.Playing;
+					}
+					catch
+					{
+						//when broser not suport play() and failed because the user didn't interact with the document first.
+						_owner.PlaybackSession.PlaybackState = MediaPlaybackState.Paused;
+					}
 				}
 			}
 
