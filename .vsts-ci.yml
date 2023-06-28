@@ -50,6 +50,7 @@ variables:
   windows2019HostedVMImage: 'windows-2019'
   windows2022HostedVMImage: 'windows-2022'
   windowsScaledPool: 'Windows2022-20230613'
+  linuxBenchmarksPool: 'Linux-Arm64-20.04-Benchmarks'
   linuxVMImage: 'ubuntu-latest'
   macOSVMImage: 'macOS-12'
   macOSVMImage_UITests: 'macOS-12'
@@ -62,4 +63,23 @@ variables:
   #enable_package_cache: true
 
 stages:
-- template: build/ci/.azure-devops-stages.yml
+- stage: Build
+  jobs:
+  - job: Build
+    pool: 'Linux-Arm64-20.04-Benchmarks'
+    container: 'unoplatform/dotnet-build:3.0.1-arm64'
+    steps:
+#    - task: NodeTool@0
+#      inputs:
+#        versionSpec: '18.16.1'
+
+    - bash: |
+        rm -f chromium_114.0.5735.198-1_arm64.deb
+        rm -f chromium-driver_114.0.5735.198-1_arm64.deb
+        wget https://snapshot.debian.org/archive/debian/20230701T025017Z/pool/main/c/chromium/chromium_114.0.5735.198-1_arm64.deb
+        wget https://snapshot.debian.org/archive/debian/20230701T025017Z/pool/main/c/chromium/chromium-driver_114.0.5735.198-1_arm64.deb
+        sudo dpkg -i chromium_114.0.5735.198-1_arm64.deb
+        sudo dpkg -i chromium-driver_114.0.5735.198-1_arm64.deb
+
+#stages:
+#- template: build/ci/.azure-devops-stages.yml

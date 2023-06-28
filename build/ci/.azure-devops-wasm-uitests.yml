@@ -1,4 +1,5 @@
 parameters:
+  benchmarksPool: ''
   vmImage: ''
 
 jobs:
@@ -131,8 +132,6 @@ jobs:
   dependsOn:
   - Wasm_UITests_Build
 
-  container: nv-bionic-wasm
-
   strategy:
     matrix:
       net7_default:
@@ -141,6 +140,7 @@ jobs:
         UITEST_TEST_TIMEOUT: '120s'
 
       net7_benchmarks:
+        BENCHMARKS_POOL: ${{ parameters.benchmarksPool }}
         SITE_SUFFIX: 'net7.0-UWP'
         UITEST_AUTOMATED_GROUP: 'Benchmarks'
         UITEST_TEST_TIMEOUT: '120s'
@@ -188,7 +188,26 @@ jobs:
         UITEST_RUNTIME_TEST_GROUP_COUNT: 3
 
   pool:
+    name: $[
+      replace(
+        replace(
+          eq(variables['UITEST_AUTOMATED_GROUP'], 'Benchmarks'),
+          True,
+          variables['BENCHMARKS_POOL']),
+        False,
+        '')
+      ]
     vmImage: ${{ parameters.vmImage }}
+
+  container: $[
+    replace(
+      replace(
+        eq(variables['UITEST_AUTOMATED_GROUP'], 'Benchmarks'),
+        True,
+        'unoplatform/dotnet-build:3.0.1-arm64'),
+      False,
+      'nv-bionic-wasm')
+    ]
 
   variables:
     NUGET_PACKAGES: $(build.sourcesdirectory)/.nuget
@@ -202,6 +221,10 @@ jobs:
   - template: templates/nuget-cache.yml
     parameters:
       nugetPackages: $(NUGET_PACKAGES)
+
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '18.16.1'
 
   - task: DownloadBuildArtifacts@0
     inputs:

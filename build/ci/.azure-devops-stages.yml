@@ -84,6 +84,7 @@ stages:
   
   - template: .azure-devops-wasm-uitests.yml
     parameters:
+      benchmarksPool: '$(linuxBenchmarksPool)'
       vmImage: '$(linuxVMImage)'
 
 - stage: skia_tests

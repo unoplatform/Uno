@@ -5,8 +5,8 @@ IFS=$'\n\t'
 
 cd $BUILD_SOURCESDIRECTORY/build/wasm-uitest-binaries
 
-npm i chromedriver@102.0.0
-npm i puppeteer@14.1.0
+npm i chromedriver@114.0.2
+npm i puppeteer@20.7.2
 
 # install dotnet serve / Remove as needed
 dotnet tool uninstall dotnet-serve -g || true
@@ -16,7 +16,7 @@ export PATH="$PATH:$BUILD_SOURCESDIRECTORY/build/tools"
 
 export UNO_UITEST_TARGETURI=http://localhost:8000
 export UNO_UITEST_DRIVERPATH_CHROME=$BUILD_SOURCESDIRECTORY/build/wasm-uitest-binaries/node_modules/chromedriver/lib/chromedriver
-export UNO_UITEST_CHROME_BINARY_PATH=$BUILD_SOURCESDIRECTORY/build/wasm-uitest-binaries/node_modules/puppeteer/.local-chromium/linux-991974/chrome-linux/chrome
+export UNO_UITEST_CHROME_BINARY_PATH=$HOME/.cache/puppeteer/chrome/linux-114.0.5735.133/chrome-linux64/chrome
 export UNO_UITEST_SCREENSHOT_PATH=$BUILD_ARTIFACTSTAGINGDIRECTORY/screenshots/wasm-automated-$SITE_SUFFIX-$UITEST_AUTOMATED_GROUP
 export UITEST_RUNTIME_TEST_GROUP=${UITEST_RUNTIME_TEST_GROUP=automated}
 export UNO_UITEST_PLATFORM=Browser
