@@ -7,6 +7,7 @@ using System;
 using Uno.Extensions;
 using Uno.UI.Common;
 using Uno.UI.DataBinding;
+using Uno.UI.Helpers;
 using Uno.UI.Xaml.Input;
 using Windows.Foundation;
 using Windows.System;
@@ -569,7 +570,7 @@ namespace Windows.UI.Xaml.Controls
 				typeof(int),
 				typeof(TextBox),
 				new FrameworkPropertyMetadata(
-					defaultValue: 0,
+					defaultValue: Boxes.IntegerBoxes.Zero,
 					propertyChangedCallback: (s, e) => ((TextBox)s)?.OnMaxLengthChanged((int)e.NewValue)
 				)
 			);

@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 using Uno.Extensions;
 using Uno.UI.DataBinding;
+using Uno.UI.Helpers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 using Uno.Client;
@@ -152,7 +153,7 @@ namespace Uno.UI.Controls
 				if (base.EnablesReturnKeyAutomatically != value)
 				{
 					base.EnablesReturnKeyAutomatically = value;
-					SetBindingValue(value);
+					SetBindingValue(Boxes.Box(value));
 				}
 			}
 		}
@@ -171,7 +172,7 @@ namespace Uno.UI.Controls
 				if (_isAutoLostFocusEnabled != value)
 				{
 					_isAutoLostFocusEnabled = value;
-					SetBindingValue(value);
+					SetBindingValue(Boxes.Box(value));
 				}
 			}
 		}

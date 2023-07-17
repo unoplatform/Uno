@@ -13,6 +13,7 @@ using Uno.Foundation.Logging;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.System;
+using Uno.UI.Helpers;
 #if __IOS__
 using View = UIKit.UIView;
 #elif __MACOS__
@@ -166,7 +167,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 				&& buttonBase.Command != null
 				&& !buttonBase.Command.CanExecute(buttonBase.CommandParameter))
 			{
-				return false;
+				return Boxes.BooleanBoxes.BoxedFalse;
 			}
 
 			return baseValue;

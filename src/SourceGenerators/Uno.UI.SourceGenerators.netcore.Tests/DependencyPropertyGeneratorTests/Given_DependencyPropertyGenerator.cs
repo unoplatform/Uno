@@ -261,7 +261,7 @@ public class Given_DependencyPropertyGenerator
 										return (int)instance.GetValue(global::Mynamespace.C.MyValueProperty);
 									}
 								}
-								private static void SetMyValueValue(global::Windows.UI.Xaml.DependencyObject instance, int value) => instance.SetValue(global::Mynamespace.C.MyValueProperty, value);
+								private static void SetMyValueValue(global::Windows.UI.Xaml.DependencyObject instance, int value) => instance.SetValue(global::Mynamespace.C.MyValueProperty, global::Uno.UI.Helpers.Boxes.Box(value));
 								/// <summary>
 								/// Generated method used to create the <see cref="MyValueProperty" /> member value
 								/// </summary>
@@ -300,6 +300,11 @@ public class Given_DependencyPropertyGenerator
 			ReferenceAssemblies = ReferenceAssemblies.Default.AddPackages(ImmutableArray.Create(new PackageIdentity("Uno.UI", "4.4.20"))),
 		};
 
+		// TODO: Update Uno.UI PackageIdentity above to remove this diagnostic.
+		test.ExpectedDiagnostics.Add(
+			// Uno.UI.SourceGenerators.Internal\Uno.UI.SourceGenerators.DependencyObject.DependencyPropertyGenerator\Mynamespace.C_ff60ac57d15aac47cd3b269d3b6ab7ad.cs(43,161): error CS0234: The type or namespace name 'Boxes' does not exist in the namespace 'Uno.UI.Helpers' (are you missing an assembly reference?)
+			DiagnosticResult.CompilerError("CS0234").WithSpan(@"Uno.UI.SourceGenerators.Internal\Uno.UI.SourceGenerators.DependencyObject.DependencyPropertyGenerator\Mynamespace.C_ff60ac57d15aac47cd3b269d3b6ab7ad.cs", 43, 161, 43, 189).WithArguments("Boxes", "Uno.UI.Helpers")
+		);
 		await test.RunAsync();
 	}
 
@@ -385,7 +390,7 @@ public class Given_DependencyPropertyGenerator
 										return (int)instance.GetValue(global::Mynamespace.C.MyValueProperty);
 									}
 								}
-								private static void SetMyValueValue(global::Windows.UI.Xaml.DependencyObject instance, int value) => instance.SetValue(global::Mynamespace.C.MyValueProperty, value);
+								private static void SetMyValueValue(global::Windows.UI.Xaml.DependencyObject instance, int value) => instance.SetValue(global::Mynamespace.C.MyValueProperty, global::Uno.UI.Helpers.Boxes.Box(value));
 								/// <summary>
 								/// Generated method used to create the <see cref="MyValueProperty" /> member value
 								/// </summary>
@@ -424,6 +429,11 @@ public class Given_DependencyPropertyGenerator
 			ReferenceAssemblies = ReferenceAssemblies.Default.AddPackages(ImmutableArray.Create(new PackageIdentity("Uno.UI", "4.4.20"))),
 		};
 
+		// TODO: Update Uno.UI PackageIdentity above to remove this diagnostic.
+		test.ExpectedDiagnostics.Add(
+			// Uno.UI.SourceGenerators.Internal\Uno.UI.SourceGenerators.DependencyObject.DependencyPropertyGenerator\Mynamespace.C_ff60ac57d15aac47cd3b269d3b6ab7ad.cs(43,161): error CS0234: The type or namespace name 'Boxes' does not exist in the namespace 'Uno.UI.Helpers' (are you missing an assembly reference?)
+			DiagnosticResult.CompilerError("CS0234").WithSpan(@"Uno.UI.SourceGenerators.Internal\Uno.UI.SourceGenerators.DependencyObject.DependencyPropertyGenerator\Mynamespace.C_ff60ac57d15aac47cd3b269d3b6ab7ad.cs", 43, 161, 43, 189).WithArguments("Boxes", "Uno.UI.Helpers")
+		);
 		await test.RunAsync();
 	}
 

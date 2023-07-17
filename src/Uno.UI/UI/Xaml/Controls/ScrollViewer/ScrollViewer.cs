@@ -22,6 +22,7 @@ using Uno;
 using Uno.Extensions;
 using Uno.Foundation.Logging;
 using Uno.UI.Extensions;
+using Uno.UI.Helpers;
 
 
 #if __ANDROID__
@@ -273,7 +274,7 @@ namespace Windows.UI.Xaml.Controls
 		[global::Uno.NotImplemented]
 #endif
 		public static void SetBringIntoViewOnFocusChange(global::Windows.UI.Xaml.DependencyObject element, bool bringIntoViewOnFocusChange)
-			=> element.SetValue(BringIntoViewOnFocusChangeProperty, bringIntoViewOnFocusChange);
+			=> element.SetValue(BringIntoViewOnFocusChangeProperty, global::Uno.UI.Helpers.Boxes.Box(bringIntoViewOnFocusChange));
 
 #if __IOS__
 		[global::Uno.NotImplemented]
@@ -341,7 +342,7 @@ namespace Windows.UI.Xaml.Controls
 		public float MinZoomFactor
 		{
 			get => (float)GetValue(MinZoomFactorProperty);
-			set => SetValue(MinZoomFactorProperty, value);
+			set => SetValue(MinZoomFactorProperty, (object)value);
 		}
 
 		public static DependencyProperty MinZoomFactorProperty { get; } =
@@ -357,7 +358,7 @@ namespace Windows.UI.Xaml.Controls
 		public float MaxZoomFactor
 		{
 			get => (float)GetValue(MaxZoomFactorProperty);
-			set => SetValue(MaxZoomFactorProperty, value);
+			set => SetValue(MaxZoomFactorProperty, (object)value);
 		}
 
 		public static DependencyProperty MaxZoomFactorProperty { get; } =
@@ -373,7 +374,7 @@ namespace Windows.UI.Xaml.Controls
 		public float ZoomFactor
 		{
 			get => (float)GetValue(ZoomFactorProperty);
-			private set { SetValue(ZoomFactorProperty, value); }
+			private set { SetValue(ZoomFactorProperty, (object)value); }
 		}
 
 		public static DependencyProperty ZoomFactorProperty { get; } =
@@ -452,7 +453,7 @@ namespace Windows.UI.Xaml.Controls
 				"ExtentHeight",
 				typeof(double),
 				typeof(ScrollViewer),
-				new FrameworkPropertyMetadata(default(double)));
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 		#endregion
 
 		#region ExtentWidth (DP - readonly)
@@ -467,7 +468,7 @@ namespace Windows.UI.Xaml.Controls
 				"ExtentWidth",
 				typeof(double),
 				typeof(ScrollViewer),
-				new FrameworkPropertyMetadata(default(double)));
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 		#endregion
 
 		#region ViewportHeight (DP - readonly)
@@ -482,7 +483,7 @@ namespace Windows.UI.Xaml.Controls
 				"ViewportHeight",
 				typeof(double),
 				typeof(ScrollViewer),
-				new FrameworkPropertyMetadata(default(double)));
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 		#endregion
 
 		#region ViewportWidth (DP - readonly)
@@ -497,7 +498,7 @@ namespace Windows.UI.Xaml.Controls
 				"ViewportWidth",
 				typeof(double),
 				typeof(ScrollViewer),
-				new FrameworkPropertyMetadata(default(double)));
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 		#endregion
 
 		#region ComputedHorizontalScrollBarVisibility (DP - readonly)
@@ -542,7 +543,7 @@ namespace Windows.UI.Xaml.Controls
 				"ScrollableHeight",
 				typeof(double),
 				typeof(ScrollViewer),
-				new FrameworkPropertyMetadata(default(double)));
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 		#endregion
 
 		#region ScrollableWidth (DP - readonly)
@@ -557,7 +558,7 @@ namespace Windows.UI.Xaml.Controls
 				"ScrollableWidth",
 				typeof(double),
 				typeof(ScrollViewer),
-				new FrameworkPropertyMetadata(default(double)));
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 		#endregion
 
 		#region VerticalOffset (DP - readonly)
@@ -573,7 +574,7 @@ namespace Windows.UI.Xaml.Controls
 				typeof(double),
 				typeof(ScrollViewer),
 				new FrameworkPropertyMetadata(
-					defaultValue: (double)0,
+					defaultValue: Boxes.DoubleBoxes.Zero,
 					propertyChangedCallback: null
 				)
 			);
@@ -593,7 +594,7 @@ namespace Windows.UI.Xaml.Controls
 				typeof(double),
 				typeof(ScrollViewer),
 				new FrameworkPropertyMetadata(
-					defaultValue: (double)0,
+					defaultValue: Boxes.DoubleBoxes.Zero,
 					propertyChangedCallback: null
 				)
 			);

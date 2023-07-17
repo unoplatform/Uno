@@ -4,6 +4,7 @@ using System.Text;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Uno.UI.Helpers;
 
 namespace Windows.UI.Xaml.Controls
 {
@@ -126,7 +127,7 @@ namespace Windows.UI.Xaml.Controls
 				"DynamicOverflowOrder",
 				typeof(int),
 				typeof(AppBarToggleButton),
-				new FrameworkPropertyMetadata(default(int))
+				new FrameworkPropertyMetadata(Boxes.IntegerBoxes.Zero)
 			);
 
 		#endregion

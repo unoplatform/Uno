@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Media;
 using Uno.UI;
 using Uno;
 using Uno.UI.DataBinding;
+using Uno.UI.Helpers;
 
 namespace Windows.UI.Xaml.Controls.Primitives;
 
@@ -69,7 +70,7 @@ public partial class Popup
 	{
 		if (property == IsLightDismissEnabledProperty)
 		{
-			defaultValue = FeatureConfiguration.Popup.EnableLightDismissByDefault;
+			defaultValue = Boxes.Box(FeatureConfiguration.Popup.EnableLightDismissByDefault);
 			return true;
 		}
 		return base.GetDefaultValue2(property, out defaultValue);
@@ -215,7 +216,7 @@ public partial class Popup
 			typeof(double),
 			typeof(Popup),
 			new FrameworkPropertyMetadata(
-				0.0,
+				Boxes.DoubleBoxes.Zero,
 				FrameworkPropertyMetadataOptions.AffectsMeasure,
 				propertyChangedCallback: (s, e) => ((Popup)s)?.OnHorizontalOffsetChanged((double)e.OldValue, (double)e.NewValue)
 			)
@@ -248,7 +249,7 @@ public partial class Popup
 			typeof(double),
 			typeof(Popup),
 			new FrameworkPropertyMetadata(
-				0.0,
+				Boxes.DoubleBoxes.Zero,
 				FrameworkPropertyMetadataOptions.AffectsMeasure,
 				propertyChangedCallback: (s, e) => ((Popup)s)?.OnVerticalOffsetChanged((double)e.OldValue, (double)e.NewValue)
 			)

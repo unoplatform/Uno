@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Uno.Extensions;
 using Uno;
 using Uno.Foundation.Logging;
+using Uno.UI.Helpers;
 using Windows.UI.Xaml.Controls;
 using Windows.Foundation;
 using View = Windows.UI.Xaml.UIElement;
@@ -435,16 +436,16 @@ namespace Windows.UI.Xaml
 				UpdateDOMXamlProperty(nameof(Margin), Margin);
 				UpdateDOMXamlProperty(nameof(HorizontalAlignment), HorizontalAlignment);
 				UpdateDOMXamlProperty(nameof(VerticalAlignment), VerticalAlignment);
-				UpdateDOMXamlProperty(nameof(Width), Width);
-				UpdateDOMXamlProperty(nameof(Height), Height);
-				UpdateDOMXamlProperty(nameof(MinWidth), MinWidth);
-				UpdateDOMXamlProperty(nameof(MinHeight), MinHeight);
-				UpdateDOMXamlProperty(nameof(MaxWidth), MaxWidth);
-				UpdateDOMXamlProperty(nameof(MaxHeight), MaxHeight);
+				UpdateDOMXamlProperty(nameof(Width), Boxes.Box(Width));
+				UpdateDOMXamlProperty(nameof(Height), Boxes.Box(Height));
+				UpdateDOMXamlProperty(nameof(MinWidth), Boxes.Box(MinWidth));
+				UpdateDOMXamlProperty(nameof(MinHeight), Boxes.Box(MinHeight));
+				UpdateDOMXamlProperty(nameof(MaxWidth), Boxes.Box(MaxWidth));
+				UpdateDOMXamlProperty(nameof(MaxHeight), Boxes.Box(MaxHeight));
 
 				if (this is Control control)
 				{
-					UpdateDOMXamlProperty(nameof(Control.IsEnabled), control.IsEnabled);
+					UpdateDOMXamlProperty(nameof(Control.IsEnabled), Boxes.Box(control.IsEnabled));
 				}
 
 				if (this.TryGetPadding(out var padding))

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using Uno.UI.Extensions;
+using Uno.UI.Helpers;
 using Uno.Foundation.Logging;
 using Uno.Extensions;
 using Windows.Graphics.Display;
@@ -40,7 +41,7 @@ namespace Uno.UI
 		{
 			if (typeof(ViewHelper).Log().IsEnabled(Uno.Foundation.Logging.LogLevel.Debug))
 			{
-				typeof(ViewHelper).Log().DebugFormat("Display scale is {0}", DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel);
+				typeof(ViewHelper).Log().DebugFormat("Display scale is {0}", Boxes.Box(DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel));
 			}
 		}
 

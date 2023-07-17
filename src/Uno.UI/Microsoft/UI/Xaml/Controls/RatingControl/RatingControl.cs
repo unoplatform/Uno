@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Automation.Peers;
 using System.Numerics;
 using RatingControlAutomationPeer = Microsoft.UI.Xaml.Automation.Peers.RatingControlAutomationPeer;
+using Uno.UI.Helpers;
 
 #if HAS_UNO_WINUI
 using Microsoft.UI.Input;

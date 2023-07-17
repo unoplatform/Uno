@@ -1,4 +1,5 @@
-﻿using Windows.Foundation;
+﻿using Uno.UI.Helpers;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 
 namespace Windows.UI.Xaml.Controls.Primitives
@@ -17,7 +18,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty ContentHeightProperty { get; } =
-			DependencyProperty.Register(nameof(ContentHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(ContentHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public Visibility EffectiveOverflowButtonVisibility
 		{
@@ -35,7 +36,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty NegativeOverflowContentHeightProperty { get; } =
-			DependencyProperty.Register(nameof(NegativeOverflowContentHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(NegativeOverflowContentHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public Rect OverflowContentClipRect
 		{
@@ -54,7 +55,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentHeightProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public double OverflowContentHorizontalOffset
 		{
@@ -63,7 +64,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentHorizontalOffsetProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentHorizontalOffset), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentHorizontalOffset), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public double OverflowContentMaxHeight
 		{
@@ -72,7 +73,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentMaxHeightProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentMaxHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentMaxHeight), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public double OverflowContentMinWidth
 		{
@@ -81,7 +82,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentMinWidthProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentMinWidth), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentMinWidth), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public double OverflowContentMaxWidth
 		{
@@ -90,7 +91,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentMaxWidthProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentMaxWidth), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentMaxWidth), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 
 		public double OverflowContentCompactYTranslation
@@ -100,7 +101,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentCompactYTranslationProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentCompactYTranslation), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentCompactYTranslation), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 
 		public double OverflowContentHiddenYTranslation
@@ -110,7 +111,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentHiddenYTranslationProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentHiddenYTranslation), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentHiddenYTranslation), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		public double OverflowContentMinimalYTranslation
 		{
@@ -119,6 +120,6 @@ namespace Windows.UI.Xaml.Controls.Primitives
 		}
 
 		internal static DependencyProperty OverflowContentMinimalYTranslationProperty { get; } =
-			DependencyProperty.Register(nameof(OverflowContentMinimalYTranslation), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(0.0));
+			DependencyProperty.Register(nameof(OverflowContentMinimalYTranslation), typeof(double), typeof(CommandBarTemplateSettings), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 	}
 }

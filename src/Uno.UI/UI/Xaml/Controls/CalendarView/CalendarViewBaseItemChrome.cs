@@ -18,6 +18,7 @@ using Windows.UI.Xaml.Media;
 using DirectUI;
 using CCalendarViewBaseItemChrome = Windows.UI.Xaml.Controls.CalendarViewBaseItem;
 using DateTime = System.DateTimeOffset;
+using Uno.UI.Helpers;
 
 namespace Windows.UI.Xaml.Controls
 {

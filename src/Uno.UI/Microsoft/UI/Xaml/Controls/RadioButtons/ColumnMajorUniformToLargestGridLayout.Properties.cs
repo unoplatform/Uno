@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using Uno.UI.Helpers;
+using Windows.UI.Xaml;
 
 namespace Microsoft.UI.Xaml.Controls.Primitives
 {
@@ -11,7 +12,7 @@ namespace Microsoft.UI.Xaml.Controls.Primitives
 		}
 
 		public static DependencyProperty ColumnSpacingProperty { get; } =
-			DependencyProperty.Register(nameof(ColumnSpacing), typeof(double), typeof(ColumnMajorUniformToLargestGridLayout), new FrameworkPropertyMetadata(default(double), OnColumnSpacingPropertyChanged));
+			DependencyProperty.Register(nameof(ColumnSpacing), typeof(double), typeof(ColumnMajorUniformToLargestGridLayout), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero, OnColumnSpacingPropertyChanged));
 
 		public int MaxColumns
 		{
@@ -20,7 +21,7 @@ namespace Microsoft.UI.Xaml.Controls.Primitives
 		}
 
 		public static DependencyProperty MaxColumnsProperty { get; } =
-			DependencyProperty.Register(nameof(MaxColumns), typeof(int), typeof(ColumnMajorUniformToLargestGridLayout), new FrameworkPropertyMetadata(default(int), OnMaxColumnsPropertyChanged));
+			DependencyProperty.Register(nameof(MaxColumns), typeof(int), typeof(ColumnMajorUniformToLargestGridLayout), new FrameworkPropertyMetadata(Boxes.IntegerBoxes.Zero, OnMaxColumnsPropertyChanged));
 
 		public double RowSpacing
 		{
@@ -29,7 +30,7 @@ namespace Microsoft.UI.Xaml.Controls.Primitives
 		}
 
 		public static DependencyProperty RowSpacingProperty { get; } =
-			DependencyProperty.Register(nameof(RowSpacing), typeof(double), typeof(ColumnMajorUniformToLargestGridLayout), new FrameworkPropertyMetadata(default(double), OnRowSpacingPropertyChanged));
+			DependencyProperty.Register(nameof(RowSpacing), typeof(double), typeof(ColumnMajorUniformToLargestGridLayout), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero, OnRowSpacingPropertyChanged));
 
 		private static void OnColumnSpacingPropertyChanged(
 			DependencyObject sender,
@@ -50,7 +51,7 @@ namespace Microsoft.UI.Xaml.Controls.Primitives
 			owner.ValidateGreaterThanZero(coercedValue);
 			if (value != coercedValue)
 			{
-				sender.SetValue(args.Property, coercedValue);
+				sender.SetValue(args.Property, Boxes.Box(coercedValue));
 				return;
 			}
 

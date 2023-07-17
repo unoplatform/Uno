@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Uno.UI.Helpers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -23,7 +24,7 @@ namespace Microsoft.UI.Xaml.Controls
 
 		#region Spacing - DP with common callback
 		public static DependencyProperty SpacingProperty { get; } = DependencyProperty.Register(
-			"Spacing", typeof(double), typeof(StackLayout), new FrameworkPropertyMetadata(default(double), OnDependencyPropertyChanged));
+			"Spacing", typeof(double), typeof(StackLayout), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero, OnDependencyPropertyChanged));
 
 		public double Spacing
 		{

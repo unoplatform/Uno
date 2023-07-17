@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Uno.UI.Helpers;
 using Windows.Foundation;
 using DateTime = System.DateTimeOffset;
 
@@ -20,7 +21,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 			"MinViewWidth",
 			typeof(double),
 			typeof(CalendarViewTemplateSettings),
-			new FrameworkPropertyMetadata(default(double)));
+			new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		/// <summary>Gets the text of the header.</summary>
 		/// <returns>The text of the header.</returns>
@@ -202,7 +203,7 @@ namespace Windows.UI.Xaml.Controls.Primitives
 			"CenterX",
 			typeof(double),
 			typeof(CalendarViewTemplateSettings),
-			new FrameworkPropertyMetadata(default(double)));
+			new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 
 		/// <summary>Gets the Y coordinate of the CalendarView 's center point.</summary>
 		/// <returns>The Y coordinate of the CalendarView 's center point.</returns>
@@ -216,6 +217,6 @@ namespace Windows.UI.Xaml.Controls.Primitives
 			"CenterY",
 			typeof(double),
 			typeof(CalendarViewTemplateSettings),
-			new FrameworkPropertyMetadata(default(double)));
+			new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero));
 	}
 }

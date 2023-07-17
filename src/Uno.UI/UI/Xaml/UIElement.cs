@@ -33,6 +33,7 @@ using Uno.UI.Extensions;
 using Windows.UI.Xaml.Documents;
 using Windows.ApplicationModel.Core;
 using Uno.UI.Xaml.Media;
+using Uno.UI.Helpers;
 
 #if __IOS__
 using UIKit;
@@ -178,7 +179,7 @@ namespace Windows.UI.Xaml
 			}
 			else if (property == IsTabStopProperty)
 			{
-				defaultValue = IsTabStopDefaultValue;
+				defaultValue = Boxes.Box(IsTabStopDefaultValue);
 				return true;
 			}
 

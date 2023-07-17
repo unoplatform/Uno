@@ -4,6 +4,7 @@ using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using System.ComponentModel;
+using Uno.UI.Helpers;
 
 namespace Uno.UI.Controls
 {

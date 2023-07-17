@@ -1,4 +1,6 @@
-﻿#if __ANDROID__
+using Uno.UI.Helpers;
+
+#if __ANDROID__
 using Android.Views;
 using Android.Graphics;
 using View = Android.Views.View;
@@ -49,7 +51,7 @@ namespace Windows.UI.Xaml.Media
 				"Offset",
 				typeof(double),
 				typeof(GradientStop),
-				new FrameworkPropertyMetadata(default(double))
+				new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero)
 			);
 	}
 }

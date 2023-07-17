@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Uno.UI.Helpers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -23,7 +24,7 @@ namespace Microsoft.UI.Xaml.Controls
 
 		#region MinColumnSpacing - DP with common callback
 		public static DependencyProperty MinColumnSpacingProperty { get; } = DependencyProperty.Register(
-			"MinColumnSpacing", typeof(double), typeof(FlowLayout), new FrameworkPropertyMetadata(default(double), OnDependencyPropertyChanged));
+			"MinColumnSpacing", typeof(double), typeof(FlowLayout), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero, OnDependencyPropertyChanged));
 
 		public double MinColumnSpacing
 		{
@@ -34,7 +35,7 @@ namespace Microsoft.UI.Xaml.Controls
 
 		#region MinRowSpacing - DP with common callback
 		public static DependencyProperty MinRowSpacingProperty { get; } = DependencyProperty.Register(
-			"MinRowSpacing", typeof(double), typeof(FlowLayout), new FrameworkPropertyMetadata(default(double), OnDependencyPropertyChanged));
+			"MinRowSpacing", typeof(double), typeof(FlowLayout), new FrameworkPropertyMetadata(Boxes.DoubleBoxes.Zero, OnDependencyPropertyChanged));
 
 		public double MinRowSpacing
 		{

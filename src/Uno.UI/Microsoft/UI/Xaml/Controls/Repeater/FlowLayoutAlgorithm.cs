@@ -8,6 +8,7 @@ using Windows.Foundation;
 using Windows.UI.Xaml;
 using Uno.Extensions;
 using static Microsoft.UI.Xaml.Controls._Tracing;
+using Uno.UI.Helpers;
 
 namespace Microsoft.UI.Xaml.Controls
 {
@@ -81,9 +82,9 @@ namespace Microsoft.UI.Xaml.Controls
 			m_scrollOrientationSameAsFlow = Minor(availableSize) == double.PositiveInfinity;
 			var realizationRect = RealizationRect;
 			REPEATER_TRACE_INFO("%*s: \tMeasureLayout Realization(%.0f,%.0f,%.0f,%.0f)\n",
-				context.Indent,
+				Boxes.Box(context.Indent),
 				layoutId,
-				realizationRect.X, realizationRect.Y, realizationRect.Width, realizationRect.Height);
+				Boxes.Box(realizationRect.X), Boxes.Box(realizationRect.Y), Boxes.Box(realizationRect.Width), Boxes.Box(realizationRect.Height));
 
 			var suggestedAnchorIndex = m_context.RecommendedAnchorIndex;
 			if (m_elementManager.IsIndexValidInData(suggestedAnchorIndex))
@@ -102,7 +103,7 @@ namespace Microsoft.UI.Xaml.Controls
 			Generate(GenerateDirection.Backward, anchorIndex, availableSize, minItemSpacing, lineSpacing, maxItemsPerLine, disableVirtualization, layoutId);
 			if (isWrapping && IsReflowRequired)
 			{
-				REPEATER_TRACE_INFO("%*s: \tReflow Pass \n", context.Indent, layoutId);
+				REPEATER_TRACE_INFO("%*s: \tReflow Pass \n", Boxes.Box(context.Indent), layoutId);
 				var firstElementBounds = m_elementManager.GetLayoutBoundsForRealizedIndex(0);
 				SetMinorStart(ref firstElementBounds, 0);
 				m_elementManager.SetLayoutBoundsForRealizedIndex(0, firstElementBounds);
@@ -124,7 +125,7 @@ namespace Microsoft.UI.Xaml.Controls
 			FlowLayoutLineAlignment lineAlignment,
 			string layoutId)
 		{
-			REPEATER_TRACE_INFO("%*s: \tArrangeLayout \n", context.Indent, layoutId);
+			REPEATER_TRACE_INFO("%*s: \tArrangeLayout \n", Boxes.Box(context.Indent), layoutId);
 			ArrangeVirtualizingLayout(finalSize, lineAlignment, isWrapping, layoutId);
 
 			return new Size(
@@ -204,7 +205,7 @@ namespace Microsoft.UI.Xaml.Controls
 
 				if (isAnchorSuggestionValid)
 				{
-					REPEATER_TRACE_INFO("%*s: \tUsing suggested anchor %d\n", context.Indent, layoutId, suggestedAnchorIndex);
+					REPEATER_TRACE_INFO("%*s: \tUsing suggested anchor %d\n", Boxes.Box(context.Indent), layoutId, Boxes.Box(suggestedAnchorIndex));
 					anchorIndex = m_algorithmCallbacks.Algorithm_GetAnchorForTargetElement(
 						suggestedAnchorIndex,
 						availableSize,
@@ -244,9 +245,9 @@ namespace Microsoft.UI.Xaml.Controls
 				}
 				else if (needAnchorColumnRevaluation || !isRealizationWindowConnected)
 				{
-					if (needAnchorColumnRevaluation) { REPEATER_TRACE_INFO("%*s: \tNeedAnchorColumnReevaluation \n", context.Indent, layoutId); }
+					if (needAnchorColumnRevaluation) { REPEATER_TRACE_INFO("%*s: \tNeedAnchorColumnReevaluation \n", Boxes.Box(context.Indent), layoutId); }
 
-					if (!isRealizationWindowConnected) { REPEATER_TRACE_INFO("%*s: \tDisconnected Window \n", context.Indent, layoutId); }
+					if (!isRealizationWindowConnected) { REPEATER_TRACE_INFO("%*s: \tDisconnected Window \n", Boxes.Box(context.Indent), layoutId); }
 
 					// The anchor is based on the realization window because a connected ItemsRepeater might intersect the realization window
 					// but not the visible window. In that situation, we still need to produce a valid anchor.
@@ -256,7 +257,7 @@ namespace Microsoft.UI.Xaml.Controls
 				}
 				else
 				{
-					REPEATER_TRACE_INFO("%*s: \tConnected Window - picking first realized element as anchor \n", context.Indent, layoutId);
+					REPEATER_TRACE_INFO("%*s: \tConnected Window - picking first realized element as anchor \n", Boxes.Box(context.Indent), layoutId);
 					// No suggestion - just pick first in realized range
 					anchorIndex = m_elementManager.GetDataIndexFromRealizedRangeIndex(0);
 					var firstElementBounds = m_elementManager.GetLayoutBoundsForRealizedIndex(0);
@@ -264,7 +265,7 @@ namespace Microsoft.UI.Xaml.Controls
 				}
 			}
 
-			REPEATER_TRACE_INFO("%*s: \tPicked anchor:%d \n", context.Indent, layoutId, anchorIndex);
+			REPEATER_TRACE_INFO("%*s: \tPicked anchor:%d \n", Boxes.Box(context.Indent), layoutId, Boxes.Box(anchorIndex));
 			global::System.Diagnostics.Debug.Assert(anchorIndex == -1 || m_elementManager.IsIndexValidInData(anchorIndex));
 			m_firstRealizedDataIndexInsideRealizationWindow = m_lastRealizedDataIndexInsideRealizationWindow = anchorIndex;
 			if (m_elementManager.IsIndexValidInData(anchorIndex))
@@ -272,7 +273,7 @@ namespace Microsoft.UI.Xaml.Controls
 				if (!m_elementManager.IsDataIndexRealized(anchorIndex))
 				{
 					// Disconnected, throw everything and create new anchor
-					REPEATER_TRACE_INFO("%*s Disconnected Window - throwing away all realized elements \n", context.Indent, layoutId);
+					REPEATER_TRACE_INFO("%*s Disconnected Window - throwing away all realized elements \n", Boxes.Box(context.Indent), layoutId);
 					m_elementManager.ClearRealizedRange();
 
 					var anchor = m_context.GetOrCreateElementAt(anchorIndex, ElementRealizationOptions.ForceCreate | ElementRealizationOptions.SuppressAutoRecycle);
@@ -285,16 +286,16 @@ namespace Microsoft.UI.Xaml.Controls
 				m_elementManager.SetLayoutBoundsForDataIndex(anchorIndex, layoutBounds);
 
 				REPEATER_TRACE_INFO("%*s: \tLayout bounds of anchor %d are (%.0f,%.0f,%.0f,%.0f). \n",
-					context.Indent,
+					Boxes.Box(context.Indent),
 					layoutId,
-					anchorIndex,
-					layoutBounds.X, layoutBounds.Y, layoutBounds.Width, layoutBounds.Height);
+					Boxes.Box(anchorIndex),
+					Boxes.Box(layoutBounds.X), Boxes.Box(layoutBounds.Y), Boxes.Box(layoutBounds.Width), Boxes.Box(layoutBounds.Height));
 			}
 			else
 			{
 				// Throw everything away
 				REPEATER_TRACE_INFO("%*s \tAnchor index is not valid - throwing away all realized elements \n",
-					context.Indent,
+Boxes.Box(context.Indent),
 					layoutId);
 				m_elementManager.ClearRealizedRange();
 			}
@@ -322,10 +323,10 @@ namespace Microsoft.UI.Xaml.Controls
 				int step = (direction == GenerateDirection.Forward) ? 1 : -1;
 
 				REPEATER_TRACE_INFO("%*s: \tGenerating %ls from anchor %d. \n",
-					m_context.Indent,
+Boxes.Box(m_context.Indent),
 					layoutId,
 					direction == GenerateDirection.Forward ? "forward" : "backward",
-					anchorIndex);
+Boxes.Box(anchorIndex));
 
 				int previousIndex = anchorIndex;
 				int currentIndex = anchorIndex + step;
@@ -412,10 +413,10 @@ namespace Microsoft.UI.Xaml.Controls
 										SetMajorSize(ref bounds, lineMajorSize);
 										m_elementManager.SetLayoutBoundsForDataIndex(dataIndex, bounds);
 										REPEATER_TRACE_INFO("%*s: \t Corrected Layout bounds of element %d are (%.0f,%.0f,%.0f,%.0f). \n",
-											m_context.Indent,
+											Boxes.Box(m_context.Indent),
 											layoutId,
-											dataIndex,
-											bounds.X, bounds.Y, bounds.Width, bounds.Height);
+											Boxes.Box(dataIndex),
+											Boxes.Box(bounds.X), Boxes.Box(bounds.Y), Boxes.Box(bounds.Width), Boxes.Box(bounds.Height));
 									}
 								}
 							}
@@ -440,10 +441,10 @@ namespace Microsoft.UI.Xaml.Controls
 					m_elementManager.SetLayoutBoundsForDataIndex(currentIndex, currentBounds);
 
 					REPEATER_TRACE_INFO("%*s: \tLayout bounds of element %d are (%.0f,%.0f,%.0f,%.0f). \n",
-						m_context.Indent,
+						Boxes.Box(m_context.Indent),
 						layoutId,
-						currentIndex,
-						currentBounds.X, currentBounds.Y, currentBounds.Width, currentBounds.Height);
+						Boxes.Box(currentIndex),
+						Boxes.Box(currentBounds.X), Boxes.Box(currentBounds.Y), Boxes.Box(currentBounds.Width), Boxes.Box(currentBounds.Height));
 					previousIndex = currentIndex;
 					currentIndex += step;
 				}
@@ -543,7 +544,7 @@ namespace Microsoft.UI.Xaml.Controls
 				lastDataIndex,
 				lastBounds);
 
-			REPEATER_TRACE_INFO("%*s Extent: (%.0f,%.0f,%.0f,%.0f). \n", m_context.Indent, layoutId, extent.X, extent.Y, extent.Width, extent.Height);
+			REPEATER_TRACE_INFO("%*s Extent: (%.0f,%.0f,%.0f,%.0f). \n", Boxes.Box(m_context.Indent), layoutId, Boxes.Box(extent.X), Boxes.Box(extent.Y), Boxes.Box(extent.Width), Boxes.Box(extent.Height));
 			return extent;
 		}
 
@@ -716,10 +717,10 @@ namespace Microsoft.UI.Xaml.Controls
 				var element = m_elementManager.GetAt(rangeIndex);
 
 				REPEATER_TRACE_INFO("%*s: \tArranging element %d at (%.0f,%.0f,%.0f,%.0f). \n",
-					m_context.Indent,
+					Boxes.Box(m_context.Indent),
 					layoutId,
-					m_elementManager.GetDataIndexFromRealizedRangeIndex(rangeIndex),
-					bounds.X, bounds.Y, bounds.Width, bounds.Height);
+					Boxes.Box(m_elementManager.GetDataIndexFromRealizedRangeIndex(rangeIndex)),
+					Boxes.Box(bounds.X), Boxes.Box(bounds.Y), Boxes.Box(bounds.Width), Boxes.Box(bounds.Height));
 				element.Arrange(bounds);
 			}
 		}

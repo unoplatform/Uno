@@ -16,6 +16,7 @@ using System.Runtime.CompilerServices;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Text;
 using Uno.UI;
+using Uno.UI.Helpers;
 using Uno.UI.Xaml;
 using Uno.UI.Xaml.Media;
 
@@ -217,7 +218,7 @@ namespace Windows.UI.Xaml.Documents
 				typeof(int),
 				typeof(TextElement),
 				new FrameworkPropertyMetadata(
-					defaultValue: 0,
+					defaultValue: Boxes.IntegerBoxes.Zero,
 					options: FrameworkPropertyMetadataOptions.Inherits,
 					propertyChangedCallback: (s, e) => ((TextElement)s).OnCharacterSpacingChanged()
 				)

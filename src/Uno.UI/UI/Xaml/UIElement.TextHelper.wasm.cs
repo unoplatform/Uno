@@ -109,17 +109,10 @@ namespace Windows.UI.Xaml
 			}
 		}
 
-		internal void SetMaxLines(object localValue)
+		internal void SetMaxLines(int localValue)
 		{
-			if (localValue is UnsetValue)
-			{
-				this.ResetStyle("display", "-webkit-line-clamp", "webkit-box-orient");
-			}
-			else
-			{
-				var value = (int)localValue;
-				this.SetStyle(("display", "-webkit-box"), ("-webkit-line-clamp", value.ToStringInvariant()), ("-webkit-box-orient", "vertical"));
-			}
+			var value = (int)localValue;
+			this.SetStyle(("display", "-webkit-box"), ("-webkit-line-clamp", value.ToStringInvariant()), ("-webkit-box-orient", "vertical"));
 		}
 
 		private void SetTextTrimming(object localValue)

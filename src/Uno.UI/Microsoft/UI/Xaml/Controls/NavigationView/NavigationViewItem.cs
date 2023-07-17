@@ -33,6 +33,7 @@ using Microsoft.UI.Input;
 #else
 using Windows.UI.Input;
 using Windows.Devices.Input;
+using Uno.UI.Helpers;
 #endif
 
 namespace Microsoft.UI.Xaml.Controls

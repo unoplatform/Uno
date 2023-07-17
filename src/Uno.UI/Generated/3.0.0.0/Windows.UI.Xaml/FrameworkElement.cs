@@ -193,17 +193,17 @@ namespace Windows.UI.Xaml
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "IS_UNIT_TESTS", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public static global::Windows.UI.Xaml.DependencyProperty ActualHeightProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(ActualHeight), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(ActualHeight), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if __ANDROID__ || __IOS__ || IS_UNIT_TESTS || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "IS_UNIT_TESTS", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
 		public static global::Windows.UI.Xaml.DependencyProperty ActualWidthProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(ActualWidth), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(ActualWidth), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if __ANDROID__ || __IOS__ || IS_UNIT_TESTS || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__ || __MACOS__
 		[global::Uno.NotImplemented("__ANDROID__", "__IOS__", "IS_UNIT_TESTS", "__WASM__", "__SKIA__", "__NETSTD_REFERENCE__", "__MACOS__")]
@@ -217,9 +217,9 @@ namespace Windows.UI.Xaml
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
 		public static global::Windows.UI.Xaml.DependencyProperty HeightProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(Height), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(Height), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if false || false || false || false || false || __NETSTD_REFERENCE__ || false
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
@@ -249,33 +249,33 @@ namespace Windows.UI.Xaml
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
 		public static global::Windows.UI.Xaml.DependencyProperty MaxHeightProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(MaxHeight), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(MaxHeight), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if false || false || false || false || false || __NETSTD_REFERENCE__ || false
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
 		public static global::Windows.UI.Xaml.DependencyProperty MaxWidthProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(MaxWidth), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(MaxWidth), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if false || false || false || false || false || __NETSTD_REFERENCE__ || false
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
 		public static global::Windows.UI.Xaml.DependencyProperty MinHeightProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(MinHeight), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(MinHeight), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if false || false || false || false || false || __NETSTD_REFERENCE__ || false
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
 		public static global::Windows.UI.Xaml.DependencyProperty MinWidthProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(MinWidth), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(MinWidth), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		#if false || false || IS_UNIT_TESTS || false || false || __NETSTD_REFERENCE__ || false
 		[global::Uno.NotImplemented("IS_UNIT_TESTS", "__NETSTD_REFERENCE__")]
@@ -299,9 +299,9 @@ namespace Windows.UI.Xaml
 		[global::Uno.NotImplemented("__NETSTD_REFERENCE__")]
 		public static global::Windows.UI.Xaml.DependencyProperty WidthProperty { get; } =
 		Windows.UI.Xaml.DependencyProperty.Register(
-			nameof(Width), typeof(double),
-			typeof(global::Windows.UI.Xaml.FrameworkElement),
-			new Windows.UI.Xaml.FrameworkPropertyMetadata(default(double)));
+			nameof(Width), typeof(double), 
+			typeof(global::Windows.UI.Xaml.FrameworkElement), 
+			new Windows.UI.Xaml.FrameworkPropertyMetadata(global::Uno.UI.Helpers.Boxes.DoubleBoxes.Zero));
 		#endif
 		// Skipping already declared property RequestedThemeProperty
 		// Skipping already declared property AllowFocusOnInteractionProperty

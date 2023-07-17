@@ -15,6 +15,7 @@ using System.Diagnostics;
 using Windows.UI.Xaml.Data;
 using Uno.UI;
 using System.Collections;
+using Uno.UI.Helpers;
 
 #if __ANDROID__
 using View = Android.Views.View;
@@ -43,7 +44,7 @@ namespace Windows.UI.Xaml
 			}
 
 			internal void Set(object key, bool isAncestor)
-				=> _entries[key] = isAncestor;
+				=> _entries[key] = Boxes.Box(isAncestor);
 
 			internal void Clear()
 				=> _entries.Clear();

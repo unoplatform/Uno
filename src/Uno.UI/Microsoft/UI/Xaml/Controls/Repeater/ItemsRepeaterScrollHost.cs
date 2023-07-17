@@ -15,6 +15,7 @@ using Uno.UI;
 using Uno.UI.Helpers.WinUI;
 using static Microsoft.UI.Xaml.Controls._Tracing;
 using Windows.UI.Xaml.Markup;
+using Uno.UI.Helpers;
 
 namespace Microsoft.UI.Xaml.Controls
 {
@@ -307,7 +308,7 @@ namespace Microsoft.UI.Xaml.Controls
 			var it = m_candidates.FindIndex(c => c.Element == elem);
 			if (it != -1)
 			{
-				REPEATER_TRACE_INFO("Unregistered candidate %d\n", it);
+				REPEATER_TRACE_INFO("Unregistered candidate %d\n", Boxes.Box(it));
 				m_candidates.RemoveAt(it);
 				m_isAnchorElementDirty = true;
 			}
@@ -329,7 +330,7 @@ namespace Microsoft.UI.Xaml.Controls
 				elementOffset.X = -elementOffset.X;
 				elementOffset.Y = -elementOffset.Y + (float)(m_pendingViewportShift);
 
-				REPEATER_TRACE_INFO("Pending Shift - %lf\n", m_pendingViewportShift);
+				REPEATER_TRACE_INFO("Pending Shift - %lf\n", Boxes.Box(m_pendingViewportShift));
 
 				if (hasLockedViewport)
 				{
@@ -376,7 +377,7 @@ namespace Microsoft.UI.Xaml.Controls
 
 			bringIntoView.ChangeViewOffset = changeViewOffset;
 
-			REPEATER_TRACE_INFO("ItemsRepeaterScrollHost scroll to absolute offset (%.0f, %.0f), animate=%d \n", changeViewOffset.X, changeViewOffset.Y, bringIntoView.Animate);
+			REPEATER_TRACE_INFO("ItemsRepeaterScrollHost scroll to absolute offset (%.0f, %.0f), animate=%d \n", Boxes.Box(changeViewOffset.X), Boxes.Box(changeViewOffset.Y), Boxes.Box(bringIntoView.Animate));
 			scrollViewer.ChangeView(
 				changeViewOffset.X,
 				changeViewOffset.Y,
@@ -426,7 +427,7 @@ namespace Microsoft.UI.Xaml.Controls
 				//  update the ongoing animation correctly and we end up missing our target
 				//  viewport. We should address that when building element tracking as part
 				//  of the framework.
-				REPEATER_TRACE_INFO("Viewport shift:%.0f. \n", pendingViewportShift);
+				REPEATER_TRACE_INFO("Viewport shift:%.0f. \n", Boxes.Box(pendingViewportShift));
 				scrollViewer.ChangeView(
 					null,
 					verticalOffset + pendingViewportShift,

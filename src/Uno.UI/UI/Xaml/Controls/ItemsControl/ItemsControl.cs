@@ -16,6 +16,7 @@ using Uno.Foundation.Logging;
 using Uno.UI;
 using Uno.UI.DataBinding;
 using Uno.UI.Extensions;
+using Uno.UI.Helpers;
 
 #if __ANDROID__
 using Android.Graphics;
@@ -382,7 +383,7 @@ namespace Windows.UI.Xaml.Controls
 				"IndexForItemContainer",
 				typeof(int),
 				typeof(ItemsControl),
-				new FrameworkPropertyMetadata(-1)
+				new FrameworkPropertyMetadata(Boxes.IntegerBoxes.NegativeOne)
 			);
 
 		internal static DependencyProperty ItemsControlForItemContainerProperty { get; } =
@@ -1325,7 +1326,7 @@ namespace Windows.UI.Xaml.Controls
 			_containerBeingPrepared = container;
 
 			// This must be set before calling PrepareContainerForItemOverride
-			container.SetValue(IndexForItemContainerProperty, index);
+			container.SetValue(IndexForItemContainerProperty, Boxes.Box(index));
 
 			var item = ItemFromIndex(index);
 			PrepareContainerForItemOverride(container, item);
@@ -1418,7 +1419,7 @@ namespace Windows.UI.Xaml.Controls
 			}
 
 			var index = IndexFromItem(item);
-			var containerFromIndex = index == -1 ? null : MaterializedContainers.FirstOrDefault(materializedContainer => Equals(IndexFromContainer(materializedContainer), index));
+			var containerFromIndex = index == -1 ? null : MaterializedContainers.FirstOrDefault(materializedContainer => Equals(Boxes.Box(IndexFromContainer(materializedContainer)), Boxes.Box(index)));
 			EnsureContainerItemsControlProperty(containerFromIndex);
 			return containerFromIndex;
 		}
@@ -1513,7 +1514,7 @@ namespace Windows.UI.Xaml.Controls
 
 		internal virtual DependencyObject ContainerFromIndexInner(int index)
 		{
-			return MaterializedContainers.FirstOrDefault(materializedContainer => Equals(materializedContainer.GetValue(IndexForItemContainerProperty), index));
+			return MaterializedContainers.FirstOrDefault(materializedContainer => Equals(materializedContainer.GetValue(IndexForItemContainerProperty), Boxes.Box(index)));
 		}
 
 		protected int GetInProgressAdjustedIndex(int index)

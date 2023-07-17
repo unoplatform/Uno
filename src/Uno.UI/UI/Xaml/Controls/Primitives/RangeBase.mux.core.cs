@@ -1,4 +1,5 @@
 ﻿using System;
+using Uno.UI.Helpers;
 
 namespace Windows.UI.Xaml.Controls.Primitives;
 
@@ -45,7 +46,7 @@ public partial class RangeBase : Control
 			double max = GetDoubleValueHelper(MaximumProperty);
 
 			var newValue = CoerceValueBetween(m_uncoercedValue, min, max);
-			return newValue;
+			return Boxes.Box(newValue);
 
 			//wasHandled = true;
 		}
@@ -91,7 +92,7 @@ public partial class RangeBase : Control
 				// CControl::SetValue(args));
 			}
 
-			return newMin;
+			return Boxes.Box(newMin);
 			//wasHandled = true;
 		}
 		else if (property == MaximumProperty)
@@ -132,7 +133,7 @@ public partial class RangeBase : Control
 				// SetMaximum(newMax);
 			}
 
-			return newMax;
+			return Boxes.Box(newMax);
 			//wasHandled = true;
 		}
 
