@@ -161,7 +161,6 @@ namespace Windows.UI.Xaml.Input
 			set => _engagedControl = value;
 		}
 
-		//TODO Uno: Currently we set this only from Page, but should be set from other places as well.
 		/// <summary>
 		/// Represents a value indicating whether we are still to provide the initial focus.
 		/// </summary>

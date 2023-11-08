@@ -1,11 +1,22 @@
-#pragma warning disable 108 // new keyword hiding
-#pragma warning disable 114 // new keyword hiding
-namespace Windows.UI.Xaml.Controls
+namespace Windows.UI.Xaml.Controls;
+
+/// <summary>
+/// Specifies identifiers to indicate the return value of a ContentDialog.
+/// </summary>
+public enum ContentDialogResult
 {
-	public enum ContentDialogResult
-	{
-		None,
-		Primary,
-		Secondary,
-	}
+	/// <summary>
+	/// No button was tapped.
+	/// </summary>
+	None,
+
+	/// <summary>
+	/// The primary button was tapped by the user.
+	/// </summary>
+	Primary,
+
+	/// <summary>
+	/// The secondary button was tapped by the user.
+	/// </summary>
+	Secondary,
 }
