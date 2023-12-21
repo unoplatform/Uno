@@ -1,3 +1,4 @@
+#if false
 #nullable enable
 
 //// Copyright (c) Microsoft Corporation. All rights reserved.
@@ -412,3 +413,4 @@ namespace Windows.UI.Xaml.Controls
 		}
 	}
 }
+#endif

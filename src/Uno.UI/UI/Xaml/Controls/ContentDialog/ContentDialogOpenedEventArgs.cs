@@ -1,8 +1,8 @@
-#pragma warning disable 108 // new keyword hiding
-#pragma warning disable 114 // new keyword hiding
-namespace Windows.UI.Xaml.Controls
+namespace Windows.UI.Xaml.Controls;
+
+/// <summary>
+/// Provides data for the Opened event.
+/// </summary>
+public partial class ContentDialogOpenedEventArgs 
 {
-	public partial class ContentDialogOpenedEventArgs
-	{
-	}
 }

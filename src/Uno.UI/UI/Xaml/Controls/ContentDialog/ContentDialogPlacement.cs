@@ -1,13 +1,18 @@
-#pragma warning disable 108 // new keyword hiding
-#pragma warning disable 114 // new keyword hiding
 using Uno;
 
-namespace Windows.UI.Xaml.Controls
+namespace Windows.UI.Xaml.Controls;
+
+public enum ContentDialogPlacement
 {
-	public enum ContentDialogPlacement
-	{
-		Popup,
-		[NotImplemented]
-		InPlace,
-	}
+	/// <summary>
+	/// The dialog is rooted in the PopupRoot element of the XAML Window.
+	/// </summary>
+	Popup,
+
+	/// <summary>
+	/// If the dialog has a parent element, the dialog is rooted
+	/// in the parent's visual tree. Otherwise, it falls back
+	/// to the Popup behavior.
+	/// </summary>
+	InPlace,
 }

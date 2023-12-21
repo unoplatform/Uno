@@ -11,6 +11,7 @@ using Uno.UI.Xaml.Controls;
 using Uno.UI.Xaml.Core;
 using Windows.ApplicationModel.Resources;
 using Windows.Foundation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace DirectUI
@@ -20,7 +21,8 @@ namespace DirectUI
 		private static readonly Lazy<DXamlCore> _current = new Lazy<DXamlCore>(() => new DXamlCore());
 
 		private Dictionary<string, List<WeakReference<RadioButton>>>? _radioButtonGroupsByName;
-
+		private ContentDialogMetadata? _contentDialogMetadata;
+		
 		private BuildTreeService? _buildTreeService;
 		private BudgetManager? _budgetManager;
 
@@ -31,6 +33,8 @@ namespace DirectUI
 		public static DXamlCore Current => _current.Value;
 
 		public static DXamlCore GetCurrentNoCreate() => Current;
+
+		public Window Window => Window.Current; // TODO: Uno specific: This is a very simple solution for now until we have multi-window support.
 
 		public Uno.UI.Xaml.Core.CoreServices GetHandle() => Uno.UI.Xaml.Core.CoreServices.Instance;
 
@@ -68,5 +72,7 @@ namespace DirectUI
 
 			return _radioButtonGroupsByName;
 		}
+
+		internal ContentDialogMetadata ContentDialogMetadata => _contentDialogMetadata ??= new ContentDialogMetadata();
 	}
 }

@@ -48,6 +48,8 @@ namespace Uno.UI.Xaml.Core
 
 		public DependencyObject? VisualRoot => _mainVisualTree?.PublicRootVisual;
 
+		public bool BackButtonSupported() => InitializationType != InitializationType.IslandsOnly; // TODO:MZ: Should include Android here?
+
 		private void ResetCoreWindowVisualTree()
 		{
 			//TODO Uno: Implement.

@@ -1,12 +1,17 @@
-namespace Windows.UI.Xaml.Controls
-{
-	public partial class ContentDialogClosedEventArgs
-	{
-		internal ContentDialogClosedEventArgs(ContentDialogResult result)
-		{
-			Result = result;
-		}
+namespace Windows.UI.Xaml.Controls;
 
-		public global::Windows.UI.Xaml.Controls.ContentDialogResult Result { get; }
+/// <summary>
+/// Provides data for the Closed event.
+/// </summary>
+public partial class ContentDialogClosedEventArgs
+{
+	internal ContentDialogClosedEventArgs(ContentDialogResult result)
+	{
+		Result = result;
 	}
+
+	/// <summary>
+	/// Gets the ContentDialogResult of the button click event.
+	/// </summary>
+	public ContentDialogResult Result { get; }
 }

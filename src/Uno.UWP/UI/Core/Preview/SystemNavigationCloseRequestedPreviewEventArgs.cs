@@ -15,7 +15,7 @@ public partial class SystemNavigationCloseRequestedPreviewEventArgs
 
 	public bool Handled { get; set; }
 
-	internal DeferralManager<Deferral> DeferralManager { get; }
+	internal DeferralFactoryManager<Deferral> DeferralManager { get; }
 
 	public Deferral GetDeferral() => DeferralManager.GetDeferral();
 }
