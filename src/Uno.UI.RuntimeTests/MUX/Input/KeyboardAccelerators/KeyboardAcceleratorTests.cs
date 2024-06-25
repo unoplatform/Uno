@@ -2054,7 +2054,6 @@ public partial class KeyboardAcceleratorTests : MUXApiTestBase
 
 	[TestMethod]
 	[TestProperty("Description", "Validates that Button control fires the accelerators on its attached Flyout.")]
-	[Ignore("Requires Flyout support for Keyboard Accelerators #17134")]
 	public async Task VerifyButtonFlyoutCanInvokeAcceleratorsDefinedOnFlyoutContent()
 	{
 		const string rootPanelXaml =
@@ -2140,7 +2139,6 @@ public partial class KeyboardAcceleratorTests : MUXApiTestBase
 
 	[TestMethod]
 	[TestProperty("Description", "Validates that Button control fires the accelerators on its attached Flyout.")]
-	[Ignore("Requires MenuFlyout support for Keyboard Accelerators #17134")]
 	public async Task VerifyButtonContextFlyoutWithFlyoutCanInvokeAcceleratorDefinedOnFlyoutContent()
 	{
 		const string rootPanelXaml =
