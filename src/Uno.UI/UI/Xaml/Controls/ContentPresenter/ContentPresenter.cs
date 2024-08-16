@@ -1389,7 +1389,7 @@ public partial class ContentPresenter : FrameworkElement, IFrameworkTemplatePool
 
 	internal override bool CanHaveChildren() => true;
 
-	internal override bool IsViewHit() => Border.IsViewHitImpl(this);
+	internal override bool IsViewHit() => ((IBorderInfoProvider)this).IsViewHit();
 
 	/// <summary>
 	/// Registers the provided native element in the native shell
