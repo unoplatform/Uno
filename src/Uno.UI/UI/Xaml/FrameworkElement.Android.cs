@@ -28,6 +28,14 @@ namespace Microsoft.UI.Xaml
 		/// </summary>
 		internal IViewParent NativeVisualParent => (this as View).Parent;
 
+		/// <summary>
+		/// Previously, we had a wrong behavior where we raise Loading/Loaded on current element, then Loading/Loaded on children, etc.
+		/// This boolean signals that we should raise Loading on all elements first, then Loaded on all elements.
+		/// We do this only for managed loaded/unloaded **and** DeferredOnApplyTemplate.
+		/// This change was done when changing the default value of UseDeferredOnApplyTemplate to true, where problems related to Loading/Loaded started to become an issue.
+		/// </summary>
+		private bool AllLoadingThenAllLoaded => FeatureConfiguration.FrameworkElement.AndroidUseManagedLoadedUnloaded && FeatureConfiguration.Control.UseDeferredOnApplyTemplate;
+
 		protected FrameworkElement()
 		{
 			Initialize();
@@ -37,6 +45,26 @@ namespace Microsoft.UI.Xaml
 
 		protected override void OnNativeLoaded()
 			=> OnNativeLoaded(isFromResources: false);
+
+		protected override void BeforeOnNativeLoaded()
+		{
+			if (!AllLoadingThenAllLoaded)
+			{
+				return;
+			}
+
+			try
+			{
+				PerformOnLoading();
+
+				base.BeforeOnNativeLoaded();
+			}
+			catch (Exception ex)
+			{
+				this.Log().Error("BeforeOnNativeLoaded failed in FrameworkElementMixins", ex);
+				Application.Current.RaiseRecoverableUnhandledException(ex);
+			}
+		}
 
 		private void OnNativeLoaded(bool isFromResources)
 		{
@@ -58,7 +86,10 @@ namespace Microsoft.UI.Xaml
 			if (!isFromResources)
 			{
 				((IDependencyObjectStoreProvider)this).Store.Parent = base.Parent;
-				OnLoading();
+				if (!AllLoadingThenAllLoaded)
+				{
+					OnLoading();
+				}
 			}
 
 			if (this.Resources is not null)
@@ -90,6 +121,19 @@ namespace Microsoft.UI.Xaml
 						// Loaded/Unloaded actions.
 						e.OnNativeLoaded(isFromResources);
 					}
+				}
+			}
+		}
+
+		private void PerformOnLoading()
+		{
+			OnLoading();
+
+			foreach (var child in (this as IShadowChildrenProvider).ChildrenShadow)
+			{
+				if (child is FrameworkElement e)
+				{
+					e.PerformOnLoading();
 				}
 			}
 		}
