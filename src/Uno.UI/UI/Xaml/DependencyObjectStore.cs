@@ -1555,9 +1555,8 @@ namespace Microsoft.UI.Xaml
 
 			foreach (var propertyDetail in _properties.GetAllDetails())
 			{
-				if (propertyDetail == null
-					|| propertyDetail == _properties.DataContextPropertyDetails
-					|| propertyDetail == _properties.TemplatedParentPropertyDetails)
+				if (propertyDetail == _properties.DataContextPropertyDetails ||
+					propertyDetail == _properties.TemplatedParentPropertyDetails)
 				{
 					continue;
 				}
