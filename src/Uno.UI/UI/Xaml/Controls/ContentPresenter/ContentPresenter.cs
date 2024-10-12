@@ -705,9 +705,11 @@ public partial class ContentPresenter : FrameworkElement
 
 #if !UNO_HAS_ENHANCED_LIFECYCLE
 		TrySetDataContextFromContent(newValue);
+#endif
 
 		TryRegisterNativeElement(oldValue, newValue);
 
+#if !UNO_HAS_ENHANCED_LIFECYCLE
 		SetUpdateTemplate();
 #endif
 	}
