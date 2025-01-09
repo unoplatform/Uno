@@ -194,6 +194,18 @@ namespace Microsoft.UI.Xaml
 				{
 					_isMaterializing = true;
 
+					// Before swapping out the ElementStub, we set the inherited DC locally so that when removed from the
+					// visual tree, the inherited DC is kept intact. This is important in case of setting x:Load with an
+					// x:Bind. The binding we generate from the x:Bind will only listen to property changes while the DC
+					// is present. This is definitely not what happens on WinUI, but considering our implementation of
+					// x:Bind and ElementStub differ completely from WinUI's, this is acceptable for now.
+					// https://github.com/unoplatform/uno/issues/18509
+					if ((this as IDependencyObjectStoreProvider).Store.GetPropertyDetails(DataContextProperty)
+						.CurrentHighestValuePrecedence > DependencyPropertyValuePrecedences.Local)
+					{
+						this.SetValue(DataContextProperty, DataContext, DependencyPropertyValuePrecedences.Local);
+					}
+
 					_content = SwapViews(oldView: (FrameworkElement)this, newViewProvider: ContentBuilder);
 #if ENABLE_LEGACY_TEMPLATED_PARENT_SUPPORT
 					// note: This can be safely removed, once moving away from legacy impl.
@@ -220,6 +232,7 @@ namespace Microsoft.UI.Xaml
 
 			if (_content != null)
 			{
+				this.ClearValue(DataContextProperty, DependencyPropertyValuePrecedences.Local);
 				var newView = SwapViews(oldView: (FrameworkElement)_content, newViewProvider: () => this as View);
 				if (newView != null)
 				{
