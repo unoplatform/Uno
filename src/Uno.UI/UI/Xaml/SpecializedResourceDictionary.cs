@@ -269,9 +269,9 @@ namespace Microsoft.UI.Xaml
 
 		public Enumerator GetEnumerator() => new Enumerator(this, Enumerator.KeyValuePair);
 
-		internal ref object FindValue(in ResourceKey key)
+		internal unsafe ref object FindValue(in ResourceKey key)
 		{
-			ref Entry entry = ref Unsafe.NullRef<Entry>();
+			ref Entry entry = ref Unsafe.AsRef<Entry>(null);
 
 			if (_buckets != null)
 			{
@@ -317,7 +317,7 @@ namespace Microsoft.UI.Xaml
 		Return:
 			return ref value;
 		ReturnNotFound:
-			value = ref Unsafe.NullRef<object>();
+			value = ref Unsafe.AsRef<object>(null);
 			goto Return;
 		}
 
