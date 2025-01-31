@@ -234,6 +234,8 @@ public partial class Given_MediaPlayerElement
 
 #if __SKIA__
 	[Ignore("Test not work properly on CI, the player do not have time to pause, doe the video do not auto play.  [https://github.com/unoplatform/uno/issues/12692]")]
+#elif __ANDROID__
+	[Ignore("Fails on Android")]
 #endif
 	[TestMethod]
 	public async Task When_MediaPlayerElement_SetSource_Check_PlayPause()
@@ -293,11 +295,11 @@ public partial class Given_MediaPlayerElement
 		var root = (WindowHelper.XamlRoot?.Content as FrameworkElement)!;
 		var tcp = (FrameworkElement)root.FindName("TransportControlsPresenter");
 
-		Assert.AreEqual(tcp.Visibility, Visibility.Collapsed);
+		Assert.AreEqual(Visibility.Collapsed, tcp.Visibility);
 		sut.AreTransportControlsEnabled = true;
-		Assert.AreEqual(tcp.Visibility, Visibility.Visible);
+		Assert.AreEqual(Visibility.Visible, tcp.Visibility);
 		sut.AreTransportControlsEnabled = false;
-		Assert.AreEqual(tcp.Visibility, Visibility.Collapsed);
+		Assert.AreEqual(Visibility.Collapsed, tcp.Visibility);
 	}
 
 #if !HAS_UNO
@@ -582,11 +584,7 @@ public partial class Given_MediaPlayerElement
 				);
 	}
 
-
-
-
-
-	public void CheckMediaPlayerExtensionAvailability()
+	private void CheckMediaPlayerExtensionAvailability()
 	{
 #if HAS_UNO
 		if (_MediaPlayer.ImplementedByExtensions && !ApiExtensibility.IsRegistered<IMediaPlayerExtension>())

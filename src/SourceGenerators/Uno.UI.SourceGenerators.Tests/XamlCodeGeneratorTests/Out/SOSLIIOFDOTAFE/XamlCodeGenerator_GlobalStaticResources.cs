@@ -4,6 +4,7 @@ namespace MyProject
 	/// <summary>
 	/// Contains all the static resources defined for the application
 	/// </summary>
+	[global::System.Runtime.CompilerServices.CreateNewOnMetadataUpdate]
 	public sealed partial class GlobalStaticResources
 	{
 		static bool _initialized;
@@ -24,12 +25,12 @@ namespace MyProject
 			if (!_initialized)
 			{
 				_initialized = true;
-				global::Uno.UI.GlobalStaticResources.Initialize();
 				global::Uno.UI.Toolkit.GlobalStaticResources.Initialize();
-				global::Uno.UI.GlobalStaticResources.RegisterDefaultStyles();
+				global::Uno.UI.GlobalStaticResources.Initialize();
 				global::Uno.UI.Toolkit.GlobalStaticResources.RegisterDefaultStyles();
-				global::Uno.UI.GlobalStaticResources.RegisterResourceDictionariesBySource();
+				global::Uno.UI.GlobalStaticResources.RegisterDefaultStyles();
 				global::Uno.UI.Toolkit.GlobalStaticResources.RegisterResourceDictionariesBySource();
+				global::Uno.UI.GlobalStaticResources.RegisterResourceDictionariesBySource();
 			}
 		}
 		public static void RegisterDefaultStyles()

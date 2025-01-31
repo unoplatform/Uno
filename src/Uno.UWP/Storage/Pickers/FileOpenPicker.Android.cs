@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Uno.UI;
+using Uno.UI.Dispatching;
 
 namespace Windows.Storage.Pickers
 {
@@ -21,6 +22,7 @@ namespace Windows.Storage.Pickers
 		private const string AnyWildcard = "*/*";
 		private const string ImageWildcard = "image/*";
 		private const string VideoWildcard = "video/*";
+		private Action<Intent>? _intentAction;
 
 		internal static bool TryHandleIntent(Intent intent, Result resultCode)
 		{
@@ -41,15 +43,44 @@ namespace Windows.Storage.Pickers
 			return true;
 		}
 
-		private async Task<StorageFile?> PickSingleFileTaskAsync(CancellationToken token)
+		private Task<StorageFile?> PickSingleFileTaskAsync(CancellationToken token)
 		{
-			var files = await PickFilesAsync(false, token);
-			return files.Count == 0 ? null : files[0];
+			var tcs = new TaskCompletionSource<StorageFile?>();
+			NativeDispatcher.Main.Enqueue(async () =>
+			{
+				try
+				{
+					var files = await PickFilesAsync(false, token);
+					var file = files.Count > 0 ? files[0] : null;
+
+					tcs.TrySetResult(file);
+				}
+				catch (Exception e)
+				{
+					tcs.TrySetException(e);
+				}
+			});
+
+			return tcs.Task;
 		}
 
-		private async Task<IReadOnlyList<StorageFile>> PickMultipleFilesTaskAsync(CancellationToken token)
+		private Task<IReadOnlyList<StorageFile>> PickMultipleFilesTaskAsync(CancellationToken token)
 		{
-			return await PickFilesAsync(true, token);
+			var tcs = new TaskCompletionSource<IReadOnlyList<StorageFile>>();
+			NativeDispatcher.Main.Enqueue(async () =>
+			{
+				try
+				{
+					var files = await PickFilesAsync(true, token);
+					tcs.TrySetResult(files);
+				}
+				catch (Exception e)
+				{
+					tcs.TrySetException(e);
+				}
+			});
+
+			return tcs.Task;
 		}
 
 		private async Task<FilePickerSelectedFilesArray> PickFilesAsync(bool multiple, CancellationToken token)
@@ -102,6 +133,8 @@ namespace Windows.Storage.Pickers
 			}
 
 			_currentFileOpenPickerRequest = new TaskCompletionSource<Intent?>();
+
+			_intentAction?.Invoke(intent);
 
 			var pickerIntent = Intent.CreateChooser(intent, "");
 
@@ -234,5 +267,8 @@ namespace Windows.Storage.Pickers
 
 			return mimeTypes.ToArray();
 		}
+
+		internal void RegisterOnBeforeStartActivity(Action<Intent> intentAction)
+			=> _intentAction = intentAction;
 	}
 }

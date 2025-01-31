@@ -1,10 +1,10 @@
+using Common;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Common;
-using Microsoft.UI.Xaml;
 using Private.Infrastructure;
 using Uno.UI.RuntimeTests;
-using Uno.UI.RuntimeTests.Helpers;
 using SplitButton = Microsoft/* UWP don't rename */.UI.Xaml.Controls.SplitButton;
 
 namespace Windows.UI.Xaml.Tests.MUXControls.ApiTests;
@@ -18,16 +18,14 @@ public class Given_SplitButton
 #if __MACOS__
 	[Ignore("Currently fails on macOS, part of #9282 epic")]
 #endif
-	public void VerifyFontFamilyForChevron()
+	public async Task VerifyFontFamilyForChevron()
 	{
-		using (StyleHelper.UseFluentStyles())
-		{
-			var splitButton = new SplitButton();
-			TestServices.WindowHelper.WindowContent = splitButton;
+		var splitButton = new SplitButton();
+		TestServices.WindowHelper.WindowContent = splitButton;
+		await TestServices.WindowHelper.WaitForIdle();
 
-			var secondayButton = splitButton.GetTemplateChild("SecondaryButton");
-			var font = ((secondayButton as Button).Content as TextBlock).FontFamily;
-			Verify.AreEqual((FontFamily)Application.Current.Resources["SymbolThemeFontFamily"], font);
-		}
+		var secondayButton = splitButton.GetTemplateChild("SecondaryButton");
+		var font = ((secondayButton as Button).Content as TextBlock).FontFamily;
+		Verify.AreEqual((FontFamily)Application.Current.Resources["SymbolThemeFontFamily"], font);
 	}
 }

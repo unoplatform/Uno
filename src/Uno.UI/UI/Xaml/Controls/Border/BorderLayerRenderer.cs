@@ -1,4 +1,4 @@
-﻿#if IS_UNIT_TESTS || __WASM__ || __SKIA__ || __NETSTD_REFERENCE__
+﻿#if !UNO_HAS_BORDER_VISUAL
 using System;
 using Microsoft.UI.Xaml;
 using Uno.Disposables;
@@ -29,17 +29,24 @@ internal partial class BorderLayerRenderer
 
 		_owner.Loaded += (s, e) => Update();
 		_owner.Unloaded += (s, e) => Clear();
-		_owner.LayoutUpdated += (s, e) => Update();
+#if UNO_HAS_ENHANCED_LIFECYCLE
+		_owner.SizeChanged += (_, _) => Update();
+#else
+		// Using SizeChanged on other platforms SHOULD work. But it didn't work on Android
+		// for unknown reason. For now, we are using SizeChanged only on enhanced lifecycle
+		// platforms where we are sure it works correctly.
+		_owner.LayoutUpdated += (_, _) => Update();
+#endif
 	}
 
 	/// <summary>
 	/// Updates the border.
 	/// </summary>
-	internal void Update()
+	internal void Update(bool forceUpdate = false)
 	{
 		if (_owner.IsLoaded)
 		{
-			UpdatePlatform();
+			UpdatePlatform(forceUpdate);
 		}
 	}
 
@@ -52,7 +59,7 @@ internal partial class BorderLayerRenderer
 		_currentState = default;
 	}
 
-	partial void UpdatePlatform();
+	partial void UpdatePlatform(bool forceUpdate);
 
 	partial void ClearPlatform();
 }

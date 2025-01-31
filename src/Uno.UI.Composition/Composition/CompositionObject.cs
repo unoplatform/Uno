@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using System.Runtime.CompilerServices;
-using Microsoft.UI.Dispatching;
 using Uno.Foundation.Logging;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.Core;
 
+using static Microsoft.UI.Composition.SubPropertyHelpers;
+
 namespace Microsoft.UI.Composition
 {
 	public partial class CompositionObject : IDisposable
 	{
-		private readonly ContextStore _contextStore = new ContextStore();
 		private CompositionPropertySet? _properties;
 		private Dictionary<string, CompositionAnimation>? _animations;
 
@@ -48,36 +48,25 @@ namespace Microsoft.UI.Composition
 			return new CompositionPropertySet(Compositor);
 		}
 
-		private protected T ValidateValue<T>(object? value)
-		{
-			if (value is not T t)
-			{
-				if (Convert.ChangeType(value, typeof(T), CultureInfo.InvariantCulture) is T changed)
-				{
-					return changed;
-				}
-
-				throw new ArgumentException($"Cannot convert value of type '{value?.GetType()}' to {typeof(T)}");
-			}
-
-			return t;
-		}
-
 		// Overrides are based on:
 		// https://learn.microsoft.com/en-us/uwp/api/windows.ui.composition.compositionobject.startanimation?view=winrt-22621
-		private protected virtual bool IsAnimatableProperty(ReadOnlySpan<char> propertyName)
-		{
-			// Note: We don't care about the parameter type. So, anything can be used (here we are using bool).
-			// It only decides whether the return status is Succeeded or TypeMismatch, which are equally treated as we are looking for
-			// anything other than NotFound.
-			return _properties is not null && _properties.TryGetValue<bool>(propertyName.ToString(), out _) != CompositionGetValueStatus.NotFound;
-		}
+		internal virtual object GetAnimatableProperty(string propertyName, string subPropertyName)
+			=> TryGetFromProperties(_properties ?? this as CompositionPropertySet, propertyName, subPropertyName);
 
 		private protected virtual void SetAnimatableProperty(ReadOnlySpan<char> propertyName, ReadOnlySpan<char> subPropertyName, object? propertyValue)
-			=> TryUpdateFromProperties(propertyName, subPropertyName, propertyValue);
+			=> TryUpdateFromProperties(Properties, propertyName, subPropertyName, propertyValue);
+
+		// TODO: Clone the animation object to support scenarios where the same animation is used on multiple objects
 
 		public void StartAnimation(string propertyName, CompositionAnimation animation)
 		{
+#if __IOS__
+			if (StartAnimationCore(propertyName, animation))
+			{
+				return;
+			}
+#endif
+
 			ReadOnlySpan<char> firstPropertyName;
 			ReadOnlySpan<char> subPropertyName;
 			var firstDotIndex = propertyName.IndexOf('.');
@@ -92,11 +81,6 @@ namespace Microsoft.UI.Composition
 				subPropertyName = default;
 			}
 
-			if (!IsAnimatableProperty(firstPropertyName))
-			{
-				throw new ArgumentException($"Property '{firstPropertyName}' is not animatable.");
-			}
-
 			if (_animations?.ContainsKey(propertyName) == true)
 			{
 				StopAnimation(propertyName);
@@ -104,8 +88,8 @@ namespace Microsoft.UI.Composition
 
 			_animations ??= new();
 			_animations[propertyName] = animation;
-			animation.PropertyChanged += ReEvaluateAnimation;
-			var animationValue = animation.Start();
+			animation.AnimationFrame += ReEvaluateAnimation;
+			var animationValue = animation.Start(firstPropertyName, subPropertyName, this);
 
 			try
 			{
@@ -119,6 +103,16 @@ namespace Microsoft.UI.Composition
 				{
 					this.Log().LogError($"An exception occurred while setting animation value '{animationValue}' to property '{propertyName}' for animation '{animation}'. {ex.Message}");
 				}
+			}
+		}
+
+		public void StartAnimation(string propertyName, CompositionAnimation animation, AnimationController animationController)
+		{
+			StartAnimation(propertyName, animation);
+
+			if (animation is KeyFrameAnimation keyFrameAnimation)
+			{
+				animationController.Initialize(this, propertyName, keyFrameAnimation);
 			}
 		}
 
@@ -153,14 +147,85 @@ namespace Microsoft.UI.Composition
 			}
 		}
 
+		private void ReEvaluateAnimation(KeyFrameAnimation animation, float progress)
+		{
+			if (_animations == null)
+			{
+				return;
+			}
+
+			foreach (var (key, value) in _animations)
+			{
+				if (value == animation)
+				{
+					var propertyName = key;
+					ReadOnlySpan<char> firstPropertyName;
+					ReadOnlySpan<char> subPropertyName;
+					var firstDotIndex = propertyName.IndexOf('.');
+					if (firstDotIndex > -1)
+					{
+						firstPropertyName = propertyName.AsSpan().Slice(0, firstDotIndex);
+						subPropertyName = propertyName.AsSpan().Slice(firstDotIndex + 1);
+					}
+					else
+					{
+						firstPropertyName = propertyName;
+						subPropertyName = default;
+					}
+
+					this.SetAnimatableProperty(firstPropertyName, subPropertyName, animation.Evaluate(progress));
+				}
+			}
+		}
+
 		public void StopAnimation(string propertyName)
 		{
 			if (_animations?.TryGetValue(propertyName, out var animation) == true)
 			{
-				animation.PropertyChanged -= ReEvaluateAnimation;
+				animation.AnimationFrame -= ReEvaluateAnimation;
 				animation.Stop();
 				_animations.Remove(propertyName);
 			}
+		}
+
+		public AnimationController? TryGetAnimationController(string propertyName)
+		{
+			if (_animations?.TryGetValue(propertyName, out var animation) == true && animation is KeyFrameAnimation keyFrameAnimation)
+			{
+				return new(this, propertyName, keyFrameAnimation);
+			}
+
+			// TODO: verify if returning null is the correct behavior
+			return null;
+		}
+
+		// AnimationController only supports KeyFrameAnimations
+		internal void PauseAnimation(KeyFrameAnimation animation)
+		{
+			animation.AnimationFrame -= ReEvaluateAnimation;
+			animation.Pause();
+		}
+
+		internal void ResumeAnimation(KeyFrameAnimation animation)
+		{
+			animation.Resume();
+			animation.AnimationFrame += ReEvaluateAnimation;
+		}
+
+		internal void SeekAnimation(KeyFrameAnimation animation, float progress)
+		{
+			PauseAnimation(animation);
+			ReEvaluateAnimation(animation, progress);
+		}
+
+		internal KeyFrameAnimation? GetKeyFrameAnimation(string propertyName)
+		{
+			if (_animations?.TryGetValue(propertyName, out var animation) == true && animation is KeyFrameAnimation keyFrameAnimation)
+			{
+				return keyFrameAnimation;
+			}
+
+			return null;
 		}
 
 		public void Dispose() => DisposeInternal();
@@ -169,20 +234,10 @@ namespace Microsoft.UI.Composition
 		{
 		}
 
-		internal virtual void StartAnimationCore(string propertyName, CompositionAnimation animation)
-		{
-
-		}
-
-		internal void AddContext(CompositionObject context, string? propertyName)
-		{
-			_contextStore.AddContext(context, propertyName);
-		}
-
-		internal void RemoveContext(CompositionObject context, string? propertyName)
-		{
-			_contextStore.RemoveContext(context, propertyName);
-		}
+#if __IOS__
+		internal virtual bool StartAnimationCore(string propertyName, CompositionAnimation animation)
+			=> false;
+#endif
 
 		private protected void SetProperty(ref bool field, bool value, [CallerMemberName] string? propertyName = null)
 		{
@@ -331,7 +386,7 @@ namespace Microsoft.UI.Composition
 			// Is this valid even for non-composition objects like interface?
 			var fieldCO = field as CompositionObject;
 			var valueCO = value as CompositionObject;
-			if (fieldCO != null || value != null)
+			if (fieldCO != null || valueCO != null)
 			{
 				OnCompositionPropertyChanged(fieldCO, valueCO, propertyName);
 			}
@@ -361,7 +416,7 @@ namespace Microsoft.UI.Composition
 		private protected void OnPropertyChanged(string? propertyName, bool isSubPropertyChange)
 		{
 			OnPropertyChangedCore(propertyName, isSubPropertyChange);
-			_contextStore.RaiseChanged();
+			PropagateChanged();
 		}
 
 		private protected virtual void OnPropertyChangedCore(string? propertyName, bool isSubPropertyChange)

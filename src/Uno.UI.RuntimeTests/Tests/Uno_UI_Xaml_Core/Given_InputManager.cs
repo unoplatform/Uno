@@ -1,4 +1,4 @@
-﻿#if __SKIA__
+﻿#if HAS_INPUT_INJECTOR && !WINAPPSDK
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -20,6 +20,12 @@ using Private.Infrastructure;
 using Uno.Extensions;
 using Uno.UI.RuntimeTests.Helpers;
 
+#if HAS_UNO_WINUI
+using GestureRecognizer = Microsoft.UI.Input.GestureRecognizer;
+#else
+using GestureRecognizer = Windows.UI.Input.GestureRecognizer;
+#endif
+
 namespace Uno.UI.RuntimeTests.Tests.Uno_UI_Xaml_Core;
 
 [TestClass]
@@ -28,7 +34,7 @@ public class Given_InputManager
 {
 	[TestMethod]
 #if !HAS_INPUT_INJECTOR
-	[Ignore("Pointer injection supported only on skia for now.")]
+	[Ignore("InputInjector is not supported on this platform.")]
 #endif
 	public async Task When_VisibilityChangesWhileDispatching_Then_RecomputeOriginalSource()
 	{
@@ -69,7 +75,7 @@ public class Given_InputManager
 
 	[TestMethod]
 #if !HAS_INPUT_INJECTOR
-	[Ignore("Pointer injection supported only on skia for now.")]
+	[Ignore("InputInjector is not supported on this platform.")]
 #endif
 	public async Task When_LeaveElementWhileManipulating_Then_CaptureNotLost()
 	{
@@ -87,7 +93,7 @@ public class Given_InputManager
 					HorizontalAlignment = HorizontalAlignment.Center,
 					VerticalAlignment = VerticalAlignment.Center,
 					Width = 16,
-					Height = Windows.UI.Input.GestureRecognizer.Manipulation.StartTouch.TranslateY * 3,
+					Height = GestureRecognizer.Manipulation.StartTouch.TranslateY * 3,
 					Background = new SolidColorBrush(Colors.DeepPink),
 					ManipulationMode = ManipulationModes.TranslateY,
 					RenderTransform = (transform = new TranslateTransform())
@@ -124,7 +130,7 @@ public class Given_InputManager
 
 	[TestMethod]
 #if !HAS_INPUT_INJECTOR
-	[Ignore("Pointer injection supported only on skia for now.")]
+	[Ignore("InputInjector is not supported on this platform.")]
 #endif
 	public async Task When_Hover_No_Delay_For_VisualState_Update()
 	{
@@ -146,8 +152,10 @@ public class Given_InputManager
 	}
 
 	[TestMethod]
-#if !HAS_INPUT_INJECTOR
-	[Ignore("Pointer injection supported only on skia for now.")]
+#if __WASM__
+	[Ignore("Scrolling is handled by native code and InputInjector is not yet able to inject native pointers.")]
+#elif !HAS_INPUT_INJECTOR
+	[Ignore("InputInjector is not supported on this platform.")]
 #endif
 	public async Task When_Scroll_No_Delay_For_VisualState_Update()
 	{
@@ -209,7 +217,7 @@ public class Given_InputManager
 		var button1 = (Button)stackPanel.Children[0];
 		var button2 = (Button)stackPanel.Children[1];
 
-		SetProtectedCursor(button1, InputSystemCursor.Create(InputSystemCursorShape.IBeam));
+		button1.SetProtectedCursor(InputSystemCursor.Create(InputSystemCursorShape.IBeam));
 
 		var border = new Border { scrollViewer };
 
@@ -250,7 +258,7 @@ public class Given_InputManager
 		var button1 = (Button)stackPanel.Children[0];
 		var button2 = (Button)stackPanel.Children[1];
 
-		SetProtectedCursor(button1, InputSystemCursor.Create(InputSystemCursorShape.IBeam));
+		button1.SetProtectedCursor(InputSystemCursor.Create(InputSystemCursorShape.IBeam));
 
 		var border = new Border { scrollViewer };
 
@@ -297,7 +305,7 @@ public class Given_InputManager
 
 		var button1 = (Button)stackPanel.Children[0];
 
-		SetProtectedCursor(button1, InputSystemCursor.Create(InputSystemCursorShape.IBeam));
+		button1.SetProtectedCursor(InputSystemCursor.Create(InputSystemCursorShape.IBeam));
 
 		var border = new Border { scrollViewer };
 
@@ -342,7 +350,7 @@ public class Given_InputManager
 
 		var button1 = (Button)stackPanel.Children[0];
 
-		SetProtectedCursor(button1, InputSystemCursor.Create(InputSystemCursorShape.IBeam));
+		button1.SetProtectedCursor(InputSystemCursor.Create(InputSystemCursorShape.IBeam));
 
 		var border = new Border { scrollViewer };
 
@@ -395,7 +403,7 @@ public class Given_InputManager
 		var button1 = (Button)stackPanel.Children[0];
 
 		var cursor = InputSystemCursor.Create(InputSystemCursorShape.IBeam);
-		SetProtectedCursor(button1, cursor);
+		button1.SetProtectedCursor(cursor);
 
 		var border = new Border { scrollViewer };
 
@@ -449,7 +457,7 @@ public class Given_InputManager
 
 		var button1 = (Button)stackPanel.Children[0];
 
-		SetProtectedCursor(button1, InputSystemCursor.Create(InputSystemCursorShape.IBeam));
+		button1.SetProtectedCursor(InputSystemCursor.Create(InputSystemCursorShape.IBeam));
 
 		var border = new Border { scrollViewer };
 
@@ -463,7 +471,7 @@ public class Given_InputManager
 
 		Assert.AreEqual(CoreCursorType.IBeam, GetCursorShape());
 
-		SetProtectedCursor(button1, null);
+		button1.SetProtectedCursor(null);
 		await TestServices.WindowHelper.WaitForIdle();
 
 		// This is NOT the behaviour on WinUI. The cursor should change immediately. To align this behaviour,
@@ -503,15 +511,6 @@ public class Given_InputManager
 		{
 			source.PointerCursor = cursor;
 		}
-	}
-
-	// This is to deal with WinUI's silly design choice to make ProtectedCursor protected.
-	// The alternative would be to create subclasses that set ProtectedCursor from within.
-	private static void SetProtectedCursor(UIElement element, InputCursor cursor)
-	{
-		var propInfo = typeof(UIElement).GetProperty("ProtectedCursor", BindingFlags.Instance | BindingFlags.NonPublic);
-		propInfo!.SetValue(element, cursor, null);
-
 	}
 }
 #endif

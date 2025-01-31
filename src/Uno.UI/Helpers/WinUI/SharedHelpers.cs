@@ -20,12 +20,7 @@ using Microsoft.UI.Xaml.Automation.Peers;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
-
-#if HAS_UNO_WINUI
 using ITextSelection = Microsoft.UI.Text.ITextSelection;
-#else
-using ITextSelection = Windows.UI.Text.ITextSelection;
-#endif
 
 namespace Uno.UI.Helpers.WinUI
 {
@@ -445,8 +440,7 @@ namespace Uno.UI.Helpers.WinUI
 		{
 			try
 			{
-				var displayInformation = XamlRoot.GetDisplayInformation(xamlRootReference.XamlRoot);
-				var scaleFactor = (float)displayInformation.RawPixelsPerViewPixel;
+				var scaleFactor = (float)xamlRootReference.XamlRoot.RasterizationScale;
 
 				return new Rect()
 				{
@@ -469,8 +463,7 @@ namespace Uno.UI.Helpers.WinUI
 		{
 			try
 			{
-				var displayInformation = XamlRoot.GetDisplayInformation(xamlRootReference.XamlRoot);
-				var scaleFactor = (float)displayInformation.RawPixelsPerViewPixel;
+				var scaleFactor = xamlRootReference.XamlRoot.RasterizationScale;
 
 				return new Rect
 				{
@@ -563,6 +556,7 @@ namespace Uno.UI.Helpers.WinUI
 
 		public static void QueueCallbackForCompositionRendering(Action callback)
 		{
+			//TODO:MZ:Make this work on non-Skia targets!
 			try
 			{
 				void OnRender(object sender, object e)
@@ -605,7 +599,7 @@ namespace Uno.UI.Helpers.WinUI
 		public static bool IsAncestor(
 			DependencyObject child,
 			DependencyObject parent,
-			bool checkVisibility)
+			bool checkVisibility = false)
 		{
 			if (child == null || parent == null || child == parent)
 			{
@@ -651,6 +645,19 @@ namespace Uno.UI.Helpers.WinUI
 			}
 
 			return false;
+		}
+
+		public static bool IsFocusableElement(
+			UIElement element)
+		{
+			if (element.Visibility == Visibility.Collapsed)
+			{
+				return false;
+			}
+
+			var control = element as Control;
+
+			return control is not null && (control.IsEnabled || control.AllowFocusWhenDisabled) && control.IsTabStop;
 		}
 
 		public static IconElement MakeIconElementFrom(Microsoft/* UWP don't rename */.UI.Xaml.Controls.IconSource iconSource)

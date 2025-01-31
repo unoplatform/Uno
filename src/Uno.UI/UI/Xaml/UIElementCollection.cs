@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Collections;
 
 namespace Microsoft.UI.Xaml.Controls
 {
@@ -57,7 +57,9 @@ namespace Microsoft.UI.Xaml.Controls
 
 		public void Add(UIElement item)
 		{
+#if !__CROSSRUNTIME__ // SetParent is already called in AddCore and calling it here messes up the check inside AddCore for a preexisting parent. VerifyNavigationViewItemToolTipPaneDisplayMode (in DEBUG) fails otherwise because Enter is called multiple times on the same element
 			item.SetParent(_owner);
+#endif
 
 			AddCore(item);
 			OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
@@ -80,6 +82,11 @@ namespace Microsoft.UI.Xaml.Controls
 				{
 					item.SetParent(null);
 				}
+			}
+
+			if (!hasItems)
+			{
+				return;
 			}
 
 			if (_owner is FrameworkElement fe)
@@ -152,6 +159,16 @@ namespace Microsoft.UI.Xaml.Controls
 		/// <param name="newIndex">The zero-based index specifying the new location of the item.</param>
 		public void Move(uint oldIndex, uint newIndex)
 		{
+			if (oldIndex >= Count)
+			{
+				throw new ArgumentOutOfRangeException(nameof(oldIndex));
+			}
+
+			if (newIndex >= Count)
+			{
+				throw new ArgumentOutOfRangeException(nameof(newIndex));
+			}
+
 			if (oldIndex == newIndex)
 			{
 				return;

@@ -12,12 +12,16 @@ using Windows.ApplicationModel.Core;
 using Uno.Helpers.Theming;
 using PhotosUI;
 using Uno.UI.Dispatching;
+using MobileCoreServices;
 using Windows.Foundation.Metadata;
+using Uno.Foundation.Logging;
 
 namespace Windows.Storage.Pickers
 {
 	public partial class FileOpenPicker
 	{
+		private int _multipleFileLimit;
+
 		private Task<StorageFile?> PickSingleFileTaskAsync(CancellationToken token)
 		{
 			var tcs = new TaskCompletionSource<StorageFile?>();
@@ -49,7 +53,12 @@ namespace Windows.Storage.Pickers
 			return tcs.Task;
 		}
 
-		private UIViewController GetViewController(bool multiple, TaskCompletionSource<StorageFile?[]> completionSource)
+		internal void SetMultipleFileLimit(int limit)
+		{
+			_multipleFileLimit = limit;
+		}
+
+		private UIViewController GetViewController(bool multiple, int limit, TaskCompletionSource<StorageFile?[]> completionSource)
 		{
 			var iOS14AndAbove = UIDevice.CurrentDevice.CheckSystemVersion(14, 0);
 			switch (SuggestedStartLocation)
@@ -64,13 +73,22 @@ namespace Windows.Storage.Pickers
 					};
 
 				case PickerLocationId.PicturesLibrary when multiple is true && iOS14AndAbove is true:
-				case PickerLocationId.VideosLibrary when multiple is true && iOS14AndAbove is true:
-					var configuration = new PHPickerConfiguration
+					var imageConfiguration = new PHPickerConfiguration
 					{
 						Filter = PHPickerFilter.ImagesFilter,
-						SelectionLimit = multiple ? 0 : 1
+						SelectionLimit = limit
 					};
-					return new PHPickerViewController(configuration)
+					return new PHPickerViewController(imageConfiguration)
+					{
+						Delegate = new PhotoPickerDelegate(completionSource)
+					};
+				case PickerLocationId.VideosLibrary when multiple is true && iOS14AndAbove is true:
+					var videoConfiguration = new PHPickerConfiguration
+					{
+						Filter = PHPickerFilter.VideosFilter,
+						SelectionLimit = limit
+					};
+					return new PHPickerViewController(videoConfiguration)
 					{
 						Delegate = new PhotoPickerDelegate(completionSource)
 					};
@@ -96,7 +114,7 @@ namespace Windows.Storage.Pickers
 
 			var completionSource = new TaskCompletionSource<StorageFile?[]>();
 
-			using var viewController = this.GetViewController(multiple, completionSource);
+			using var viewController = this.GetViewController(multiple, _multipleFileLimit, completionSource);
 
 			viewController.OverrideUserInterfaceStyle = CoreApplication.RequestedTheme == SystemTheme.Light ?
 				UIUserInterfaceStyle.Light : UIUserInterfaceStyle.Dark;
@@ -110,7 +128,8 @@ namespace Windows.Storage.Pickers
 
 			var files = await completionSource.Task;
 
-			rootController.DismissViewController(true, null);
+			// Dismiss if still shown
+			viewController.DismissViewController(true, null);
 
 			if (files is null || files.Length == 0)
 			{
@@ -132,6 +151,7 @@ namespace Windows.Storage.Pickers
 
 			public override void FinishedPickingMedia(UIImagePickerController picker, NSDictionary info)
 			{
+
 				if (info.ValueForKey(new NSString("UIImagePickerControllerImageURL")) is NSUrl nSUrl)
 				{
 					var file = StorageFile.GetFromSecurityScopedUrl(nSUrl, null);
@@ -151,17 +171,71 @@ namespace Windows.Storage.Pickers
 			public PhotoPickerDelegate(TaskCompletionSource<StorageFile?[]> taskCompletionSource) =>
 				_taskCompletionSource = taskCompletionSource;
 
-			public override void DidFinishPicking(PHPickerViewController picker, PHPickerResult[] results)
+			public override async void DidFinishPicking(PHPickerViewController picker, PHPickerResult[] results)
 			{
-				var storageFiles = ConvertPickerResults(results);
-				_taskCompletionSource.SetResult(storageFiles.ToArray());
+				// Dismiss the picker early to get the user back to the app as soon as possible.
+				picker.DismissViewController(true, null);
+
+				var storageFiles = await ConvertPickerResults(results);
+
+				// This callback can be called multiple times, user tapping multiple times over the "add" button,
+				// we need to ensure that we only set the result once.
+				_taskCompletionSource.TrySetResult(storageFiles.ToArray());
 			}
-			static IEnumerable<StorageFile> ConvertPickerResults(PHPickerResult[] results)
-				=> results
+
+			private async Task<IEnumerable<StorageFile>> ConvertPickerResults(PHPickerResult[] results)
+			{
+				List<StorageFile> storageFiles = new List<StorageFile>();
+				var providers = results
 					.Select(res => res.ItemProvider)
 					.Where(provider => provider != null && provider.RegisteredTypeIdentifiers?.Length > 0)
-					.Select(p => StorageFile.GetFromItemProvider(p, null))
 					.ToArray();
+
+				foreach (NSItemProvider provider in providers)
+				{
+					var identifier = GetIdentifier(provider.RegisteredTypeIdentifiers ?? []) ?? "public.data";
+					var data = await provider.LoadDataRepresentationAsync(identifier);
+
+					if (data is null)
+					{
+						continue;
+					}
+
+					var extension = GetExtension(identifier);
+
+					var destinationUrl = NSFileManager.DefaultManager
+						.GetTemporaryDirectory()
+						.Append($"{NSProcessInfo.ProcessInfo.GloballyUniqueString}.{extension}", false);
+					data.Save(destinationUrl, false);
+
+					storageFiles.Add(StorageFile.GetFromSecurityScopedUrl(destinationUrl, null));
+				}
+
+				return storageFiles;
+			}
+			private static string? GetIdentifier(string[] identifiers)
+			{
+				if (!(identifiers?.Length > 0))
+				{
+					return null;
+				}
+
+				if (identifiers.Any(i => i.StartsWith(UTType.LivePhoto, StringComparison.InvariantCultureIgnoreCase)) && identifiers.Contains(UTType.JPEG))
+				{
+					return identifiers.FirstOrDefault(i => i == UTType.JPEG);
+				}
+
+				if (identifiers.Contains(UTType.QuickTimeMovie))
+				{
+					return identifiers.FirstOrDefault(i => i == UTType.QuickTimeMovie);
+				}
+
+				return identifiers.FirstOrDefault();
+			}
+
+			private string? GetExtension(string identifier)
+			=> UTType.CopyAllTags(identifier, UTType.TagClassFilenameExtension)?.FirstOrDefault();
+
 		}
 
 		private class FileOpenPickerDelegate : UIDocumentPickerDelegate

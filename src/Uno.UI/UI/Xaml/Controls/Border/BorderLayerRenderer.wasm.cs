@@ -12,6 +12,7 @@ using Uno;
 using Uno.UI.Helpers;
 using Uno.UI.Extensions;
 using Windows.Foundation;
+using Windows.UI;
 
 namespace Uno.UI.Xaml.Controls;
 
@@ -19,8 +20,10 @@ partial class BorderLayerRenderer
 {
 	private Action _backgroundChanged;
 	private Action _borderChanged;
+	private IDisposable _borderBrushChangedSubscription;
+	private IDisposable _brushChangedSubscription;
 
-	partial void UpdatePlatform()
+	partial void UpdatePlatform(bool forceUpdate)
 	{
 		var newState = new BorderLayerState(
 			new Size(_owner.RenderSize.Width, _owner.RenderSize.Height),
@@ -30,7 +33,7 @@ partial class BorderLayerRenderer
 			_borderInfoProvider.BorderThickness,
 			_borderInfoProvider.CornerRadius);
 		var previousLayoutState = _currentState;
-		if (!newState.Equals(previousLayoutState))
+		if (!newState.Equals(previousLayoutState) || forceUpdate)
 		{
 			if (previousLayoutState.Background != newState.Background && _owner is FrameworkElement fwElt)
 			{
@@ -55,8 +58,9 @@ partial class BorderLayerRenderer
 	private void SetAndObserveBorder(BorderLayerState newState)
 	{
 		SetBorder(newState);
-		Brush.SetupBrushChanged(
-			_currentState.BorderBrush,
+
+		_borderBrushChangedSubscription?.Dispose();
+		_borderBrushChangedSubscription = Brush.SetupBrushChanged(
 			newState.BorderBrush,
 			ref _borderChanged,
 			() =>
@@ -84,14 +88,9 @@ partial class BorderLayerRenderer
 			switch (brush)
 			{
 				case SolidColorBrush solidColorBrush:
-					var borderColor = solidColorBrush.ColorWithOpacity;
-					element.SetStyle(
-						("border", ""),
-						("border-style", "solid"),
-						("border-color", borderColor.ToHexString()),
-						("border-width", borderWidth));
+					ApplySolidColorBorder(element, borderWidth, solidColorBrush.ColorWithOpacity);
 					break;
-				case GradientBrush gradientBrush:
+				case GradientBrush gradientBrush when gradientBrush.CanApplyToBorder(cornerRadius):
 					var border = gradientBrush.ToCssString(element.RenderSize);
 					element.SetStyle(
 						("border-style", "solid"),
@@ -99,6 +98,9 @@ partial class BorderLayerRenderer
 						("border-image", border),
 						("border-width", borderWidth),
 						("border-image-slice", "1"));
+					break;
+				case GradientBrush unsupportedGradientBrush:
+					ApplySolidColorBorder(element, borderWidth, unsupportedGradientBrush.FallbackColorWithOpacity);
 					break;
 				case RadialGradientBrush radialGradientBrush:
 					var radialBorder = radialGradientBrush.ToCssString(element.RenderSize);
@@ -124,6 +126,15 @@ partial class BorderLayerRenderer
 		}
 
 		SetCornerRadius(_owner, cornerRadius, thickness);
+	}
+
+	private static void ApplySolidColorBorder(FrameworkElement element, string borderWidth, Color borderColor)
+	{
+		element.SetStyle(
+			("border", ""),
+			("border-style", "solid"),
+			("border-color", borderColor.ToHexString()),
+			("border-width", borderWidth));
 	}
 
 	internal static void SetCornerRadius(
@@ -209,7 +220,8 @@ partial class BorderLayerRenderer
 
 		if (newOnInvalidateRender is not null)
 		{
-			Brush.SetupBrushChanged(oldValue, newValue, ref brushChanged, newOnInvalidateRender);
+			_brushChangedSubscription?.Dispose();
+			_brushChangedSubscription = Brush.SetupBrushChanged(newValue, ref brushChanged, newOnInvalidateRender);
 		}
 	}
 

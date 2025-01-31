@@ -11,7 +11,7 @@ using Private.Infrastructure;
 using Uno.UI.RuntimeTests.Helpers;
 using Windows.UI.Input.Preview.Injection;
 
-#if HAS_UNO_WINUI
+#if HAS_UNO_WINUI || WINAPPSDK
 using PointerDeviceType = Microsoft.UI.Input.PointerDeviceType;
 #else
 using PointerDeviceType = Windows.Devices.Input.PointerDeviceType;
@@ -20,7 +20,7 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Composition;
 
 [TestClass]
 [RunsOnUIThread]
-internal partial class Given_InteractionTracker
+public partial class Given_InteractionTracker
 {
 	private static InteractionTracker SetupTracker(Compositor compositor)
 	{
@@ -52,6 +52,9 @@ internal partial class Given_InteractionTracker
 	}
 
 	[TestMethod]
+#if !HAS_COMPOSITION_API
+	[Ignore("Composition APIs are not supported on this platform.")]
+#endif
 	public async Task When_TryUpdatePositionWithAdditionalVelocity_SingleCall()
 	{
 		var border = new Border()
@@ -113,6 +116,9 @@ internal partial class Given_InteractionTracker
 	}
 
 	[TestMethod]
+#if !HAS_COMPOSITION_API
+	[Ignore("Composition APIs are not supported on this platform.")]
+#endif
 	public async Task When_TryUpdatePositionWithAdditionalVelocity_TwoCalls()
 	{
 		var border = new Border()
@@ -176,8 +182,10 @@ internal partial class Given_InteractionTracker
 
 	[TestMethod]
 	[RequiresFullWindow]
-#if !HAS_INPUT_INJECTOR
-	[Ignore("InputInjector is only supported on skia")]
+#if !HAS_COMPOSITION_API
+	[Ignore("Composition APIs are not supported on this platform.")]
+#elif !HAS_INPUT_INJECTOR
+	[Ignore("InputInjector is not supported on this platform.")]
 #elif !HAS_UNO
 	[Ignore("Test fails on Windows. For some reason, Drag isn't doing what we expect it to for an unknown reason.")]
 #endif
@@ -216,7 +224,7 @@ internal partial class Given_InteractionTracker
 
 		var injector = InputInjector.TryCreate() ?? throw new InvalidOperationException("Failed to init the InputInjector");
 		var finger = injector.GetFinger();
-		finger.Drag(new(position.Left + 50, position.Top + 50), new(position.Left + 100, position.Top + 50));
+		finger.Drag(new(position.Left + 50, position.Top + 50), new(position.Left + 100, position.Top + 50), stepOffsetInMilliseconds: 0);
 
 		string logs = await WaitTrackerLogs(tracker);
 		var helper = new TrackerAssertHelper(logs);
@@ -248,7 +256,7 @@ internal partial class Given_InteractionTracker
 				requestId: 0,
 				naturalRestingPosition: new(-50.0f, 0.0f, 0.0f),
 				modifiedRestingPosition: new(-50.0f, 0.0f, 0.0f),
-				positionVelocityInPixelsPerSecond: Vector3.Zero),
+				positionVelocityInPixelsPerSecond: new(-0.0f, -0.0f, -0.0f)),
 			helper.Current);
 
 		helper.Advance();
@@ -263,4 +271,79 @@ internal partial class Given_InteractionTracker
 		Assert.IsTrue(captureLostRaised);
 		Assert.IsTrue(helper.IsDone);
 	}
+
+#if HAS_UNO
+	[TestMethod]
+	[RequiresFullWindow]
+#if !HAS_COMPOSITION_API
+	[Ignore("Composition APIs are not supported on this platform.")]
+#elif !HAS_INPUT_INJECTOR
+	[Ignore("InputInjector is not supported on this platform.")]
+#endif
+	public async Task When_MouseWheel()
+	{
+		var border = new Border()
+		{
+			Width = 200,
+			Height = 200,
+			Background = new SolidColorBrush(Microsoft.UI.Colors.Red),
+		};
+
+		var position = await UITestHelper.Load(border);
+
+		var visual = ElementCompositionPreview.GetElementVisual(border);
+		var tracker = SetupTracker(visual.Compositor);
+
+		Assert.AreEqual(Vector3.Zero, tracker.Position);
+
+		var vis = VisualInteractionSource.Create(visual);
+		vis.ManipulationRedirectionMode = VisualInteractionSourceRedirectionMode.PointerWheelOnly;
+		vis.PositionXSourceMode = InteractionSourceMode.EnabledWithInertia;
+		vis.PositionYSourceMode = InteractionSourceMode.EnabledWithInertia;
+		tracker.InteractionSources.Add(vis);
+
+		await TestServices.WindowHelper.WaitForIdle();
+
+		var injector = InputInjector.TryCreate() ?? throw new InvalidOperationException("Failed to init the InputInjector");
+		var finger = injector.GetMouse();
+		finger.MoveTo(new(position.Left + 100, position.Top + 100), steps: 1);
+		finger.WheelDown();
+
+		string logs = await WaitTrackerLogs(tracker);
+		var helper = new TrackerAssertHelper(logs);
+
+		Assert.AreEqual(
+			TrackerLogsConstructingHelper.GetInertiaStateEntered(
+				trackerPosition: new(0.0f, 0.0f, 0.0f),
+				requestId: 0,
+				naturalRestingPosition: new(0.0f, 48.0f, 0.0f),
+				modifiedRestingPosition: new(0.0f, 48.0f, 0.0f),
+				positionVelocityInPixelsPerSecond: new(0.0f, 192.0f, 0.0f)),
+			helper.Current);
+
+		helper.Advance();
+
+		var linesSkipped = helper.SkipLines(current => current.StartsWith("ValuesChanged:", StringComparison.Ordinal));
+		Assert.IsTrue(linesSkipped >= 2);
+		helper.Back();
+
+		Assert.AreEqual(
+			TrackerLogsConstructingHelper.GetValuesChanged(
+				trackerPosition: new(0.0f, 48.0f, 0.0f),
+				requestId: 0,
+				argsPosition: new(0.0f, 48.0f, 0.0f)),
+			helper.Current);
+
+		helper.Advance();
+
+		Assert.AreEqual(
+			TrackerLogsConstructingHelper.GetIdleStateEntered(
+				trackerPosition: new(0.0f, 48.0f, 0.0f),
+				requestId: 0),
+			helper.Current);
+
+		helper.Advance();
+		Assert.IsTrue(helper.IsDone);
+	}
+#endif
 }

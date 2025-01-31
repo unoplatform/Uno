@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Windows.Foundation;
+using Microsoft.UI.Composition;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
 using Uno.UI.Xaml.Controls;
@@ -10,7 +11,7 @@ namespace Microsoft.UI.Xaml.Controls
 {
 	partial class CalendarViewBaseItem
 	{
-#if __ANDROID__ || __IOS__ || __SKIA__ || __WASM__ || __MACOS__
+#if !UNO_HAS_BORDER_VISUAL
 		private BorderLayerRenderer _borderRenderer;
 #endif
 
@@ -55,6 +56,10 @@ namespace Microsoft.UI.Xaml.Controls
 		}
 #endif
 
+#if UNO_HAS_BORDER_VISUAL
+		private protected override ContainerVisual CreateElementVisual() => Compositor.GetSharedCompositor().CreateBorderVisual();
+#endif
+
 		private void UpdateChromeIfNeeded(Rect rect)
 		{
 			if (rect.Width > 0 && rect.Height > 0 && _lastSize != rect.Size)
@@ -66,8 +71,9 @@ namespace Microsoft.UI.Xaml.Controls
 
 		private void UpdateChrome()
 		{
-#if __SKIA__ || __WASM__
+#if !UNO_HAS_BORDER_VISUAL
 			_borderRenderer ??= new BorderLayerRenderer(this);
+#endif
 
 			// DrawBackground			=> General background for all items
 			// DrawControlBackground	=> Control.Background customized by the apps (can be customized in the element changing event)
@@ -90,24 +96,10 @@ namespace Microsoft.UI.Xaml.Controls
 			}
 #endif
 
-			_borderRenderer.Update();
+#if UNO_HAS_BORDER_VISUAL
+			this.UpdateAllBorderProperties();
 #else
-			// DrawBackground			=> General background for all items
-			// DrawControlBackground	=> Control.Background customized by the apps (can be customized in the element changing event)
-			// DrawDensityBar			=> Not supported yet
-			// DrawFocusBorder			=> Not supported yet
-			// OR DrawBorder			=> Draws the border ...
-			// DrawInnerBorder			=> The today / selected state
-
-			var borderInfoProvider = (IBorderInfoProvider)this;
-			var background = borderInfoProvider.Background;
-			var borderThickness = borderInfoProvider.BorderThickness;
-			var borderBrush = borderInfoProvider.BorderBrush;
-			var cornerRadius = borderInfoProvider.CornerRadius;
-
-#if __ANDROID__ || __IOS__ || __MACOS__
-			_borderRenderer?.UpdateLayer(this, background, BackgroundSizing.InnerBorderEdge, borderThickness, borderBrush, cornerRadius, default);
-#endif
+			_borderRenderer.Update();
 #endif
 		}
 

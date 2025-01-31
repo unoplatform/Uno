@@ -7,26 +7,36 @@ namespace Microsoft.UI.Composition;
 public partial class ExpressionAnimation : CompositionAnimation
 {
 	private AnimationExpressionSyntax? _parsedExpression;
+	private string _expression = string.Empty;
 
 	internal ExpressionAnimation(Compositor compositor) : base(compositor)
 	{
 	}
 
-	public string? Expression { get; set; }
+	public string Expression
+	{
+		get => _expression;
+		set => _expression = value ?? throw new ArgumentException();
+	}
+
+	// ExpressionAnimation is re-evaluated on property changes, not on every render frame by the compositor.
+	internal override bool IsTrackedByCompositor => false;
 
 	private protected override void OnPropertyChangedCore(string? propertyName, bool isSubPropertyChange)
 	{
 		if (_parsedExpression is not null)
 		{
-			RaisePropertyChanged();
+			RaiseAnimationFrame();
 		}
 	}
 
-	internal override object? Start()
+	internal override object? Start(ReadOnlySpan<char> propertyName, ReadOnlySpan<char> subPropertyName, CompositionObject compositionObject)
 	{
-		if (Expression is null)
+		base.Start(propertyName, subPropertyName, compositionObject);
+
+		if (Expression.Length == 0)
 		{
-			throw new InvalidOperationException("Property 'Expression' should not be null when starting an ExpressionAnimation");
+			throw new InvalidOperationException("Property 'Expression' should not be empty when starting an ExpressionAnimation");
 		}
 
 		// TODO: Check what to do if this is a second Start call and we already have non-null _parsedExpression;

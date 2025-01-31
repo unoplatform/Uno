@@ -19,22 +19,23 @@ Legend
 * 💬 Partially supported (see below for more details)
 * ✖ Not supported
 
-| Picker         | UWP   | WebAssembly | Android | iOS    | macOS | WPF | GTK |
-|----------------|-------|-------------|---------|--------|-------|-----|-----|
-| FileOpenPicker | ✔    | ✔ (1)       | ✔      | ✔      | ✔    | ✔   | ✔  |
-| FileSavePicker | ✔    | ✔ (1)       | ✔      | ✔      | ✔    | ✔   | ✔  |
-| FolderPicker   | ✔    | ✔           | ✔      | 💬 (2) | ✔    | ✖   | ✔  |
+| Picker         | Windows App SDK   | WebAssembly | Android | iOS    | Desktop |
+|----------------|-------|-------------|---------|--------|-------|
+| FileOpenPicker | ✔    | ✔ (1)       | ✔      | ✔      | ✔    |
+| FileSavePicker | ✔    | ✔ (1)       | ✔      | 💬 (2) | ✔    |
+| FolderPicker   | ✔    | ✔           | ✔      | ✔      | ✔    |
 
 *(1) - Multiple implementations supported - see WebAssembly section below*\
 *(2) - See iOS section below*
 
 On some platforms, you can further customize the file-picking experience by utilizing additional properties:
 
-| Feature                 | UWP  | WebAssembly | Android | iOS   | macOS | WPF | GTK |
-|-------------------------|------|-------------|---------|-------|-------|-----|-----|
-| SuggestedFileName       | ✔   | ✔           | ✖      | ✖     | ✔    | ✔   | ✔  |
-| SuggestedStartLocation  | ✔   | ✔ (1)       | 💬 (4) | ✔ (3) | ✔    | ✔   | ✔  |
-| SettingsIdentifier      | ✔   | ✔ (1)       | ✔      | ✖     | ✖    | ✖   | ✖  |
+| Feature                 | Windows App SDK  | WebAssembly | Android | iOS   | Desktop |
+|-------------------------|------|-------------|---------|-------|-----|
+| SuggestedFileName       | ✔   | ✔           | ✖      | ✖     | ✔ |
+| SuggestedStartLocation  | ✔   | ✔ (1)       | 💬 (4) | ✔ (3) | ✔ |
+| SettingsIdentifier      | ✔   | ✔ (1)       | ✔      | ✖     | ✔ |
+| SetMultipleFileLimit()  | ✖   | ✖           | ✖      | ✔     | ✖ |
 
 *(1) - Only for the native file pickers - see WebAssembly section below*\
 *(2) - For FileOpenPicker, VideosLibrary and PicturesLibrary are used to apply `image/*` and `video/*` filters*\
@@ -152,6 +153,45 @@ else
 {
     // No file was picked or the dialog was cancelled.
 }
+```
+
+> [!IMPORTANT]
+> On Uno Platform Targets, the `Path` information found on the `StorageFile` object returned from either the `PickMultipleFilesAsync()` or `PickSingleFileAsync()` method cannot be used with Windows File System APIs. This means that, for example, this `Path` cannot be used to initialize a `FileInfo` object.
+> If you need to access file size, use the `GetBasicProperties()` or `GetBasicPropertiesAsync()` methods. Both methods provide access to the `Size` and the `DateModified.` For the file extension, use the `FileType` property.
+
+##### Accessing information about the File
+
+```csharp
+var fileOpenPicker = new FileOpenPicker();
+...
+
+var pickedFile = await fileOpenPicker.PickSingleFileAsync();
+
+if (pickedFile != null)
+{
+    var extension = pickedFile.FileType;
+
+    var properties = await pickedFile.GetBasicPropertiesAsync();    
+    var size = properties.Size;
+}
+```
+
+> [!NOTE]
+> On iOS, when making multiple selections, you can limit the number of items selected by calling the `SetMultipleFileLimit()` method and specifying the maximum number of items.
+>
+
+##### Limiting the number of items
+
+```csharp
+var fileOpenPicker = new FileOpenPicker();
+fileOpenPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+fileOpenPicker.FileTypeFilter.Add(".jpg");
+fileOpenPicker.FileTypeFilter.Add(".png");
+//The user will be able to pick up to three files.
+fileOpenPicker.SetMultipleFileLimit(3);
+
+var pickedFiles = await fileOpenPicker.PickMultipleFilesAsync();
+...
 ```
 
 > [!NOTE]
@@ -351,6 +391,25 @@ Files picked from file pickers on Android are provided by the *Storage Access Fr
 The `SuggestedStartLocation` property has no effect on certain Android devices, and the file picker will always open in the root directory of the internal storage. When using VideosLibrary or PicturesLibrary locations, the file picker will open the picture library with the image picker controller. Still, for those devices that do not support it, it will open the root directory of the internal storage and suggest all the applications that can handle file types.
 
 The `FileSavePicker` API, which uses `ACTION_CREATE_DOCUMENT` on Android, has various limitations. To allow for the best possible compatibility across different Android versions, you should always add your file type extension to `FileTypeChoices`, and, if possible, provide only one such file type. In addition, if the `SuggestedFileName` or the user-typed file name matches an existing file, the resulting file will be renamed with `(1)` in the name, e.g., `test.txt` will become `test (1).txt` and the existing file will not be overwritten. However, if the user explicitly taps an existing file in the file browser, the system will show a dialog allowing the app to overwrite the existing file. This inconsistent behavior is caused by Android itself, so there is, unfortunately, no way to work around it from our side. See [this issue](https://issuetracker.google.com/issues/37136466) for more information.
+
+If you want to have further influence on the pickers and, for example, create permanent access to the file for the `FileOpenPicker` (flag with GrantPersistableUriPermission), you can do this with the `FilePickerHelper`. The `FolderPicker` can be extended analogue, the `FolderPickerHelper` is available for this purpose.
+
+```csharp
+FileOpenPicker fileOpenPicker = new FileOpenPicker
+{
+    SuggestedStartLocation = PickerLocationId.ComputerFolder
+};
+
+#if __ANDROID__
+FilePickerHelper.RegisterOnBeforeStartActivity(fileOpenPicker, (intent) =>
+{
+    // your code... for example
+    intent.AddFlags(Android.Content.ActivityFlags.GrantPersistableUriPermission);
+});
+#endif
+
+var result = await fileOpenPicker.PickSingleFileAsync();
+```
 
 ## iOS
 

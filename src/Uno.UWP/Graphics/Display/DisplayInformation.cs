@@ -16,6 +16,7 @@ namespace Windows.Graphics.Display
 	{
 		internal const float BaseDpi = 96.0f;
 
+		private static object _windowIdMapLock = new object();
 		private static readonly Dictionary<WindowId, DisplayInformation> _windowIdMap = new();
 
 #if __ANDROID__ || __IOS__ || __MACOS__ || __WASM__
@@ -30,10 +31,21 @@ namespace Windows.Graphics.Display
 		private TypedEventHandler<DisplayInformation, object> _orientationChanged;
 		private TypedEventHandler<DisplayInformation, object> _dpiChanged;
 
-		private DisplayInformation()
+		private DisplayInformation(
+#if !ANDROID
+			WindowId windowId
+#endif
+			)
 		{
+#if !ANDROID
+			WindowId = windowId;
+#endif
 			Initialize();
 		}
+
+#if !ANDROID
+		internal WindowId WindowId { get; }
+#endif
 
 		public static DisplayInformation GetForCurrentView()
 		{
@@ -47,29 +59,26 @@ namespace Windows.Graphics.Display
 #endif
 		}
 
+#pragma warning disable RS0030 // Do not use banned APIs
 		internal static DisplayInformation GetForCurrentViewSafe() => GetForCurrentView();
-
-		internal static DisplayInformation GetForWindowId(WindowId windowId)
-		{
-			if (!_windowIdMap.TryGetValue(windowId, out var appView))
-			{
-				throw new InvalidOperationException(
-					$"ApplicationView corresponding with this window does not exist yet, which usually means " +
-					$"the API was called too early in the windowing lifecycle. Try to use ApplicationView later.");
-			}
-
-			return appView;
-		}
+#pragma warning restore RS0030 // Do not use banned APIs
 
 		internal static DisplayInformation GetOrCreateForWindowId(WindowId windowId)
 		{
-			if (!_windowIdMap.TryGetValue(windowId, out var appView))
+			lock (_windowIdMapLock)
 			{
-				appView = new();
-				_windowIdMap[windowId] = appView;
-			}
+				if (!_windowIdMap.TryGetValue(windowId, out var displayInformation))
+				{
+					displayInformation = new(
+#if !ANDROID
+						windowId
+#endif
+					);
+					_windowIdMap[windowId] = displayInformation;
+				}
 
-			return appView;
+				return displayInformation;
+			}
 		}
 
 		public static DisplayOrientations AutoRotationPreferences

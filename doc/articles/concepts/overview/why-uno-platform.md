@@ -14,6 +14,14 @@ At the core is a cross-platform .NET UI framework, that allows apps to run every
 
 However, built on top of this foundation is also a rich platform which includes libraries, extensions, and tools that accelerate the design, development, and testing of cross-platform applications.
 
+## Hot Design - The only Visual Designer for cross-platform .NET Applications
+
+Uno Platform offers Hot Design, industry's first and only runtime Visual Designer for cross-platform .NET Applications. It transforms your running app into a Designer from any IDE on any OS. This offers unprecedented productivity gains. Learn more about [Hot Design](https://platform.uno/hot-design/)
+
+## True Single Project for 9 Platform Targets across Mobile, Web, Desktop, and Embedded
+
+Our Single Project approach is .NET ecosystem’s first and only true Single Project solution, empowering developers with a unified approach across all 9 platform targets, spanning mobile, web, desktop, and embedded apps. This genuine Single Project approach simplifies development, accelerates build times, and facilitates platform-specific development, enhancing your productivity and efficiency.
+
 ## It's Free and Open-Source
 
 Uno Platform is free and open source under Apache 2.0.
@@ -154,11 +162,11 @@ Uno.Extensions Authentication is a provider-based authentication service that ca
 
 ## Skia drawing
 
-The Uno Platform provides access to SkiaSharp as a render canvas for your app, enabling rich support to fine grained drawing primitives. Uno Platform also uses SkiaSharp to render the UI for GTK, WPF, and FrameBuffer apps.
+The Uno Platform provides access to SkiaSharp as a render canvas for your app, enabling rich support for fine-grained drawing primitives. Uno Platform also uses SkiaSharp to render the UI for X11, FrameBuffer, macOS, and Windows 7+ apps.
 
 ## Animations: Beyond storyboards, access to Lottie and Rive
 
-Based on SkiaSharp support, Uno Platform provides AnimatedVisualPlayer to give the ability to render rich Lottie files directly in your app, for all target platforms.
+Based on SkiaSharp support, Uno Platform provides AnimatedVisualPlayer to give the ability to render rich [Lottie files](https://airbnb.io/lottie/#/) directly in your app, for all target platforms.
 
 ## Performance and app size with AOT/Jiterpreter
 
@@ -196,7 +204,7 @@ Your Uno Platform WebAssembly app can run as a Progressive Web App. This means u
 
 ## WebView across platforms
 
-When you need to display web content within your cross-platform apps, you can use our `WebView2` control. Not only will it easily handle rendering of both remote and in-app HTML content, but it will also allow you to implement bi-directional JavaScript communication without any hassle. Note that `WebView2` is currently available on mobile and WinAppSDK targets. We are working on an implementation for Skia targets.
+When you need to display web content within your cross-platform apps, you can use our `WebView2` control. Not only will it easily handle rendering of both remote and in-app HTML content, but it will also allow you to implement bi-directional JavaScript communication without any hassle. Note that `WebView2` is currently available on mobile, WPF, and WinAppSDK targets. We are working on an implementation for the remaining Skia targets.
 
 ## Media Player across platforms
 

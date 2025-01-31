@@ -11,10 +11,22 @@ namespace Uno.Extensions
 			=> angleDegree * Math.PI / 180.0;
 
 		/// <summary>
+		/// Converts an angle in degree into radians
+		/// </summary>
+		public static float ToRadians(float angleDegree)
+			=> angleDegree * MathF.PI / 180.0f;
+
+		/// <summary>
 		/// Converts an angle in radians into degrees
 		/// </summary>
 		public static double ToDegree(double angleRadian)
 			=> angleRadian * 180.0 / Math.PI;
+
+		/// <summary>
+		/// Converts an angle in radians into degrees
+		/// </summary>
+		public static float ToDegree(float angleRadian)
+			=> angleRadian * 180.0f / MathF.PI;
 
 		/// <summary>
 		/// Converts an angle in radians into degrees normalized in the [0, 360[ range.
@@ -23,14 +35,6 @@ namespace Uno.Extensions
 			=> angleRadian >= 0
 				? ToDegree(angleRadian) % 360
 				: 360 + ToDegree(angleRadian) % 360;
-
-		/// <summary>
-		/// Normalize an angle in degrees in the [0, 360[ range.
-		/// </summary>
-		public static double NormalizeDegree(double angleDegree)
-			=> angleDegree >= 0
-				? angleDegree % 360
-				: 360 + angleDegree % 360;
 
 		/// <summary>
 		/// Tests if two values are equal to within the specified error.

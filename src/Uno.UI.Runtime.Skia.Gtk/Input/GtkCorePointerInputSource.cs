@@ -408,8 +408,7 @@ internal sealed class GtkCorePointerInputSource : IUnoCorePointerInputSource
 		Event? evt)
 	{
 		var xamlRoot = GtkManager.XamlRootMap.GetRootForHost(_windowHost);
-		var displayInformation = XamlRoot.GetDisplayInformation(xamlRoot);
-		var positionAdjustment = displayInformation.FractionalScaleAdjustment;
+		var positionAdjustment = xamlRoot?.FractionalScaleAdjustment ?? 1.0;
 
 		var pointerDevice = PointerDevice.For(devType);
 		var rawPosition = new Windows.Foundation.Point(rootX / positionAdjustment, rootY / positionAdjustment);
@@ -476,6 +475,7 @@ internal sealed class GtkCorePointerInputSource : IUnoCorePointerInputSource
 				properties.IsRightButtonPressed = IsPressed(state, ModifierType.Button3Mask, properties.PointerUpdateKind, RightButtonPressed, RightButtonReleased);
 				properties.IsXButton1Pressed = IsPressed(state, ModifierType.Button4Mask, properties.PointerUpdateKind, XButton1Pressed, XButton1Released);
 				properties.IsXButton2Pressed = IsPressed(state, ModifierType.Button5Mask, properties.PointerUpdateKind, XButton1Pressed, XButton2Released);
+				properties.IsTouchPad = dev.Source == InputSource.Touchpad;
 				break;
 
 			case PointerDeviceType.Pen:
@@ -501,10 +501,10 @@ internal sealed class GtkCorePointerInputSource : IUnoCorePointerInputSource
 		}
 
 		properties.IsInRange = true;
-
+		var timeInMicroseconds = time * 1000;
 		var pointerPoint = new Windows.UI.Input.PointerPoint(
 			frameId: time,
-			timestamp: time * (ulong)TimeSpan.TicksPerMillisecond, // time is in ms, timestamp is in ticks
+			timestamp: timeInMicroseconds,
 			device: pointerDevice,
 			pointerId: pointerId,
 			rawPosition: rawPosition,

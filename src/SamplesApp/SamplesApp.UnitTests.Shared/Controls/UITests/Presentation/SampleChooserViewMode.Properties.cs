@@ -24,6 +24,8 @@ using Microsoft.UI.Xaml.Controls;
 #if HAS_UNO
 using Uno.UI.Xaml.Core;
 using WinUICoreServices = Uno.UI.Xaml.Core.CoreServices;
+using Uno.UI;
+using Uno;
 #endif
 
 namespace SampleControl.Presentation
@@ -446,6 +448,34 @@ namespace SampleControl.Presentation
 				}
 			}
 		}
+
+#if HAS_UNO
+		public bool SimulateTouch
+		{
+#if DEBUG
+			get => WinRTFeatureConfiguration.DebugOptions.SimulateTouch;
+#else
+			get => false;
+#endif
+			set
+			{
+#if DEBUG
+				WinRTFeatureConfiguration.DebugOptions.SimulateTouch = value;
+				RaisePropertyChanged();
+#endif
+			}
+		}
+
+		public bool PreventLightDismissOnWindowDeactivated
+		{
+			get => FeatureConfiguration.Popup.PreventLightDismissOnWindowDeactivated;
+			set
+			{
+				FeatureConfiguration.Popup.PreventLightDismissOnWindowDeactivated = value;
+				RaisePropertyChanged();
+			}
+		}
+#endif
 
 		public bool UseDarkTheme
 		{

@@ -19,6 +19,7 @@ namespace UITests.Shared.Windows_Storage.Pickers
 - Not selecting a file should not cause an exception.
 - Selecting a file should show information below the file picker buttons.
 - It should be possible to pick multiple files, even if PicturesLibrary is selected and .jpg is used as file type.
+- Important (iOS): iOS 17 changed the way the file picker works. When testing this sample make sure to test it on iOS 17 or higher and iOS 16 or lower.
 """
 	)]
 	public sealed partial class FileOpenPickerTests : Page
@@ -31,7 +32,12 @@ namespace UITests.Shared.Windows_Storage.Pickers
 
 		private void FolderPickerTests_DataContextChanged(Microsoft.UI.Xaml.DependencyObject sender, Microsoft.UI.Xaml.DataContextChangedEventArgs args)
 		{
-			ViewModel = args.NewValue as FileOpenPickerTestsViewModel;
+			// When the picker is showing, the Page is resetting the DataContext to null.
+			if (args.NewValue is FileOpenPickerTestsViewModel viewModel)
+			{
+				ViewModel = viewModel;
+			}
+
 		}
 
 		internal FileOpenPickerTestsViewModel ViewModel { get; private set; }
@@ -67,6 +73,8 @@ namespace UITests.Shared.Windows_Storage.Pickers
 		public PickerViewMode[] ViewModes { get; } = Enum.GetValues<PickerViewMode>();
 
 		public PickerViewMode ViewMode { get; set; } = PickerViewMode.List;
+
+		public int MaxFiles { get; set; } = 2;
 
 		public string FileType
 		{
@@ -160,6 +168,9 @@ namespace UITests.Shared.Windows_Storage.Pickers
 					filePicker.CommitButtonText = CommitButtonText;
 				}
 				filePicker.FileTypeFilter.AddRange(FileTypeFilter);
+
+				StatusMessage = "Picking single file....";
+
 				var pickedFile = await filePicker.PickSingleFileAsync();
 				if (pickedFile != null)
 				{
@@ -198,6 +209,11 @@ namespace UITests.Shared.Windows_Storage.Pickers
 					filePicker.CommitButtonText = CommitButtonText;
 				}
 				filePicker.FileTypeFilter.AddRange(FileTypeFilter);
+
+				StatusMessage = "Picking multiple files...";
+#if __IOS__
+				filePicker.SetMultipleFilesLimit(MaxFiles);
+#endif
 				var pickedFiles = await filePicker.PickMultipleFilesAsync();
 				if (pickedFiles.Any())
 				{
