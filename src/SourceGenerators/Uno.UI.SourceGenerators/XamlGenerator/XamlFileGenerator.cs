@@ -3937,7 +3937,7 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 			if (IsAndroidView(parent.Type))
 			{
 				writer.AppendLineInvariantIndented("{0}.ContentDescription = \"{1}\";", closureName, uiAutomationId);
-			};
+			}
 
 			if (IsIOSUIView(parent.Type))
 			{
@@ -5988,7 +5988,7 @@ namespace Uno.UI.SourceGenerators.XamlGenerator
 						"List<{0}>".InvariantCultureFormat(GetFullGenericTypeName(type.TypeArguments.Single() as INamedTypeSymbol)) :
 						"List<System.Object>";
 					return true;
-			};
+			}
 
 			newableTypeName = null;
 			return false;
