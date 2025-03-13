@@ -11,7 +11,7 @@ namespace Uno.UI.RuntimeTests.Tests.Windows_UI_Xaml_Controls;
 
 [TestClass]
 [RunsOnUIThread]
-public class Given_WebView
+public class Given_WebView2
 {
 	[TestMethod]
 	public async Task When_InvokeScriptAsync()
