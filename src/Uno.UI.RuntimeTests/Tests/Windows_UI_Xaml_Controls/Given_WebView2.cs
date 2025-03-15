@@ -40,13 +40,14 @@ public class Given_WebView2
 			// may be set to true too early on wasm.
 			color = await webView.ExecuteScriptAsync(
 				"""
-				let testElement = document.getElementById('test');
-				let returnValue = "";
-				if(testElement){
-					returnValue = testElement.style.backgroundColor.toString();
-				}
-
-				returnValue;
+				func () => {
+					let testElement = document.getElementById('test');
+					let returnValue = "";
+					if(testElement){
+						return returnValue = testElement.style.backgroundColor.toString();
+					}
+					return "";
+				}()
 				""");
 
 		} while (sw.Elapsed < TimeSpan.FromSeconds(5) && string.IsNullOrEmpty(color));
