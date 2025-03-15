@@ -41,9 +41,12 @@ public class Given_WebView2
 			color = await webView.ExecuteScriptAsync(
 				"""
 				let testElement = document.getElementById('test');
+				let returnValue = "";
 				if(testElement){
-					return testElement.style.backgroundColor.toString();
+					returnValue = testElement.style.backgroundColor.toString();
 				}
+
+				returnValue;
 				""");
 
 		} while (sw.Elapsed < TimeSpan.FromSeconds(5) && string.IsNullOrEmpty(color));
